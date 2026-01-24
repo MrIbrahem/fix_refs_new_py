@@ -77,7 +77,7 @@ def add_translated_from_mdwiki(text: str, lang: str) -> str:
     """
     import re
 
-    skip_langs = ["it", "en"]
+    skip_langs = ["it", "en", "bg"]
 
     if lang in skip_langs:
         return text
