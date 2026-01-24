@@ -86,6 +86,14 @@ def test_remove_identical_refs_with_group_attribute():
     assert result == expected
 
 
+def test_remove_identical_refs_with_many_attribute():
+    """Test removing identical refs with group attribute"""
+    input_text = '''<ref group="notes" name='"hi"' any=00>Refs3</ref> <ref group="notes" name='"hi"' any=00>Refs3</ref>'''
+    expected = '''<ref group="notes" name='"hi"' any=00>Refs3</ref> <ref group="notes" name='"hi"' any=00 />'''
+    result = remove_duplicate_refs_with_attrs(input_text)
+    assert result == expected
+
+
 def test_file_text_1():
     """Test with file input for Spanish references"""
     tests_dir = Path(__file__).parent / "texts"

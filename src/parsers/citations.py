@@ -12,19 +12,43 @@ from typing import Any, List, Dict
 class Citation:
     """Represents a citation reference"""
 
-    ref: Any
+    def __init__(self, ref: Any) -> None:
+        self.ref = None
+        parsed = wtp.parse(str(ref.string))
 
-    # content=tag.contents,
-    # tag=tag.string,
-    # name=tag.attrs.get("name", ""),
-    # options=tag.attrs
+        # to copy the tag object
+        for tag in parsed.get_tags():
+            if tag.string == parsed.string:
+                self.ref = tag
+                break
+
+    @property
+    def tag(self) -> str:
+        """Get citation string"""
+        return self.ref.string
+
+    @property
+    def content(self) -> str:
+        """Get citation content"""
+        return self.ref.contents
+
+    @property
+    def name(self) -> str:
+        """Get citation name"""
+        return self.ref.attrs.get("name", "")
+
+    @property
+    def attrs(self) -> str:
+        """Get citation options/attributes"""
+        return self.ref.attrs
+
     def get_original_text(self) -> str:
         """Get the original reference tag"""
         return self.tag
 
     def get_content(self) -> str:
         """Get citation content"""
-        return self.ref.contents
+        return self.content
 
     def set_contents(self, new_content: str) -> None:
         """Set citation content"""
@@ -33,32 +57,22 @@ class Citation:
 
     def get_name(self) -> str:
         """Get citation name"""
-        return self.ref.attrs.get("name", "")
+        return self.name
 
-    @property
-    def tag(self) -> str:
-        """Get citation string"""
-        return self.ref.string
-
-    @property
-    def cite(self) -> str:
-        return self.ref
-
-    @property
-    def content(self) -> str:
-        """Get citation content"""
-        return self.get_content()
-
-    @property
-    def name(self) -> str:
-        """Get citation name"""
-        return self.get_name()
+    def _get_attributes(self) -> str:
+        """Get citation options/attributes"""
+        # {'group': 'notes', 'name': '"hi"', 'any': '00'}
+        str_attrs = ""
+        for key, value in self.ref.attrs.items():
+            str_attrs += f'{key}="{value}" '
+        return str_attrs.strip()
 
     def get_attributes(self) -> str:
         """Get citation options/attributes"""
-        return str(self.ref.attrs)
+        str_attrs = str(self.ref.string).split(">")[0].replace("<ref", "").strip()
+        return str_attrs.strip()
 
-    def to_string(self) -> str:
+    def to_string_(self) -> str:
         """Convert back to reference tag string"""
         # return f"<ref {self.options.strip()}>{self.content}</ref>"
         text = self.ref.string
@@ -68,10 +82,19 @@ class Citation:
 
         return text
 
-    @property
-    def options(self) -> str:
-        """Get citation options/attributes"""
-        return self.get_attributes()
+    def to_string_self_closing(self) -> str:
+        """Convert to self-closing tag string"""
+        attributes = self.get_attributes()
+        if attributes:
+            return f"<ref {attributes} />"
+        return self.ref.string
+
+    def to_string(self) -> str:
+        """Convert back to reference tag string"""
+        if not self.content.strip():
+            return self.ref.string.replace("></ref>", " />")
+
+        return self.ref.string
 
 
 def get_citations(text: str) -> List[Citation]:

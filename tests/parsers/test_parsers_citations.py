@@ -47,7 +47,7 @@ class TestCitations:
 
         assert len(citations) == 1
         assert citations[0].name == "test"
-        assert "group" in citations[0].options
+        assert "group" in citations[0].attrs
 
     # Tests for get_full_refs function
 

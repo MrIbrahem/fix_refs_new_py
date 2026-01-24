@@ -2,7 +2,7 @@
 Reference expansion utilities
 """
 
-from typing import Dict, List
+from typing import List
 from ..parsers.citations import get_short_citations, get_full_refs, Citation
 from ..utils.debug import echo_debug
 

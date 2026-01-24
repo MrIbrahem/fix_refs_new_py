@@ -3,11 +3,10 @@ Fix missing references by expanding from source text
 """
 
 import json
-import wikitextparser as wtp
 from pathlib import Path
 from typing import Dict, Any
 from ..utils.debug import echo_test, echo_debug
-from ..parsers.citations import Citation, get_short_citations
+from ..parsers.citations import get_short_citations
 from .expend_refs import refs_expand
 from ..config import revisions_path
 
