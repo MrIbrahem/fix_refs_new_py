@@ -2,36 +2,53 @@
 
 Converted from tests/md_catTest.php
 """
-import pytest
+from unittest.mock import patch
 from src.mdwiki.category import add_translated_from_mdwiki
 
 
-@pytest.mark.network(reason="Requires network access at get_cats, should be mocked")
-class TestMdCategoryNetwork:
+# Mock data for get_mdwiki_category responses
+MOCK_CATS = {
+    "fr": "Catégorie:Traduit de MDWiki",
+    "de": "Category:Translated from MDWiki (de)",
+    "ru": "Категория:Статьи, переведённые с MDWiki",
+    "ur": "زمرہ:ایم ڈی وکی سے ترجمہ شدہ",
+}
+
+
+def mock_get_mdwiki_category(lang):
+    """Mock implementation of get_mdwiki_category"""
+    return MOCK_CATS.get(lang, f"Category:Translated from MDWiki ({lang})")
+
+
+class TestMdCategory:
     """Test cases for MDWiki category addition"""
 
-    def test_appends_category_when_conditions_met(self):
+    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    def test_appends_category_when_conditions_met(self, mock_cats):
         """Test that category is appended for French language"""
         text = "This is a sample text"
         result = add_translated_from_mdwiki(text, "fr")
         expected = "This is a sample text\n[[Catégorie:Traduit de MDWiki]]\n"
         assert result == expected
 
-    def test_does_not_append_when_category_exists(self):
+    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    def test_does_not_append_when_category_exists(self, mock_cats):
         """Test that category is not appended if it already exists"""
         category = "[[Category:Translated from MDWiki (de)]]"
         text = "This is a sample text\n" + category
         result = add_translated_from_mdwiki(text, "de")
         assert result == text
 
-    def test_handles_multiple_newlines(self):
+    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    def test_handles_multiple_newlines(self, mock_cats):
         """Test handling of multiple newlines"""
         text = "This is a sample text\n\n"
         result = add_translated_from_mdwiki(text, "ru")
         expected = "This is a sample text\n\n\n[[Категория:Статьи, переведённые с MDWiki]]\n"
         assert result == expected
 
-    def test_langs_ur(self):
+    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    def test_langs_ur(self, mock_cats):
         """Test Urdu language category"""
         lang = "ur"
         cat = "زمرہ:ایم ڈی وکی سے ترجمہ شدہ"
