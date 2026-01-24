@@ -4,6 +4,7 @@ Converted from tests/remove_spaceTest.php
 """
 import pytest
 from src.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref
+# from src.lang_bots.hy_bot_old import remove_spaces_between_last_word_and_beginning_of_ref
 
 
 class TestRemoveSpace:

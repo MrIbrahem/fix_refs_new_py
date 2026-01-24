@@ -7,7 +7,7 @@ import re
 
 def match_it(text, charters):
     charters = re.escape(charters)
-    m = re.search(f'(</ref>|\/>)\s*([{charters}]\s*)$', text, flags=re.UNICODE)
+    m = re.search(rf'(</ref>|\/>)\s*([{charters}]\s*)$', text, flags=re.UNICODE)
     if m:
         return m.group(2)
     return None
@@ -17,8 +17,6 @@ def get_parts(newtext, charters):
     pattern = r'(.+?)(\n\n|\Z)'
     parts = re.findall(pattern, newtext, re.DOTALL)
     # ---
-    # get only parts endswith one of charters
-    # parts = [(p[0], match_it(p[0])) for p in parts if re.search(f'(</ref>|\/>)\s*[{charters}]\s*$', p[0], flags=re.UNICODE)]
     new_parts = []
     # ---
     print(f"{len(parts)=}")
@@ -40,6 +38,8 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
 
     if lang == "hy":
         dots = r".,。।։:"
+
+    newtext = re.sub(r">\s*<ref", r"><ref", newtext)
 
     parts = get_parts(newtext, dots)
     # ---

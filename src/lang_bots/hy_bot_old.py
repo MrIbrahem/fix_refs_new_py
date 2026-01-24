@@ -29,6 +29,8 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
     if lang == "hy":
         dots = r".,。।։:"
 
+    newtext = re.sub(r">\s*<ref", r"><ref", newtext)
+
     # Pattern 1: space between ref ending and punctuation - remove all spaces
     # Use [^<]* for simple refs, pattern won't match complex nested content
     pattern1 = r'(\S)(\s+)((?:<ref[^>]*(?:/\s*>|>[^<]*</ref>))+)(\s+)([' + re.escape(dots) + r'])'
