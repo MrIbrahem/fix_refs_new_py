@@ -3,51 +3,9 @@ Remove duplicate references by converting them to named short references
 """
 
 import re
-from typing import Dict, List
+from typing import Dict
 from ..parsers.citations import get_citations
-from ..bots.attrs_utils import get_attrs
-from ..bots.refs_utils import remove_start_end_quotes
 from ..utils.debug import echo_debug
-
-
-def fix_refs_names(text: str) -> str:
-    """Fix reference names by normalizing attribute quotes
-
-    Args:
-        text: Text containing citations
-
-    Returns:
-        Text with normalized citation attributes
-    """
-    new_text = text
-    citations = get_citations(text)
-
-    for citation in citations:
-        cite_attrs = citation.get_attributes()
-        cite_attrs = cite_attrs.strip() if cite_attrs else ""
-
-        if_in = f"<ref {cite_attrs}>"
-
-        if if_in not in new_text:
-            continue
-
-        attrs = get_attrs(cite_attrs)
-
-        if not cite_attrs:
-            continue
-
-        new_cite_attrs = ""
-
-        for key, value in attrs.items():
-            value2 = remove_start_end_quotes(value)
-            new_cite_attrs += f" {key}={value2}"
-
-        new_cite_attrs = new_cite_attrs.strip()
-        cite_newtext = f"<ref {new_cite_attrs}>"
-
-        new_text = new_text.replace(if_in, cite_newtext)
-
-    return new_text
 
 
 def remove_duplicate_refs_with_attrs(text: str) -> str:
@@ -73,14 +31,19 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
         cite_attrs = citation.get_attributes()
         cite_attrs = cite_attrs.strip() if cite_attrs else ""
 
-        if not cite_attrs:
+        if not citation.name:
             numb += 1
             name = f"autogen_{numb}"
             cite_attrs = f"name='{name}'"
+            citation.ref.attrs["name"] = name
 
         echo_debug(f"\n cite_attrs: (({cite_attrs}))")
 
         cite_newtext = f"<ref {cite_attrs} />"
+
+        citation.set_contents("")
+        cite_newtext = citation.to_string()
+        # exit(cite_newtext)
 
         if cite_attrs in refs:
             new_text = new_text.replace(cite_fulltext, cite_newtext)
