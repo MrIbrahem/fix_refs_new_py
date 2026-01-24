@@ -33,28 +33,6 @@ def refs_expand(short_refs: List[Citation], text: str, alltext: str) -> str:
     return text
 
 
-def find_empty_short(text: str) -> Dict[str, Citation]:
-    """Find short references that have no corresponding full reference
-
-    Args:
-        text: Text to search
-
-    Returns:
-        Dictionary mapping reference names to short citations
-    """
-    shorts = get_short_citations(text)
-    fulls = get_full_refs(text)
-    empty_refs: Dict[str, Citation] = {}
-
-    for cite in shorts:
-        name = cite.get_name()
-
-        if name not in fulls:
-            empty_refs[name] = cite
-
-    return empty_refs
-
-
 def refs_expand_work(first: str, alltext: str = "") -> str:
     """Expand short citations with full reference content
 

@@ -74,28 +74,6 @@ class Citation:
         return self.get_attributes()
 
 
-def get_name(options: str) -> str:
-    """Extract the name attribute from citation options
-
-    Args:
-        options: Citation options string
-
-    Returns:
-        Extracted name or empty string if not found
-    """
-    options = options.strip()
-    if not options:
-        return ""
-
-    pattern = r"name\s*\=\s*[\"']*([^>\"\']*)[\"\']*\s*"
-    match = re.search(pattern, options, re.IGNORECASE)
-
-    if not match or not match.group(1):
-        return ""
-
-    return match.group(1).strip()
-
-
 def get_citations(text: str) -> List[Citation]:
     """Extract all citations from text
 

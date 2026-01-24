@@ -4,7 +4,6 @@ Converted from tests/Parse/Citations_regTest.php
 """
 import pytest
 from src.parsers.citations import (
-    get_name,
     get_citations,
     get_full_refs,
     get_short_citations,
@@ -13,29 +12,6 @@ from src.parsers.citations import (
 
 class TestCitations:
     """Test cases for citation parsing"""
-
-    # Tests for get_name function
-
-    def test_get_name_with_double_quotes(self):
-        """Test getting name with double quotes"""
-        assert get_name('name="test_name"') == "test_name"
-
-    def test_get_name_with_single_quotes(self):
-        """Test getting name with single quotes"""
-        assert get_name("name='test_name'") == "test_name"
-
-    def test_get_name_without_quotes(self):
-        """Test getting name without quotes"""
-        assert get_name("name=test_name") == "test_name"
-
-    def test_get_name_with_spaces(self):
-        """Test getting name with spaces"""
-        assert get_name("name = 'test name'") == "test name"
-
-    def test_get_name_empty(self):
-        """Test getting name from empty or non-name input"""
-        assert get_name("") == ""
-        assert get_name("other_attr=value") == ""
 
     # Tests for get_citations function
 
