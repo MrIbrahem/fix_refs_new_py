@@ -10,6 +10,7 @@
     {"lang_code": "pt", "move_dots": 1, "expend": 1, "add_en_lang": 1},
     {"lang_code": "bg", "move_dots": 1, "expend": 1, "add_en_lang": 1},
     {"lang_code": "sw", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "pl", "move_dots": 0, "expend": 1, "add_en_lang": 0},
     {"lang_code": "ja", "move_dots": 1, "expend": 1, "add_en_lang": 0}
   ]
 }
