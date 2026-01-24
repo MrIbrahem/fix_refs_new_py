@@ -9,7 +9,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref as new_removes
-from src.lang_bots.hy_bot_old import remove_spaces_between_last_word_and_beginning_of_ref as old_removes
 base_path = Path(__file__).parent / "remove_space_texts"
 
 for i in [1, 2]:
@@ -23,10 +22,6 @@ for i in [1, 2]:
     output_file=base_path_sub / "output.txt"
 
     result = new_removes(input_text, "hy")
-    result_old = old_removes(input_text, "hy")
-
-    if result_old == expected:
-        print("result_old === expected")
 
     if result == expected:
         print("result === expected")
