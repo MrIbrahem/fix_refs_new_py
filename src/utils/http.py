@@ -3,7 +3,6 @@ HTTP client utilities - replaces PHP cURL
 """
 
 import requests
-from typing import Optional
 from .debug import echo_debug
 
 

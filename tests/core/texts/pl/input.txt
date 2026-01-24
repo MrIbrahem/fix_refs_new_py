@@ -1,0 +1,32 @@
+{{Choroba infobox
+|nazwa            =Sunburn
+|synonimy         =
+|grafika          =Sunburn Treatment Practices.jpg
+|opis grafiki     =A sunburned neck
+|specjalizacja    =[[Dermatology]]
+|objawy           ='''Initial''': Red, hot, tender skin<ref name=NZ2021/><br>'''Later''': [[peeling skin|Skin peeling]]<ref name=NZ2021/>
+|powikłania       =[[Dehydration]], infection, [[skin cancer]], skin aging, [[age spot|brown spots]]<ref name=NZ2021/>
+|początek         =2 to 6 hrs after exposure<ref name=NZ2021/>
+|czas trwania     =
+|typy             =
+|przyczyny        =[[Sun]] exposure, [[tanning salon]]s<ref name=NZ2021/>
+|czynniki ryzyka  =Lighter skin, living near the [[equator]], high elevation, between 10 am and 2 pm, clear skies, reflection from snow<ref name=NZ2021/>
+|rozpoznanie      =
+|różnicowanie     =[[Dermatomyositis]], [[erysipelas]], [[staphylococcal scalded skin syndrome]], [[Sezary syndrome]], [[photodermatitis]]<ref name=Stat2021/>
+|zapobieganie     =Avoiding the sun around midday, [[sunscreen]], [[sun protective clothing]]<ref name=NZ2021/>
+|leczenie         =[[Pain medication]] ([[NSAIDs]]), [[moisturizer]]<ref name=NZ2021/><ref name=Stat2021/>
+|leki             =
+|rokowanie        =Usually good<ref name=Stat2021/>
+|zapadalność      =34% per year (USA)<ref name=Stat2021/>
+|śmiertelność     =
+}}
+'''Oparzenie słoneczne''' to zaczerwienienie i obrzęk [[Skóra|skóry]], które powstają w wyniku nadmiernej ekspozycji na promieniowanie [[Ultrafiolet|ultrafioletowe]] (UV).<ref name="NZ2021">{{Cytuj stronę|tytuł=Sunburn {{!}} DermNet NZ|url=https://dermnetnz.org/topics/sunburn/|opublikowany=dermnetnz.org|data dostępu=10 July 2021|zarchiwizowano=11 April 2021|archiwum=https://web.archive.org/web/20210411132032/https://www.dermnetnz.org/topics/sunburn/|url-status=live}}</ref> Objawy pojawiają się zazwyczaj po 2–6 godzinach od narażenia.<ref name="NZ2021" /> Inne objawy mogą obejmować [[ból]], ciepło i [[Pęcherz|powstawanie pęcherzy]].<ref name="NZ2021" /> Po kilku dniach może wystąpić łuszczenie się skóry.<ref name="NZ2021" /> Do powikłań mogą należeć [[Odwodnienie (medycyna)|odwodnienie]], zakażenie, [[Nowotwór złośliwy skóry|rak skóry]], starzenie się skóry i brązowe plamy.<ref name="NZ2021" />
+
+Najczęściej pojawia się w wyniku ekspozycji [[Słońce|na słońce]], choć może mieć też inne źródła, np. [[solarium]].<ref name="NZ2021" /> Osoby o jaśniejszej karnacji są bardziej narażone na oparzenia słoneczne.<ref name="NZ2021" /> Do innych czynników ryzyka zalicza się mieszkanie w pobliżu [[Równik|równika]], dużą wysokość, godziny między 10:00 a 14:00, czyste niebo, odbicie światła od śniegu i przyjmowanie niektórych leków.<ref name="NZ2021" /><ref name="Stat2021">{{Cytuj pismo|nazwisko=Guerra|imię=KC|tytuł=Sunburn|data=January 2021|pmid=30521258|czasopismo=StatPearls}}</ref> Do leków, które mogą być przyczyną tego stanu, należą [[doksycyklina]] i [[Hydrochlorotiazyd|HCTZ]].<ref name="Stat2021" /> Podstawowy mechanizm uszkodzenia polega na uszkodzeniu [[Kwas deoksyrybonukleinowy|DNA]], po którym następuje [[Apoptoza|zaprogramowana śmierć komórki]].<ref name="Stat2021" />
+
+Środki zapobiegawcze obejmują unikanie słońca około południa, stosowanie kremów z filtrem przeciwsłonecznym i odzieży chroniącej przed słońcem.<ref name="NZ2021" /> Leczenie polega na [[Analgetyki|podawaniu leków przeciwbólowych,]] takich jak [[Niesteroidowe leki przeciwzapalne|niesteroidowe leki przeciwzapalne (NLPZ)]] i [[Emolient|środków nawilżających]].<ref name="NZ2021" /><ref name="Stat2021" /> W przypadku silnego oparzenia słonecznego konieczne może być podanie [[Wlew dożylny|dożylnych płynów]], np. [[Mleczan Ringera|płynu Ringera z mleczanem]].<ref name="Stat2021" />
+
+Oparzenia słoneczne dotknęły w 2015 roku około 34% populacji Stanów Zjednoczonych <ref name="Stat2021" /> Najczęściej chorują młodzi dorośli.<ref name="Stat2021" /> Przed rokiem 1820 uważano, że oparzenia słoneczne są spowodowane ciepłem.<ref name="Wang2016">{{Cytuj książkę|nazwisko=Wang|imię=Steven Q.|tytuł=Principles and Practice of Photoprotection|data=6 April 2016|wydawca=Springer|isbn=978-3-319-29382-0|strony=339|url=https://www.google.ca/books/edition/Principles_and_Practice_of_Photoprotecti/bcztCwAAQBAJ?hl=en&gbpv=1&dq=&pg=PA339|język=en}}</ref> Krem przeciwsłoneczny został po raz pierwszy opracowany w czasie [[II wojna światowa|II wojny światowej]].<ref name="Wang2016" />
+
+== Odniesienia ==
+<references />
