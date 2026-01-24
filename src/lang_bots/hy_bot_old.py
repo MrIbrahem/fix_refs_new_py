@@ -5,6 +5,29 @@ Armenian-specific bot fixes
 import re
 
 
+def remove_spaces_between_ref_and_punctuation(text: str) -> str:
+    dots = ".,。։।:"
+    escaped_punctuation = re.escape(dots)
+
+    # Pattern 1: space between ref ending and punctuation - remove all spaces
+    # Use [^<]* for simple refs, pattern won't match complex nested content
+    pattern1 = r'(\S)(\s+)((?:<ref[^>]*(?:/\s*>|>[^<]*</ref>))+)(\s+)([' + escaped_punctuation + r'])'
+
+    def replace_func1(match):
+        return match.group(1) + match.group(3) + match.group(5)
+
+    text = re.sub(pattern1, replace_func1, text)
+
+    # Pattern 2: multiple spaces (2+) before ref followed by punctuation
+    pattern2 = r'(\S)(\s{2,})((?:<ref[^>]*(?:/\s*>|>[^<]*</ref>))+)([' + escaped_punctuation + r'])'
+
+    def replace_func2(match):
+        return match.group(1) + match.group(3) + match.group(4)
+
+    text = re.sub(pattern2, replace_func2, text)
+    return text
+
+
 def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str) -> str:
     """Remove spaces around refs in specific patterns
 
@@ -27,26 +50,11 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
     dots = r".,。।"
 
     if lang == "hy":
-        dots = r".,。।։:"
+        dots = r".,。։।:"
 
     newtext = re.sub(r">\s*<ref", r"><ref", newtext)
 
-    # Pattern 1: space between ref ending and punctuation - remove all spaces
-    # Use [^<]* for simple refs, pattern won't match complex nested content
-    pattern1 = r'(\S)(\s+)((?:<ref[^>]*(?:/\s*>|>[^<]*</ref>))+)(\s+)([' + re.escape(dots) + r'])'
-
-    def replace_func1(match):
-        return match.group(1) + match.group(3) + match.group(5)
-
-    newtext = re.sub(pattern1, replace_func1, newtext)
-
-    # Pattern 2: multiple spaces (2+) before ref followed by punctuation
-    pattern2 = r'(\S)(\s{2,})((?:<ref[^>]*(?:/\s*>|>[^<]*</ref>))+)([' + re.escape(dots) + r'])'
-
-    def replace_func2(match):
-        return match.group(1) + match.group(3) + match.group(4)
-
-    newtext = re.sub(pattern2, replace_func2, newtext)
+    newtext = remove_spaces_between_ref_and_punctuation(newtext)
 
     # Pattern 3: at end of text with CONTENT ref - handle manually to avoid greedy matching
     # Find last punctuation character
