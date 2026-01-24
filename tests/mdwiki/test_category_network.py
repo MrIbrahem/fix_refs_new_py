@@ -6,7 +6,7 @@ import pytest
 from src.mdwiki.category import add_translated_from_mdwiki
 
 
-@pytest.mark.skip(reason="Requires network access at get_cats, should be mocked")
+@pytest.mark.network(reason="Requires network access at get_cats, should be mocked")
 class TestMdCategoryNetwork:
     """Test cases for MDWiki category addition"""
 
