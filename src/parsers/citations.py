@@ -1,8 +1,6 @@
 """
 Citation parser for WikiText reference tags
 """
-
-import re
 import wikitextparser as wtp
 from dataclasses import dataclass
 from typing import Any, List, Dict
@@ -14,6 +12,10 @@ class Citation:
 
     def __init__(self, ref: Any) -> None:
         self.ref = None
+        # self.ref = copy.deepcopy(ref) # AttributeError: property '_attrs_match' of 'Tag' object has no setter
+        self.copy_object(ref)
+
+    def copy_object(self, ref):
         parsed = wtp.parse(str(ref.string))
 
         # to copy the tag object

@@ -16,7 +16,7 @@ def load_settings_from_file() -> dict:
 def load_settings_from_server(server_name) -> dict:
     url = "http://localhost:9001/api.php?get=language_settings"
     if server_name == "mdwiki.toolforge.org":
-        json_data = "https://mdwiki.toolforge.org/api.php?get=language_settings"
+        url = "https://mdwiki.toolforge.org/api.php?get=language_settings"
 
     json_data = get_url(url)
 
