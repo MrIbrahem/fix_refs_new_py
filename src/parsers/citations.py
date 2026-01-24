@@ -59,28 +59,10 @@ class Citation:
         """Get citation name"""
         return self.name
 
-    def _get_attributes(self) -> str:
-        """Get citation options/attributes"""
-        # {'group': 'notes', 'name': '"hi"', 'any': '00'}
-        str_attrs = ""
-        for key, value in self.ref.attrs.items():
-            str_attrs += f'{key}="{value}" '
-        return str_attrs.strip()
-
     def get_attributes(self) -> str:
         """Get citation options/attributes"""
         str_attrs = str(self.ref.string).split(">")[0].replace("<ref", "").strip()
         return str_attrs.strip()
-
-    def to_string_(self) -> str:
-        """Convert back to reference tag string"""
-        # return f"<ref {self.options.strip()}>{self.content}</ref>"
-        text = self.ref.string
-        # if text like `<ref name="Zip2015"></ref>` change to self-closing tag
-        if self.content == "":
-            text = text.replace("></ref>", " />")
-
-        return text
 
     def to_string_self_closing(self) -> str:
         """Convert to self-closing tag string"""
