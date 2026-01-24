@@ -2,5 +2,4 @@
 *.pyc
 /src/fix_refs.egg-info
 tests/**/output.txt
-/tests
 .coverage
