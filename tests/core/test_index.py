@@ -2,7 +2,7 @@
 
 Converted from tests/indexTest.php
 """
-from src.core.fix_page import fix_page
+from src.core.fix_page import fix_one_page
 
 
 class TestIndex:
@@ -10,7 +10,7 @@ class TestIndex:
 
     def fix_page_wrap(self, text: str, lang: str, move_dots: bool, infobox: bool, add_en_lang: bool) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_page(text, "title", move_dots, infobox, add_en_lang, lang, 'SomeTitle', 0)
+        return fix_one_page(text, "title", lang, move_dots, infobox, add_en_lang, 'SomeTitle', 0)
 
     def test_part_3(self):
         """Test simple Armenian text with references"""

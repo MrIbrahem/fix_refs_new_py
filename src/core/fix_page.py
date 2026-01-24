@@ -1,5 +1,5 @@
 """
-Main fix_page function and interface
+Main fix_one_page function and interface
 """
 
 from ..bots.remove_duplicate_refs import remove_duplicate_refs_with_attrs
@@ -13,13 +13,14 @@ from ..infobox.expend_infobox import expand_infobox_in_text
 from ..lang_bots import apply_language_fixes
 from ..utils.debug import echo_test
 
-def fix_page(
+
+def fix_one_page(
     text: str,
     title: str,
-    move_dots: bool,
-    infobox: bool,
-    add_en_lang: bool,
     lang: str,
+    move_dots: bool=True,
+    infobox: bool=True,
+    add_en_lang: bool=False,
     source_title: str = "",
     mdwiki_revid: int = 0
 ) -> str:
@@ -65,25 +66,3 @@ def fix_page(
     text = mini_fixes_after_fixing(text, lang)
 
     return text if text else text_org
-
-
-def fix_refs(text: str, lang: str = "en") -> str:
-    """Simple interface to fix references in wikitext
-
-    Args:
-        text: WikiText content to fix
-        lang: Language code (default: 'en')
-
-    Returns:
-        Fixed WikiText content
-    """
-    return fix_page(
-        text=text,
-        title="",
-        move_dots=True,
-        infobox=True,
-        add_en_lang=False,
-        lang=lang,
-        source_title="",
-        mdwiki_revid=0
-    )
