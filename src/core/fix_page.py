@@ -19,7 +19,7 @@ def fix_one_page(
     title: str,
     lang: str,
     move_dots: bool=True,
-    infobox: bool=True,
+    expend_infobox: bool=True,
     add_en_lang: bool=False,
     source_title: str = "",
     mdwiki_revid: int = 0
@@ -44,7 +44,7 @@ def fix_one_page(
     if is_redirect(title, text):
         return text
 
-    if infobox or lang == "es":
+    if expend_infobox or lang == "es":
         text = expand_infobox_in_text(text, title, "")
 
     text = mini_fixes(text, lang)

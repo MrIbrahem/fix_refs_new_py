@@ -9,6 +9,7 @@ if not html_path.exists():
     html_path = Path(home) / "public_html"
 
 revisions_path = html_path / "revisions_new"
+resources_path = Path(__file__).parent.parent / "resources"
 
 if not revisions_path.exists():
     revisions_path = Path(__file__).parent.parent.parent.parent / "resources/revisions"
