@@ -1,0 +1,26 @@
+{{Տեղեկաքարտ Հիվանդություն և հիվանդագին վիճակներ
+|անվանում         =Fatty liver
+|հոմանիշներ       =Hepatic steatosis
+|պատկեր           =Non-alcoholic_fatty_liver_disease1.jpg
+|imagesize        =
+|alt              =
+|մասնագիտություն  =[[Gastroenterology]]
+|ախտանիշ          =None, tiredness, pain in the upper right side of the [[abdomen]]<ref name=NIH2016/><ref name=Sin2017/>
+|վնասում է        =[[Cirrhosis]], [[liver cancer]], [[esophageal varices]]<ref name=NIH2016/><ref name=Ant2019/>
+|պատճառ           =[[Ethanol|Alcohol]], [[diabetes]], [[obesity]]<ref name=Ant2019/><ref name=NIH2016/>
+|ռիսկ             =
+|ախտորոշում       =Based on the [[medical history]] supported by blood tests, [[medical imaging]], [[liver biopsy]]<ref name=NIH2016/>
+|կանխարգելում     =
+|բուժում          =No alcohol, weight loss<ref name=Ant2019/><ref name=NIH2016/>
+|հաճախություն     =NAFLD: 30% (Western countries)<ref name=Sin2017/><br>ALD: >90% of heavy drinkers<ref name=Bas2011/>
+|մահացություն     =
+}}
+'''Լյարդի ճարպային հիվանդությունը''' ( '''ԼՃՀ''' ), որը հայտնի է նաև որպես '''լյարդի ստեատոզ''', վիճակ է, որի դեպքում [[Լյարդ|լյարդում]] կուտակվում է ավելորդ [[ճարպ]] <ref name="NIH2016">{{Cite web|title=Nonalcoholic Fatty Liver Disease & NASH|url=https://www.niddk.nih.gov/health-information/liver-disease/nafld-nash/all-content|website=National Institute of Diabetes and Digestive and Kidney Diseases|access-date=7 November 2018|date=November 2016|archive-date=9 January 2020|archive-url=https://web.archive.org/web/20200109183351/https://www.niddk.nih.gov/health-information/liver-disease/nafld-nash/all-content|url-status=live}}</ref>։ Հաճախ ախտանիշներ չկան կամ քիչ են<ref name="NIH2016" /><ref name="Sin2017">{{Cite journal|last=Singh|first=S|last2=Osna|first2=NA|last3=Kharbanda|first3=KK|title=Treatment options for alcoholic and non-alcoholic fatty liver disease: A review.|journal=World Journal of Gastroenterology|date=28 September 2017|volume=23|issue=36|pages=6549–6570|doi=10.3748/wjg.v23.i36.6549|pmid=29085205|pmc=5643281}}</ref>։ Երբեմն կարող է լինել հոգնածություն կամ ցավ [[Որովայն|որովայնի]] վերին աջ մասում<ref name="NIH2016" />։ Բարդություններից կարող են լինել [[Լյարդի ցիռոզ|ցիռոզը]], [[Լյարդի քաղցկեղ|լյարդի քաղցկեղը]] և կերակրափողի լայնացած երակները<ref name="NIH2016" /><ref name="Ant2019">{{Cite journal|last=Antunes|first=C|last2=Azadfard|first2=M|last3=Gupta|first3=M|title=Fatty Liver|date=January 2019|pmid=28723021|journal=StatPearls}}</ref>։
+
+Գոյություն ունի լյարդի ճարպային հիվանդության երկու տեսակ՝ ոչ ալկոհոլային ճարպային լյարդի հիվանդություն (ՈԱՃՀ) և ալկոհոլային լյարդի հիվանդություն <ref name="NIH2016" />։ ՈԱՃՀՀ-ն բաղկացած է պարզ ճարպային լյարդից և ոչ ալկոհոլային ստեատոհեպատիտից (ՈԱՃՀ): <ref name="AFP2013">{{Cite journal|last=Iser|first=D|last2=Ryan|first2=M|title=Fatty liver disease—a practical guide for GPs.|journal=Australian Family Physician|date=July 2013|volume=42|issue=7|pages=444–7|pmid=23826593}}</ref><ref name="NIH2016" /> Հիմնական ռիսկերից են [[Էթիլ սպիրտ|ալկոհոլը]], [[Տիպ 2 շաքարային դիաբետ|2-րդ տիպի շաքարախտը]] և [[Ճարպակալում|ճարպակալումը]] <ref name="Ant2019" /><ref name="NIH2016" />։ Այլ ռիսկի գործոններից են որոշակի դեղամիջոցները, ինչպիսիք են [[Գլյուկոկորտիկոիդներ|գլյուկոկորտիկոիդները]] և [[Հեպատիտ C|հեպատիտ C-ն]] : <ref name="NIH2016" /> Անհասկանալի է, թե ինչու են ոչ ալկոհոլային ճարպային լյարդի հիվանդություն ունեցող որոշ մարդիկ զարգացնում պարզ ճարպային լյարդ, իսկ մյուսները՝ ոչ ալկոհոլային հեպատիտ: <ref name="NIH2016" /> Ախտորոշումը հիմնված է [[Անամնեզ|բժշկական պատմության]] վրա, որը հաստատվում է արյան անալիզներով, բժշկական պատկերագրական հետազոտություններով և երբեմն լյարդի բիոպսիայով<ref name="NIH2016" />։
+
+Խորհուրդ է տրվում լյարդի ճարպային հիվանդություն ունեցող մարդկանց չօգտագործել ալկոհոլ<ref name="Ant2019" /><ref name="Sin2017" />։ ՈԱՖԼՀ-ի բուժումը սովորաբար այլ կերպ է իրականացվում՝ սննդակարգի փոփոխություններով և [[Քաշի կորուստ|քաշի կորստի]] նպատակով վարժություններով <ref name="NIH2016" /> : Ծանր հիվանդների մոտ լյարդի փոխպատվաստումը կարող է լինել տարբերակ<ref name="NIH2016" />։ Բոլոր չափից շատ խմողների ավելի քան 90%-ը զարգացնում է լյարդի ճարպային հիվանդություն, մինչդեռ մոտ 25%-ը զարգացնում է ավելի ծանր ալկոհոլային հեպատիտ <ref name="Bas2011">{{Cite journal|last=Basra|first=Sarpreet|title=Definition, epidemiology and magnitude of alcoholic hepatitis|journal=World Journal of Hepatology|date=2011|volume=3|issue=5|pages=108–113|doi=10.4254/wjh.v3.i5.108|pmid=21731902|pmc=3124876}}</ref>։ Ոչ ալկոհոլային ճարպաթթուների լյարդային հիվանդությունը (ՈԱԼՀ) ազդում է արևմտյան երկրների բնակչության մոտ 30%-ի և Ասիայի բնակչության 10%-ի վրա<ref name="Sin2017" />։ ԱՄՆ-ում ոչ ալկոհոլային ճարպաթթուների (ՈԱՃՀ) համախտանիշը (ՈԱՃՀ) ազդում է երեխաների մոտ 10%-ի վրա <ref name="NIH2016" /> : Այն ավելի հաճախ է հանդիպում տարեց մարդկանց և տղամարդկանց մոտ<ref name="AFP2013" /><ref name="Ant2019" />։
+
+== Հղումներ ==
+<references />
+[[Category:Translated from MDWiki]]
