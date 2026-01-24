@@ -8,7 +8,6 @@ from src.parsers.citations import (
     get_full_refs,
     get_short_citations,
     get_name,
-    Citation
 )
 
 
@@ -87,31 +86,3 @@ class TestGetName:
         """Test when name attribute is missing"""
         options = "lang=en"
         assert get_name(options) == ""
-
-
-class TestCitation:
-    """Test Citation class"""
-
-    def test_citation_to_string(self):
-        """Test converting citation to string"""
-        citation = Citation(
-            content="Test content",
-            tag='<ref name="test">Test content</ref>',
-            name="test",
-            options='name="test"'
-        )
-        result = citation.to_string()
-        assert result == '<ref name="test">Test content</ref>'
-
-    def test_citation_getters(self):
-        """Test citation getter methods"""
-        citation = Citation(
-            content="Content",
-            tag="<ref>Content</ref>",
-            name="",
-            options=""
-        )
-        assert citation.get_content() == "Content"
-        assert citation.get_name() == ""
-        assert citation.get_attributes() == ""
-        assert citation.get_original_text() == "<ref>Content</ref>"

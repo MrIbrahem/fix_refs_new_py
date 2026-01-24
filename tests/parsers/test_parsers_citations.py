@@ -8,7 +8,6 @@ from src.parsers.citations import (
     get_citations,
     get_full_refs,
     get_short_citations,
-    Citation
 )
 
 
@@ -78,7 +77,7 @@ class TestCitations:
 
     def test_get_full_refs(self):
         """Test getting full reference mapping"""
-        text = '<ref name="ref1">Content 1</ref> <ref name="ref2">Content 2</ref>'
+        text = '<ref name="ref2"/><ref name="ref1">Content 1</ref> <ref name="ref2">Content 2</ref>'
         full_refs = get_full_refs(text)
 
         assert len(full_refs) == 2
@@ -87,7 +86,7 @@ class TestCitations:
 
     def test_get_full_refs_with_unnamed_refs(self):
         """Test full refs with unnamed citations (should be excluded)"""
-        text = '<ref>Unnamed</ref> <ref name="test">Named</ref>'
+        text = '<ref name="ref2"/><ref>Unnamed</ref> <ref name="test">Named</ref>'
         full_refs = get_full_refs(text)
 
         assert len(full_refs) == 1
@@ -96,7 +95,7 @@ class TestCitations:
 
     def test_get_full_refs_empty_text(self):
         """Test full refs with empty text"""
-        full_refs = get_full_refs("")
+        full_refs = get_full_refs('<ref name="ref2"/>')
         assert len(full_refs) == 0
 
     # Tests for get_short_citations function

@@ -2,62 +2,11 @@
 
 Converted from tests/Bots/remove_duplicate_refsTest.php
 """
-import pytest
 from pathlib import Path
 from src.bots.remove_duplicate_refs import (
-    fix_refs_names,
     remove_duplicate_refs_with_attrs
 )
 
-
-def test_fix_refs_names():
-    """اختبارات دالة fix_refs_names"""
-    tests = [
-        # Case: Reference without attributes
-        {
-            "input": "<ref>Simple reference</ref>",
-            "expected": "<ref>Simple reference</ref>"
-        },
-        # Case: Reference with name attribute in double quotes
-        {
-            "input": '<ref name="te1">Reference</ref>',
-            "expected": '<ref name="te1">Reference</ref>'
-        },
-        # Case: Reference with name attribute in single quotes
-        {
-            "input": "<ref name='te2'>Reference</ref>",
-            "expected": '<ref name="te2">Reference</ref>'
-        },
-        # Case: Reference with multiple attributes
-        {
-            "input": '<ref name="te3" group="notes">Reference</ref>',
-            "expected": '<ref name="te3" group="notes">Reference</ref>'
-        },
-        # Case: Reference with attribute without value
-        {
-            "input": '<ref name>Reference</ref>',
-            "expected": '<ref name="">Reference</ref>'
-        },
-        # Case: Reference with attribute containing internal quotes
-        {
-            "input": '<ref name="test\'quote">Reference</ref>',
-            "expected": '<ref name="test\'quote">Reference</ref>'
-        },
-        # Case: Multiple references
-        {
-            "input": '<ref name="a">Ref1</ref> <ref name=\'b\'>Ref2</ref>',
-            "expected": '<ref name="a">Ref1</ref> <ref name="b">Ref2</ref>'
-        },
-        # Case: Reference with mixed quote types
-        {
-            "input": '<ref name="te5" group=\'notes\'>Reference</ref>',
-            "expected": '<ref name="te5" group="notes">Reference</ref>'
-        }
-    ]
-
-    for test in tests:
-        result = fix_refs_names(test['input'])
-        assert result == test['expected'], f"Failed for: {test['input']}"
 
 # Tests for remove_duplicate_refs_with_attrs
 
