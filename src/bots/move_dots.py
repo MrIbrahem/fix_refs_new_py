@@ -15,13 +15,15 @@ def move_dots_after_refs(text: str, lang: str) -> str:
     Returns:
         Text with punctuation moved after references
     """
-    dot = r"\.,。।"
+    dots = r".,。।"
 
     if lang == "hy":
-        dot = r"\.,。։।:"
+        dots = r".,。։।:"
     # ([\.,。։।:]+)\s*((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)
     regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
-    pattern = rf"([{dot}]+)\s*{regline}"
+
+    escaped = re.escape(dots)
+    pattern = rf"([{escaped}]+)\s*{regline}"
     replacement = r"\2\1"
 
     text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
