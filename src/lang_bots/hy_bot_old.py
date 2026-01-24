@@ -3,32 +3,6 @@ Armenian-specific bot fixes
 """
 
 import re
-from typing import Optional
-
-
-def remove_spaces_between_ref_and_punctuation(text: str, lang: Optional[str] = None) -> str:
-    """Remove spaces between ref tags and punctuation
-
-    Args:
-        text: WikiText content
-        lang: Language code
-
-    Returns:
-        Text with spaces removed
-    """
-    # Use superset of punctuation across supported languages
-    dots = ".,。։।:"
-    cls = re.escape(dots)
-
-    # Keep punctuation right after <ref ... /> with no space
-    # Pattern: <ref[^>]*/>\s*[punctuation]
-    text = re.sub(r'(<ref[^>]*\/>)\s*([' + cls + r'])', r'\1\2', text)
-
-    # Normalize endings: </ref> followed by any punctuation remains attached
-    # Pattern: </ref>\s*[punctuation]
-    text = re.sub(r'<\/ref>\s*([' + cls + r'])', r'</ref>\1', text)
-
-    return text
 
 
 def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str) -> str:
@@ -50,10 +24,10 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
         Fixed text
     """
     # Define punctuation marks based on language
+    dots = r".,。।"
+
     if lang == "hy":
-        dots = r".,。։:"
-    else:
-        dots = r".,।"
+        dots = r".,。।։:"
 
     # Pattern 1: space between ref ending and punctuation - remove all spaces
     # Use [^<]* for simple refs, pattern won't match complex nested content
@@ -136,17 +110,3 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
                     newtext = new_before + after_punct
 
     return newtext
-
-
-def hy_fixes(text: str) -> str:
-    """Apply Armenian-specific fixes to text
-
-    Args:
-        text: WikiText content
-
-    Returns:
-        Fixed text
-    """
-    text = remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
-    text = remove_spaces_between_ref_and_punctuation(text, "hy")
-    return text

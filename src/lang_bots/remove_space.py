@@ -6,6 +6,7 @@ import re
 
 
 def match_it(text, charters):
+    charters = re.escape(charters)
     m = re.search(f'(</ref>|\/>)\s*([{charters}]\s*)$', text, flags=re.UNICODE)
     if m:
         return m.group(2)
@@ -34,13 +35,13 @@ def get_parts(newtext, charters):
 
 def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str) -> str:
 
-    # --- 1) تحديد علامات الترقيم
-    dot = r"\.,。।"
+    # Define punctuation marks based on language
+    dots = r".,。।"
 
     if lang == "hy":
-        dot = r"\.,。।։:"
+        dots = r".,。।։:"
 
-    parts = get_parts(newtext, dot)
+    parts = get_parts(newtext, dots)
     # ---
     for part, charter in parts:
         # ---
