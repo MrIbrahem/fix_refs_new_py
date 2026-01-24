@@ -6,16 +6,6 @@ import re
 from typing import Optional
 
 
-def str_ends_with(string: str, end_string: str) -> bool:
-    """Check if string ends with substring"""
-    return string.endswith(end_string)
-
-
-def str_starts_with(text: str, start: str) -> bool:
-    """Check if string starts with substring"""
-    return text.startswith(start)
-
-
 def remove_spaces_between_ref_and_punctuation(text: str, lang: Optional[str] = None) -> str:
     """Remove spaces between ref tags and punctuation
 
@@ -39,33 +29,6 @@ def remove_spaces_between_ref_and_punctuation(text: str, lang: Optional[str] = N
     text = re.sub(r'<\/ref>\s*([' + cls + r'])', r'</ref>\1', text)
 
     return text
-
-
-def get_parts(newtext: str, charters: str) -> list:
-    """Split text by double newlines and find parts ending with punctuation
-
-    Args:
-        newtext: Text to process
-        charters: Punctuation characters to match
-
-    Returns:
-        List of [part, char] pairs
-    """
-    matches = newtext.split("\n\n")
-
-    if len(matches) == 1:
-        matches = newtext.split("\r\n\r\n")
-
-    new_parts = []
-
-    for part in matches:
-        # Match </ref> or /> followed by punctuation at end
-        pattern = r'(?:<\/ref>|\/>)\s*([' + re.escape(charters) + r'])\s*$'
-        match = re.search(pattern, part, re.MULTILINE)
-        if match:
-            new_parts.append([part, match.group(1)])
-
-    return new_parts
 
 
 def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str) -> str:
