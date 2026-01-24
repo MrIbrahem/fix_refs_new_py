@@ -14,6 +14,12 @@ from ..lang_bots import apply_language_fixes
 from ..utils.debug import echo_test
 
 
+def expand_infobox_if_needed(text, title, lang, expend_infobox):
+    if expend_infobox or lang == "es":
+        text = expand_infobox_in_text(text, title, "")
+    return text
+
+
 def fix_one_page(
     text: str,
     title: str,
@@ -44,8 +50,7 @@ def fix_one_page(
     if is_redirect(title, text):
         return text
 
-    if expend_infobox or lang == "es":
-        text = expand_infobox_in_text(text, title, "")
+    text = expand_infobox_if_needed(text, title, lang, expend_infobox)
 
     text = mini_fixes(text, lang)
     text = fix_missing_refs(text, source_title, mdwiki_revid)
@@ -59,10 +64,18 @@ def fix_one_page(
         echo_test("add_en_lang\n")
         text = add_lang_en_to_refs(text)
 
-    text = apply_language_fixes(text, title, lang, source_title, mdwiki_revid)
+    text_with_lang_fixes = apply_language_fixes(text, title, lang, source_title, mdwiki_revid)
+
+    if text_with_lang_fixes:
+        text = text_with_lang_fixes
+        # Re-expand infobox if language fixes made changes
+        text = expand_infobox_if_needed(text, title, lang, expend_infobox)
 
     text = add_translated_from_mdwiki(text, lang)
 
     text = mini_fixes_after_fixing(text, lang)
 
-    return text if text else text_org
+    if not text.strip():
+        return text_org
+
+    return text
