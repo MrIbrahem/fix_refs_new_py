@@ -9,16 +9,9 @@ from ..bots.move_dots import move_dots_after_refs
 from ..bots.fix_missing_refs import fix_missing_refs
 from ..bots.redirect import is_redirect
 from ..mdwiki.category import add_translated_from_mdwiki
-from ..infobox.expend_infobox import Expend_Infobox
-from ..lang_bots.pl_bot import pl_fixes
-from ..lang_bots.pt_bot import pt_fixes
-from ..lang_bots.bg_bot import bg_fixes
-from ..lang_bots.es.es_bot import fix_es
-from ..lang_bots.es.es_section_bot import es_section
-from ..lang_bots.sw_bot import sw_fixes
-from ..lang_bots.hy_bot import hy_fixes
+from ..infobox.expend_infobox import expand_infobox_in_text
+from ..lang_bots import apply_language_fixes
 from ..utils.debug import echo_test
-
 
 def fix_page(
     text: str,
@@ -50,12 +43,8 @@ def fix_page(
     if is_redirect(title, text):
         return text
 
-    if lang == "pl":
-        text = pl_fixes(text)
-
     if infobox or lang == "es":
-        echo_test("Expend_Infobox\n")
-        text = Expend_Infobox(text, title, "")
+        text = expand_infobox_in_text(text, title, "")
 
     text = mini_fixes(text, lang)
     text = fix_missing_refs(text, source_title, mdwiki_revid)
@@ -69,43 +58,13 @@ def fix_page(
         echo_test("add_en_lang\n")
         text = add_lang_en_to_refs(text)
 
-    if lang == "pt":
-        text = pt_fixes(text)
+    text = apply_language_fixes(text, title, lang, source_title, mdwiki_revid)
 
-    elif lang == "bg":
-        text = bg_fixes(text, source_title, mdwiki_revid)
-
-    elif lang == "es":
-        text = fix_es(text, title)
-        text = es_section(source_title, text, str(mdwiki_revid))
-
-    elif lang == "sw":
-        text = sw_fixes(text)
-
-    elif lang == "hy":
-        text = hy_fixes(text)
-
-    if lang != "bg":
-        text = add_translated_from_mdwiki(text, lang)
+    text = add_translated_from_mdwiki(text, lang)
 
     text = mini_fixes_after_fixing(text, lang)
 
     return text if text else text_org
-
-
-def expend_infobox(text: str, title: str, options: str = "") -> str:
-    """Expand infobox templates using infobox/expend_infobox module
-
-    Args:
-        text: Page content
-        title: Page title
-        options: Additional options
-
-    Returns:
-        Text with expanded infobox
-    """
-
-    return Expend_Infobox(text, title, options)
 
 
 def fix_refs(text: str, lang: str = "en") -> str:
