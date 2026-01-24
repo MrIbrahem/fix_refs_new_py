@@ -2,11 +2,7 @@
 
 Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.php
 """
-from src.infobox import expend_infobox as ei_module
-
-expend_new = ei_module.expend_new
-make_section_0 = ei_module.make_section_0
-expend_infobox = ei_module.Expend_Infobox
+from src.infobox.expend_infobox import expend_new, make_section_0, expand_infobox_in_text
 
 
 class TestInfobox:
@@ -33,7 +29,7 @@ class TestInfobox:
         """Test expend_infobox with basic infobox"""
         text = """{{Infobox drug|name=Test}}
 Some content"""
-        result = expend_infobox(text, "TestPage", "")
+        result = expand_infobox_in_text(text, "TestPage", "")
         assert isinstance(result, str)
         assert len(result) > 0
 

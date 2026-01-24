@@ -3,15 +3,15 @@
 Converted from tests/FixpageTest.php
 """
 import pytest
-from src.core.fix_page import fix_page
+from src.core.fix_page import fix_one_page
 
 
 class TestFixPage:
-    """Test cases for fix_page function"""
+    """Test cases for fix_one_page function"""
 
     def fix_page_wrap(self, text: str, lang: str) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_page(text, "", True, True, False, lang, "", 0)
+        return fix_one_page(text, "", lang, True, True, False, "", 0)
 
     def test_part_1(self):
         """Test Armenian text with references and punctuation"""

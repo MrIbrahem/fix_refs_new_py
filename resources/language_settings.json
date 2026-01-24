@@ -1,0 +1,14 @@
+{
+  "results": [
+    {"lang_code": "hy", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "en", "move_dots": 1, "expend": 1, "add_en_lang": 0},
+    {"lang_code": "hi", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "zh", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "multi", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "ar", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "es", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "pt", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "bg", "move_dots": 1, "expend": 1, "add_en_lang": 1},
+    {"lang_code": "sw", "move_dots": 1, "expend": 1, "add_en_lang": 1}
+  ]
+}
