@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fix_refs"
-version = "1.0.0"
+version = "0.1.0"
 description = "A library to parse and fix references in MediaWiki wikitext"
 authors = [
     {name = "Mr. Ibrahem", email = "ibrahem.al-radaei@outlook.com"}
