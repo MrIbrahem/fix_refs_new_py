@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 from typing import Dict, Any
 from ..utils.debug import echo_test, echo_debug
-from .expend_refs import refs_expand, find_empty_short
+from ..parsers.citations import get_short_citations
+from .expend_refs import refs_expand
 from ..config import revisions_path
 
 
@@ -92,11 +93,11 @@ def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
     Returns:
         Text with missing references expanded
     """
-    empty_short = find_empty_short(text)
+    short_refs = get_short_citations(text)
 
-    echo_debug(f"empty refs: {len(empty_short)}")
+    echo_debug(f"empty refs: {len(short_refs)}")
 
-    if not empty_short:
+    if not short_refs:
         return text
 
     full_text = get_full_text(sourcetitle, mdwiki_revid)
@@ -104,6 +105,6 @@ def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
     if not full_text:
         return text
 
-    text = refs_expand(list(empty_short.values()), text, full_text)
+    text = refs_expand(short_refs, text, full_text)
 
     return text

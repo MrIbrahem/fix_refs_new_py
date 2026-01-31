@@ -1,20 +1,48 @@
 """
 Citation parser for WikiText reference tags
 """
-
-import re
+import wikitextparser as wtp
 from dataclasses import dataclass
-from typing import List, Dict, Optional
+from typing import Any, List, Dict
 
 
 @dataclass
 class Citation:
     """Represents a citation reference"""
 
-    content: str
-    tag: str
-    name: str
-    options: str
+    def __init__(self, ref: Any) -> None:
+        self.ref = None
+        # self.ref = copy.deepcopy(ref) # AttributeError: property '_attrs_match' of 'Tag' object has no setter
+        self.copy_object(ref)
+
+    def copy_object(self, ref):
+        parsed = wtp.parse(str(ref.string))
+
+        # to copy the tag object
+        for tag in parsed.get_tags():
+            if tag.string == parsed.string:
+                self.ref = tag
+                break
+
+    @property
+    def tag(self) -> str:
+        """Get citation string"""
+        return self.ref.string
+
+    @property
+    def content(self) -> str:
+        """Get citation content"""
+        return self.ref.contents
+
+    @property
+    def name(self) -> str:
+        """Get citation name"""
+        return self.ref.attrs.get("name", "")
+
+    @property
+    def attrs(self) -> str:
+        """Get citation options/attributes"""
+        return self.ref.attrs
 
     def get_original_text(self) -> str:
         """Get the original reference tag"""
@@ -24,39 +52,33 @@ class Citation:
         """Get citation content"""
         return self.content
 
+    def set_contents(self, new_content: str) -> None:
+        """Set citation content"""
+        if new_content or self.ref.contents:
+            self.ref.contents = new_content
+
     def get_name(self) -> str:
         """Get citation name"""
         return self.name
 
     def get_attributes(self) -> str:
         """Get citation options/attributes"""
-        return self.options
+        str_attrs = str(self.ref.string).split(">")[0].replace("<ref", "").strip()
+        return str_attrs.strip()
+
+    def to_string_self_closing(self) -> str:
+        """Convert to self-closing tag string"""
+        attributes = self.get_attributes()
+        if attributes:
+            return f"<ref {attributes} />"
+        return self.ref.string
 
     def to_string(self) -> str:
         """Convert back to reference tag string"""
-        return f"<ref {self.options.strip()}>{self.content}</ref>"
+        if not self.content.strip():
+            return self.ref.string.replace("></ref>", " />")
 
-
-def get_name(options: str) -> str:
-    """Extract the name attribute from citation options
-
-    Args:
-        options: Citation options string
-
-    Returns:
-        Extracted name or empty string if not found
-    """
-    options = options.strip()
-    if not options:
-        return ""
-
-    pattern = r"name\s*\=\s*[\"']*([^>\"\']*)[\"\']*\s*"
-    match = re.search(pattern, options, re.IGNORECASE)
-
-    if not match or not match.group(1):
-        return ""
-
-    return match.group(1).strip()
+        return self.ref.string
 
 
 def get_citations(text: str) -> List[Citation]:
@@ -68,20 +90,13 @@ def get_citations(text: str) -> List[Citation]:
     Returns:
         List of Citation objects
     """
-    citations = []
-    pattern = r"<ref([^\/>]*?)>(.+?)<\/ref>"
-    matches = re.findall(pattern, text, re.IGNORECASE | re.DOTALL)
 
-    for options, content in matches:
-        ref_tag = f"<ref{options}>{content}</ref>"
-        name = get_name(options)
-        citation = Citation(
-            content=content,
-            tag=ref_tag,
-            name=name,
-            options=options
-        )
-        citations.append(citation)
+    citations = []
+    parsed = wtp.parse(text)
+    for tag in parsed.get_tags():
+        if tag.name == "ref":
+            citation = Citation(ref=tag)
+            citations.append(citation)
 
     return citations
 
@@ -99,7 +114,7 @@ def get_full_refs(text: str) -> Dict[str, str]:
     citations = get_citations(text)
 
     for cite in citations:
-        if cite.name:
+        if cite.content and cite.name:
             full[cite.name] = cite.tag
 
     return full
@@ -115,18 +130,10 @@ def get_short_citations(text: str) -> List[Citation]:
         List of Citation objects for short references
     """
     citations = []
-    pattern = r"<ref ([^\/>]*?)\/\s*>"
-    matches = re.findall(pattern, text, re.IGNORECASE | re.DOTALL)
-
-    for options in matches:
-        ref_tag = f"<ref {options.strip()}/>"
-        name = get_name(options)
-        citation = Citation(
-            content="",
-            tag=ref_tag,
-            name=name,
-            options=options
-        )
-        citations.append(citation)
+    parsed = wtp.parse(text)
+    for tag in parsed.get_tags():
+        if tag.name == "ref" and not tag.contents:
+            citation = Citation(ref=tag)
+            citations.append(citation)
 
     return citations

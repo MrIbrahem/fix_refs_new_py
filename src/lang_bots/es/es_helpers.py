@@ -5,7 +5,19 @@ Spanish helper functions
 import re
 import wikitextparser as wtp
 from ...bots.months import make_date_new_val_es
-from ...parsers.citations import get_short_citations
+
+
+def remove_short_refs(text: str) -> str:
+    """
+    Remove short citations from text
+    """
+    parsed = wtp.parse(text)
+    for tag in parsed.get_tags():
+        if tag.name == "ref" and not tag.contents:
+            tag.string = ""
+    text = parsed.string
+    text = re.sub(r'\n+', '\n', text)
+    return text
 
 
 def start_end(cite_temp: str) -> bool:
@@ -58,24 +70,6 @@ def fix_es_months_in_refs(text: str) -> str:
     return parsed.string
 
 
-def check_short_refs(line: str) -> str:
-    """Remove short citations from line
-
-    Args:
-        line: Text line
-
-    Returns:
-        Line with short citations removed
-    """
-    shorts = get_short_citations(line)
-    for cite in shorts:
-        line = line.replace(cite.get_original_text(), "")
-
-    # Remove multiple newlines
-    line = re.sub(r'\n+', '\n', line)
-    return line
-
-
 def add_line_to_temp(line: str, text: str) -> str:
     """Add reference line to ref template
 
@@ -101,7 +95,7 @@ def add_line_to_temp(line: str, text: str) -> str:
         template_end = match.group(4)     # }}
 
         # Clean up existing refs content
-        refs_content = check_short_refs(refs_content)
+        refs_content = remove_short_refs(refs_content)
 
         # Combine existing refs with new refs
         combined_refs = refs_content.strip() + "\n" + line.strip() if refs_content.strip() else line.strip()

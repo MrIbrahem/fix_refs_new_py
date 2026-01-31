@@ -7,8 +7,6 @@ from src.parsers.citations import (
     get_citations,
     get_full_refs,
     get_short_citations,
-    get_name,
-    Citation
 )
 
 
@@ -59,59 +57,3 @@ class TestGetFullRefs:
         refs = get_full_refs(text)
         assert "test" in refs
         assert "Content" in refs["test"]
-
-
-class TestGetName:
-    """Test name extraction from attributes"""
-
-    def test_extract_name_with_quotes(self):
-        """Test extracting name with double quotes"""
-        options = 'name="test"'
-        assert get_name(options) == "test"
-
-    def test_extract_name_single_quotes(self):
-        """Test extracting name with single quotes"""
-        options = "name='test'"
-        assert get_name(options) == "test"
-
-    def test_extract_name_no_quotes(self):
-        """Test extracting name without quotes"""
-        options = "name=test"
-        assert get_name(options) == "test"
-
-    def test_extract_name_empty_options(self):
-        """Test with empty options"""
-        assert get_name("") == ""
-
-    def test_extract_name_no_name_attr(self):
-        """Test when name attribute is missing"""
-        options = "lang=en"
-        assert get_name(options) == ""
-
-
-class TestCitation:
-    """Test Citation class"""
-
-    def test_citation_to_string(self):
-        """Test converting citation to string"""
-        citation = Citation(
-            content="Test content",
-            tag='<ref name="test">Test content</ref>',
-            name="test",
-            options='name="test"'
-        )
-        result = citation.to_string()
-        assert result == '<ref name="test">Test content</ref>'
-
-    def test_citation_getters(self):
-        """Test citation getter methods"""
-        citation = Citation(
-            content="Content",
-            tag="<ref>Content</ref>",
-            name="",
-            options=""
-        )
-        assert citation.get_content() == "Content"
-        assert citation.get_name() == ""
-        assert citation.get_attributes() == ""
-        assert citation.get_original_text() == "<ref>Content</ref>"

@@ -4,7 +4,7 @@ Infobox expansion functions
 
 import re
 import wikitextparser as wtp
-from ..bots.txtlib2 import extract_templates_and_params
+
 
 COMMENT_PATTERN = re.compile(
     r"\s*\n*\s*(<!-- (Monoclonal antibody data|External links|Names*|Clinical data|Legal data|Legal status|Pharmacokinetic data|Chemical and physical data|Definition and medical uses|Chemical data|\w+ \w+ data|\w+ \w+ \w+ data|\w+ data|\w+ status|Identifiers) -->)\s*\n*",
@@ -51,6 +51,40 @@ def expend_new(main_temp):
     new_temp = do_comments(new_temp)
     # ---
     return new_temp
+
+
+def extract_templates_and_params(text):
+    # ---
+    result = []
+    # ---
+    parsed = wtp.parse(text)
+    templates = parsed.templates
+    # ---
+    for template in templates:
+        # ---
+        if not template:
+            continue
+        # ---
+        pa_item = template.string
+        # ---
+        if not pa_item or pa_item.strip() == "":
+            continue
+        # ---
+        params = {}
+        for param in template.arguments:
+            value = str(param.value)
+            key = str(param.name)
+            key = key.strip()
+            params[key] = value
+        # ---
+        ficrt = {
+            "params": params,
+            "item": pa_item,
+        }
+        # ---
+        result.append(ficrt)
+    # ---
+    return result
 
 
 def expand_infobox_in_text(text, title, section_0):

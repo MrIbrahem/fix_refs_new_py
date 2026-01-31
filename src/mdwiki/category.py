@@ -2,10 +2,11 @@
 MDWiki category integration
 """
 
+import os
 import json
-from pathlib import Path
 from typing import Dict, Any
 from ..utils.http import get_url
+from ..config import resources_path
 
 
 def load_from_local_file() -> Dict[str, Any]:
@@ -14,7 +15,7 @@ def load_from_local_file() -> Dict[str, Any]:
     Returns:
         Dictionary of MDWiki categories or empty dict if file not found
     """
-    local_file = Path(__file__).parent.parent.parent.parent / 'resources' / 'mdwiki_categories.json'
+    local_file = resources_path / 'mdwiki_categories.json'
 
     if not local_file.exists():
         return {}
@@ -33,6 +34,10 @@ def get_cats() -> Dict[str, Any]:
     Returns:
         Dictionary of MDWiki categories
     """
+    server_name = os.environ.get("SERVER_NAME", "")
+    if not server_name:
+        return load_from_local_file()
+
     url = "https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/Q107014860/sitelinks"
     data = get_url(url)
 
