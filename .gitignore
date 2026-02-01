@@ -3,4 +3,6 @@
 /src/fix_refs.egg-info
 tests/**/output.txt
 .coverage
-fix_refs.py
+
+# local imports only
+fix_refs/__init__.py
