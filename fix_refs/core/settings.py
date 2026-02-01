@@ -9,8 +9,10 @@ from ..config import resources_path
 
 def load_settings_from_file() -> dict:
     file_path = resources_path / "language_settings.json"
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    if file_path.exists():
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
 
 
 def load_settings_from_server(server_name) -> dict:

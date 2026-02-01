@@ -1,15 +1,16 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-home = os.getenv("HOME", str(Path.home()))
+_env_file_path = None
 
-html_path = Path("I:/medwiki/new/medwiki.toolforge.org_repo/public_html")
+try:
+    load_dotenv()
+except Exception:
+    _HOME = os.getenv("HOME")
+    if _HOME:
+        _env_file_path = Path(f"{_HOME}/.env")
+        load_dotenv(_env_file_path)
 
-if not html_path.exists():
-    html_path = Path(home) / "public_html"
-
-revisions_path = html_path / "revisions_new"
-resources_path = Path(__file__).parent.parent / "resources"
-
-if not revisions_path.exists():
-    revisions_path = Path(__file__).parent.parent.parent.parent / "resources/revisions"
+resources_path = Path(os.getenv("RESOURCES_PATH", Path(__file__).parent.parent / "resources")).expanduser()
+revisions_path = Path(os.getenv("REVISIONS_PATH", Path(resources_path) / "revisions")).expanduser()

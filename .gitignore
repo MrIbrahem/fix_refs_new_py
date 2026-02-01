@@ -3,3 +3,4 @@
 /fix_refs/fix_refs.egg-info
 tests/**/output.txt
 .coverage
+*.env
