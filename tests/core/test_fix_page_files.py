@@ -24,6 +24,7 @@ def test_file_ja():
         move_dots=True,
         expend_infobox=True,
         add_en_lang=False,
+        add_category=False,
         source_title="",
         mdwiki_revid=0
     )
