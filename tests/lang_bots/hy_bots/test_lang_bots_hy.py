@@ -2,7 +2,7 @@
 
 Converted from tests/remove_spaceTest.php and tests/remove_space2Test.php
 """
-from src.lang_bots.hy_bot import (
+from fix_refs.lang_bots.hy_bot import (
     hy_fixes
 )
 

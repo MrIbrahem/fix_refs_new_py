@@ -3,7 +3,7 @@ Tests for Bulgarian bot
 """
 
 import pytest
-from src.lang_bots.bg_bot import bg_fixes
+from fix_refs.lang_bots.bg_bot import bg_fixes
 
 
 class TestBulgarianBot:

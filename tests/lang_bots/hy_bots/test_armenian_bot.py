@@ -3,7 +3,7 @@ Tests for Armenian bot
 """
 
 import pytest
-from src.lang_bots.hy_bot import hy_fixes
+from fix_refs.lang_bots.hy_bot import hy_fixes
 
 
 class TestArmenianBot:

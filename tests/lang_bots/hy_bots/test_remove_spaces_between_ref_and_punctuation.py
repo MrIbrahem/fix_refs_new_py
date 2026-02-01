@@ -3,7 +3,7 @@
 Converted from tests/remove_space2Test.php
 """
 import pytest
-from src.lang_bots.hy_bot import remove_spaces_between_ref_and_punctuation
+from fix_refs.lang_bots.hy_bot import remove_spaces_between_ref_and_punctuation
 
 
 class TestRemoveSpace2Extra:

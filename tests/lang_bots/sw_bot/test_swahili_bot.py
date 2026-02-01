@@ -3,7 +3,7 @@ Tests for Swahili bot
 """
 
 import pytest
-from src.lang_bots.sw_bot import sw_fixes
+from fix_refs.lang_bots.sw_bot import sw_fixes
 
 
 class TestSwahiliBot:

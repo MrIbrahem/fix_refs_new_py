@@ -3,7 +3,7 @@
 Converted from tests/md_catTest.php
 """
 import pytest
-from src.mdwiki.category import add_translated_from_mdwiki
+from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
 
 class TestMdCategory:

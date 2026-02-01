@@ -4,7 +4,7 @@ Converted from tests/pl_bots/pl_infoboxTest.php
 """
 import pytest
 import re
-from src.lang_bots.pl_bot import add_missing_params_to_choroba_infobox, pl_fixes
+from fix_refs.lang_bots.pl_bot import add_missing_params_to_choroba_infobox, pl_fixes
 
 
 class TestPlInfobox:

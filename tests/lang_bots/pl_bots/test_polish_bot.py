@@ -3,7 +3,7 @@ Tests for Polish bot
 """
 
 import pytest
-from src.lang_bots.pl_bot import pl_fixes
+from fix_refs.lang_bots.pl_bot import pl_fixes
 
 
 class TestPolishBot:

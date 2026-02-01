@@ -3,13 +3,13 @@
 Converted from tests/pt_bots/pt_monthsTest.php
 """
 import pytest
-from src.lang_bots.pt_bot import (
+from fix_refs.lang_bots.pt_bot import (
     fix_pt_months_in_texts,
     fix_pt_months_in_refs,
     rm_ref_spaces,
     start_end
 )
-from src.bots.months import make_date_new_val_pt
+from fix_refs.bots.months import make_date_new_val_pt
 
 
 class TestPortugueseBot:

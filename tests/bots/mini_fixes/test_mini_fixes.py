@@ -3,7 +3,7 @@ Tests for mini fixes
 """
 
 import pytest
-from src.bots.mini_fixes import (
+from fix_refs.bots.mini_fixes import (
     mini_fixes,
     mini_fixes_after_fixing,
     refs_tags_spaces,

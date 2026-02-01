@@ -3,7 +3,7 @@
 Converted from tests/Parse/CategoryTest.php
 """
 import pytest
-from src.parsers.category import get_categories
+from fix_refs.parsers.category import get_categories
 
 
 class TestCategory:

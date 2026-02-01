@@ -3,7 +3,7 @@
 Converted from tests/Bots/remove_duplicate_refsTest.php
 """
 from pathlib import Path
-from src.bots.remove_duplicate_refs import (
+from fix_refs.bots.remove_duplicate_refs import (
     remove_duplicate_refs_with_attrs
 )
 

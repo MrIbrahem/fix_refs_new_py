@@ -3,7 +3,7 @@
 Converted from tests/Bots/mini_fixes_botTest.php
 """
 import pytest
-from src.bots.mini_fixes import (
+from fix_refs.bots.mini_fixes import (
     fix_sections_titles,
     remove_space_before_ref_tags,
     refs_tags_spaces,

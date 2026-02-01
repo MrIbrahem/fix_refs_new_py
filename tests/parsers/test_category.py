@@ -3,7 +3,7 @@ Tests for category parser
 """
 
 import pytest
-from src.parsers.category import (
+from fix_refs.parsers.category import (
     get_categories,
     get_category_list,
     has_category

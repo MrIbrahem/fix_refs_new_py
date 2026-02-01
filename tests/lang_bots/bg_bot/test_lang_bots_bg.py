@@ -3,7 +3,7 @@
 Converted from tests/bg_bots/fix_bgTest.php
 """
 import pytest
-from src.lang_bots.bg_bot import bg_section, bg_fixes
+from fix_refs.lang_bots.bg_bot import bg_section, bg_fixes
 
 
 class TestBgSection:

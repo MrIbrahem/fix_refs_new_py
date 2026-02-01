@@ -3,7 +3,7 @@
 Converted from tests/Parse/Citations_regTest.php
 """
 import pytest
-from src.parsers.citations import (
+from fix_refs.parsers.citations import (
     get_citations,
     get_full_refs,
     get_short_citations,

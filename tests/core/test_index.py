@@ -2,7 +2,7 @@
 
 Converted from tests/indexTest.php
 """
-from src.core.fix_page import fix_one_page
+from fix_refs.core.fix_page import fix_one_page
 
 
 class TestIndex:

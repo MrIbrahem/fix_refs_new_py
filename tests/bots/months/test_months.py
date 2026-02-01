@@ -3,7 +3,7 @@ Tests for month handling
 """
 
 import pytest
-from src.bots.months import (
+from fix_refs.bots.months import (
     new_date,
     make_date_new_val_pt,
     make_date_new_val_es

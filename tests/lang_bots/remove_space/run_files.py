@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref as new_removes
+from fix_refs.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref as new_removes
 base_path = Path(__file__).parent / "remove_space_texts"
 
 for i in [1, 2]:

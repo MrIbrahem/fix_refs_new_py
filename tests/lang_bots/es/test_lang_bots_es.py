@@ -2,13 +2,13 @@
 
 Converted from tests/es_bots/es_refsTest.php and tests/es_bots/es_monthsTest.php
 """
-from src.lang_bots.es.es_refs import mv_es_refs
-from src.lang_bots.es.es_helpers import (
+from fix_refs.lang_bots.es.es_refs import mv_es_refs
+from fix_refs.lang_bots.es.es_helpers import (
     fix_es_months_in_texts,
     fix_es_months_in_refs,
     start_end,
 )
-from src.bots.months import make_date_new_val_es
+from fix_refs.bots.months import make_date_new_val_es
 
 
 class TestEsMonths:

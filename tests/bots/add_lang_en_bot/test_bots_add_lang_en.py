@@ -3,7 +3,7 @@
 Converted from tests/en_lang_paramTest.php
 """
 import pytest
-from src.bots.add_lang_en_bot import add_lang_en_to_refs
+from fix_refs.bots.add_lang_en_bot import add_lang_en_to_refs
 
 
 class TestAddLangEn:

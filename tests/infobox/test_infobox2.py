@@ -5,7 +5,7 @@ Converted from tests/infoboxes/infobox2Test.php
 Note: This test requires the infobox2 Python module which may need to be implemented.
 """
 from pathlib import Path
-from src.infobox.expend_infobox import expend_new
+from fix_refs.infobox.expend_infobox import expend_new
 
 tests_dir = Path(__file__).parent / "texts_infobox2"
 

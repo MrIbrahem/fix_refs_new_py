@@ -1,6 +1,6 @@
 """
 """
-from src.infobox.expend_infobox import do_comments
+from fix_refs.infobox.expend_infobox import do_comments
 
 
 class TestDoComments:

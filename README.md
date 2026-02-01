@@ -32,11 +32,11 @@ pytest
 pip install -e ".[dev]"
 
 # Run tests with coverage
-pytest --cov=src --cov-report=html
+pytest --cov=fix_refs --cov-report=html
 
 # Type checking
-mypy src/
+mypy fix_refs/
 
 # Linting
-pylint src/
+pylint fix_refs/
 ```

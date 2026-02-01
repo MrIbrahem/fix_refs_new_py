@@ -1,8 +1,5 @@
 /.claude
 *.pyc
-/src/fix_refs.egg-info
+/fix_refs/fix_refs.egg-info
 tests/**/output.txt
 .coverage
-
-# local imports only
-fix_refs/__init__.py

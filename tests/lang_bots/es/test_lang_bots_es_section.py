@@ -3,7 +3,7 @@
 Converted from tests/es_bots/esSectionTest.php
 """
 import pytest
-from src.lang_bots.es.es_section_bot import es_section
+from fix_refs.lang_bots.es.es_section_bot import es_section
 
 
 class TestEsSection:

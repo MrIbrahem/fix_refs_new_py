@@ -2,7 +2,7 @@
 
 Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.php
 """
-from src.infobox.expend_infobox import expend_new, make_section_0, expand_infobox_in_text
+from fix_refs.infobox.expend_infobox import expend_new, make_section_0, expand_infobox_in_text
 
 
 class TestInfobox:

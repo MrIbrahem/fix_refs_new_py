@@ -3,8 +3,8 @@
 Converted from tests/remove_spaceTest.php
 """
 import pytest
-from src.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref
-from src.lang_bots.hy_bot import remove_spaces_between_ref_and_punctuation
+from fix_refs.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref
+from fix_refs.lang_bots.hy_bot import remove_spaces_between_ref_and_punctuation
 
 
 def test_remove_space_end_3rd_file():

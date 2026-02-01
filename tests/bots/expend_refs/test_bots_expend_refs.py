@@ -3,7 +3,7 @@
 Converted from tests/Bots/expend_refsTest.php
 """
 import pytest
-from src.bots.expend_refs import refs_expand_work
+from fix_refs.bots.expend_refs import refs_expand_work
 
 
 class TestExpendRefs:

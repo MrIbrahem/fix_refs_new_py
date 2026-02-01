@@ -2,8 +2,7 @@
 
 Converted from tests/helps_bots/missing_refsTest.php
 """
-import pytest
-from src.bots.fix_missing_refs import fix_missing_refs
+from fix_refs.bots.fix_missing_refs import fix_missing_refs
 
 
 class TestMissingRefs:

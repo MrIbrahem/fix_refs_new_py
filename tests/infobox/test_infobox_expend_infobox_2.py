@@ -1,7 +1,7 @@
 """
 Tests for infobox expansion (expend_infobox.py)
 """
-from src.infobox.expend_infobox import expend_new
+from fix_refs.infobox.expend_infobox import expend_new
 
 # Test data from infoboxTest.php
 TEXT_INPUT = r"""{{Infobox drug|verifiedrevid=461217017|image=Omaveloxolone structure.svg|width=250|alt=|caption=<!-- Names -->|pronounce=|tradename=Skyclarys|synonyms=RTA 408|IUPAC_name=N-((4aS,6aR,6bS,8aR,12aS,14aR,14bS)-1 1-cyano-2,2,6a,6b,9,9,12a-heptamethyl-10,14-dioxo-1,2,3,4,4a,5,6,6a,6b,7,8,8a,9,10,12a,14,14a,14b- octadecahydropicen-4a-yl)-2,2-difluoropropanamide

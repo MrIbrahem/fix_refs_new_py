@@ -3,7 +3,7 @@
 Converted from tests/swTest.php
 """
 import pytest
-from src.lang_bots.sw_bot import sw_fixes
+from fix_refs.lang_bots.sw_bot import sw_fixes
 
 
 class TestSwFixes:

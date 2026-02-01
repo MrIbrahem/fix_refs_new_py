@@ -3,7 +3,7 @@
 Converted from tests/md_catTest.php
 """
 from unittest.mock import patch
-from src.mdwiki.category import add_translated_from_mdwiki
+from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
 
 # Mock data for get_mdwiki_category responses
@@ -23,7 +23,7 @@ def mock_get_mdwiki_category(lang):
 class TestMdCategory:
     """Test cases for MDWiki category addition"""
 
-    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    @patch("fix_refs.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
     def test_appends_category_when_conditions_met(self, mock_cats):
         """Test that category is appended for French language"""
         text = "This is a sample text"
@@ -31,7 +31,7 @@ class TestMdCategory:
         expected = "This is a sample text\n[[Catégorie:Traduit de MDWiki]]\n"
         assert result == expected
 
-    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    @patch("fix_refs.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
     def test_does_not_append_when_category_exists(self, mock_cats):
         """Test that category is not appended if it already exists"""
         category = "[[Category:Translated from MDWiki (de)]]"
@@ -39,7 +39,7 @@ class TestMdCategory:
         result = add_translated_from_mdwiki(text, "de")
         assert result == text
 
-    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    @patch("fix_refs.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
     def test_handles_multiple_newlines(self, mock_cats):
         """Test handling of multiple newlines"""
         text = "This is a sample text\n\n"
@@ -47,7 +47,7 @@ class TestMdCategory:
         expected = "This is a sample text\n\n\n[[Категория:Статьи, переведённые с MDWiki]]\n"
         assert result == expected
 
-    @patch("src.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
+    @patch("fix_refs.mdwiki.category.get_mdwiki_category", side_effect=mock_get_mdwiki_category)
     def test_langs_ur(self, mock_cats):
         """Test Urdu language category"""
         lang = "ur"
