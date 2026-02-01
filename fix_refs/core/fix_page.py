@@ -27,6 +27,7 @@ def fix_one_page(
     move_dots: bool=True,
     expend_infobox: bool=True,
     add_en_lang: bool=False,
+    add_category: bool=False,
     source_title: str = "",
     mdwiki_revid: int = 0
 ) -> str:
@@ -38,6 +39,7 @@ def fix_one_page(
         move_dots: Whether to move dots after references
         infobox: Whether to expand infobox
         add_en_lang: Whether to add English language parameter
+        add_category: Whether to add category for MDWiki translations
         lang: Language code
         source_title: Source page title
         mdwiki_revid: MDWiki revision ID
@@ -71,7 +73,8 @@ def fix_one_page(
         # Re-expand infobox if language fixes made changes
         text = expand_infobox_if_needed(text, title, lang, expend_infobox)
 
-    text = add_translated_from_mdwiki(text, lang)
+    if add_category:
+        text = add_translated_from_mdwiki(text, lang)
 
     text = mini_fixes_after_fixing(text, lang)
 

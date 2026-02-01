@@ -1,10 +1,12 @@
 # Fix Refs
-
 A Python library to parse and fix references in MediaWiki wikitext.
 
 ## Installation
 
 ```bash
+pip install git+https://github.com/MrIbrahem/fix_refs_new_py.git
+
+# or
 pip install -e .
 ```
 

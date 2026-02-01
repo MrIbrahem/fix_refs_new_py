@@ -10,7 +10,16 @@ class TestIndex:
 
     def fix_page_wrap(self, text: str, lang: str, move_dots: bool, infobox: bool, add_en_lang: bool) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_one_page(text, "title", lang, move_dots, infobox, add_en_lang, 'SomeTitle', 0)
+        return fix_one_page(
+            text,
+            "title",
+            lang,
+            move_dots,
+            expend_infobox=infobox,
+            add_en_lang=add_en_lang,
+            source_title='SomeTitle',
+            mdwiki_revid=0,
+        )
 
     def test_part_3(self):
         """Test simple Armenian text with references"""
