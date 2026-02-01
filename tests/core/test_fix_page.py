@@ -11,7 +11,16 @@ class TestFixPage:
 
     def fix_page_wrap(self, text: str, lang: str) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_one_page(text, "", lang, True, True, False, "", 0)
+        return fix_one_page(
+            text=text,
+            title="",
+            lang=lang,
+            move_dots=True,
+            expend_infobox=True,
+            add_en_lang=False,
+            source_title='',
+            mdwiki_revid=0,
+        )
 
     def test_part_1(self):
         """Test Armenian text with references and punctuation"""
