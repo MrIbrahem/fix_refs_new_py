@@ -75,8 +75,9 @@ include_trailing_comma = true
 ensure_newline_before_comments = true
 
 # Project paths
-src_paths = "ArWikiCats"
-known_first_party = "ArWikiCats"
+src_paths = "fix_refs"
+known_first_party = "fix_refs"
+
 skip = [
     ".env",
     "env",
