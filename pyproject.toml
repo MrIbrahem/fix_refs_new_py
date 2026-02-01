@@ -34,8 +34,11 @@ dev = [
     "pylint>=3.0.0",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+packages = ["fix_refs"]
+
+[tool.setuptools.package-dir]
+"fix_refs" = "src"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
