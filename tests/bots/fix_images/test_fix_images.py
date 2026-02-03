@@ -3,6 +3,8 @@
 Tests the functionality of checking and removing missing images from Wikimedia Commons.
 """
 import pytest
+import wikitextparser as wtp
+
 from unittest.mock import patch, Mock
 from fix_refs.bots.fix_images import (
     check_commons_image_exists,
@@ -12,20 +14,8 @@ from fix_refs.bots.fix_images import (
     remove_missing_images,
     remove_missing_images_cached,
     clear_image_cache,
-    _create_request,
     _extract_filename_from_wikilink,
 )
-import wikitextparser as wtp
-
-
-class TestCreateRequest:
-    """Test request creation with User-Agent"""
-
-    def test_create_request_has_user_agent(self):
-        """Test that request includes User-Agent header"""
-        request = _create_request("https://example.com")
-        assert 'User-agent' in request.headers
-        assert 'fix_refs_bot/1.0' in request.headers['User-agent']
 
 
 class TestCheckCommonsImageExists:
@@ -218,11 +208,7 @@ class TestRemoveMissingInfoboxImages:
         """Test that missing infobox image is set to empty"""
         mock_check.return_value = False
 
-        input_text = """{{Infobox
-|name = Example
-|image = Non_existent.png
-|caption = This caption for missing image
-}}"""
+        input_text = """{{Infobox\n|name = Example\n|image = Non_existent.png\n|caption = This caption for missing image\n}}"""
 
         result = remove_missing_infobox_images(input_text)
 
@@ -248,11 +234,7 @@ class TestRemoveMissingInfoboxImages:
         """Test that existing infobox image is kept"""
         mock_check.return_value = True
 
-        input_text = """{{Infobox
-|name = Example
-|image = Exists.png
-|caption = Valid caption
-}}"""
+        input_text = """{{Infobox\n|name = Example\n|image = Exists.png\n|caption = Valid caption\n}}"""
 
         result = remove_missing_infobox_images(input_text)
         assert "Exists.png" in result
@@ -263,10 +245,7 @@ class TestRemoveMissingInfoboxImages:
         """Test handling of image2, image3 parameters"""
         mock_check.return_value = False
 
-        input_text = """{{Infobox
-|image2 = Missing2.png
-|caption2 = Caption 2
-}}"""
+        input_text = """{{Infobox\n|image2 = Missing2.png\n|caption2 = Caption 2\n}}"""
 
         result = remove_missing_infobox_images(input_text)
 
@@ -289,12 +268,9 @@ class TestRemoveMissingInfoboxImages:
     @patch('fix_refs.bots.fix_images.check_commons_image_exists')
     def test_skip_empty_image_values(self, mock_check):
         """Test that already empty image values are skipped"""
-        input_text = """{{Infobox
-|image =
-|caption =
-}}"""
+        input_text = """{{Infobox\n|image =\n|caption =\n}}"""
 
-        result = remove_missing_infobox_images(input_text)
+        _result = remove_missing_infobox_images(input_text)
         # Should not call the API for empty values
         assert mock_check.call_count == 0
 
@@ -303,12 +279,7 @@ class TestRemoveMissingInfoboxImages:
         """Test handling multiple templates in text"""
         mock_check.side_effect = [False, True]
 
-        input_text = """{{Infobox1
-|image = Missing.png
-}}
-{{Infobox2
-|image = Exists.png
-}}"""
+        input_text = """{{Infobox1\n|image = Missing.png\n}}\n{{Infobox2\n|image = Exists.png\n}}"""
 
         result = remove_missing_infobox_images(input_text)
 
@@ -326,11 +297,7 @@ class TestRemoveMissingImages:
         """Test handling both infobox and inline images"""
         mock_check.return_value = False
 
-        input_text = """{{Infobox
-|image = Missing1.png
-|caption = Caption 1
-}}
-Text with [[File:Missing2.png|thumb]] here."""
+        input_text = """{{Infobox|image = Missing1.png\n|caption = Caption 1\n}}\nText with [[File:Missing2.png|thumb]] here."""
 
         result = remove_missing_images(input_text)
 
@@ -369,12 +336,9 @@ class TestRemoveMissingImagesCached:
         # Clear cache first
         clear_image_cache()
 
-        input_text = """{{Infobox
-|image = Missing.png
-}}
-Text with [[File:Missing.png|thumb]] here."""
+        input_text = """{{Infobox\n|image = Missing.png\n}}\nText with [[File:Missing.png|thumb]] here."""
 
-        result = remove_missing_images_cached(input_text)
+        _result = remove_missing_images_cached(input_text)
 
         # Should only call API once due to caching
         assert mock_check.call_count == 1

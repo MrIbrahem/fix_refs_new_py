@@ -2,13 +2,11 @@
 Fix missing images by checking Wikimedia Commons and clearing invalid image references
 """
 
-import urllib.request
 import urllib.parse
-import json
-from typing import Optional, Dict
+from typing import Optional
 from functools import lru_cache
-
 import wikitextparser as wtp
+from ..utils.http import get_url_json
 
 
 # User-Agent for Wikimedia API requests (required by Wikimedia policy)
@@ -17,20 +15,6 @@ USER_AGENT = "fix_refs_bot/1.0 (https://github.com/MrIbrahem/fix_refs_new_py)"
 # Image parameter patterns (image, image2, image3, etc.)
 IMAGE_PARAM_PATTERNS = ['image', 'image2', 'image3', 'image4', 'image5']
 CAPTION_PARAM_PATTERNS = ['caption', 'caption2', 'caption3', 'caption4', 'caption5']
-
-
-def _create_request(url: str) -> urllib.request.Request:
-    """Create a request with proper User-Agent header
-
-    Args:
-        url: The URL to request
-
-    Returns:
-        Request object with User-Agent set
-    """
-    request = urllib.request.Request(url)
-    request.add_header('User-Agent', USER_AGENT)
-    return request
 
 
 def check_commons_image_exists(filename: str, timeout: int = 10) -> bool:
@@ -64,20 +48,14 @@ def check_commons_image_exists(filename: str, timeout: int = 10) -> bool:
     })
     url = f"https://commons.wikimedia.org/w/api.php?{params}"
 
-    try:
-        request = _create_request(url)
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            data = json.loads(response.read().decode('utf-8'))
+    data = get_url_json(url, timeout=timeout)
 
-            pages = data.get('query', {}).get('pages', {})
-            for page in pages.values():
-                # If 'missing' key exists, file doesn't exist
-                return 'missing' not in page
+    pages = data.get('query', {}).get('pages', {})
+    for page in pages.values():
+        # If 'missing' key exists, file doesn't exist
+        return 'missing' not in page
 
-            return False
-    except Exception:
-        # On any error, assume image exists to avoid removing valid images
-        return True
+    return True
 
 
 @lru_cache(maxsize=1000)
