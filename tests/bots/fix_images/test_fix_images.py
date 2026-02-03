@@ -61,7 +61,7 @@ class TestCheckCommonsImageExists:
     @patch('fix_refs.bots.fix_images.get_url_json')
     def test_api_error_returns_true(self, mock_get_url_json):
         """Test that API errors return True to avoid removing valid images"""
-        mock_get_url_json.side_effect = Exception("Network error")
+        mock_get_url_json.return_value = None
 
         result = check_commons_image_exists("Example.png")
         assert result is True

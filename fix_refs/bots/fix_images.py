@@ -49,6 +49,9 @@ def check_commons_image_exists(filename: str, timeout: int = 10) -> bool:
     url = f"https://commons.wikimedia.org/w/api.php?{params}"
 
     data = get_url_json(url, timeout=timeout)
+    if not data:
+        # On API error, assume image exists to avoid false positives
+        return True
 
     pages = data.get('query', {}).get('pages', {})
     for page in pages.values():
