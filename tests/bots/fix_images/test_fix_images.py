@@ -312,7 +312,9 @@ class TestRemoveMissingInfoboxImages:
         
         result = remove_missing_infobox_images(input_text)
         
-        assert "Missing.png" not in result or result.count("Missing.png") == 0 or "|image =" in result
+        # First template should have empty image value
+        assert "|image =" in result and "Missing.png" not in result
+        # Second template should retain its image
         assert "Exists.png" in result
 
 
@@ -340,7 +342,7 @@ Text with [[File:Missing2.png|thumb]] here."""
                 assert arg.value.strip() == ''
         
         # Check inline image is removed
-        assert "Missing2.png" not in result or "[[File:Missing2.png" not in result
+        assert "[[File:Missing2.png" not in result
     
     @patch('fix_refs.bots.fix_images.check_commons_image_exists')
     def test_empty_text(self, mock_check):
