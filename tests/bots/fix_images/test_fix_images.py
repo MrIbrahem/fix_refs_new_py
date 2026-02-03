@@ -5,7 +5,7 @@ Tests the functionality of checking and removing missing images from Wikimedia C
 import pytest
 import wikitextparser as wtp
 
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from fix_refs.bots.fix_images import (
     check_commons_image_exists,
     check_commons_image_exists_cached,
@@ -22,25 +22,17 @@ class TestCheckCommonsImageExists:
     """Test checking if images exist on Wikimedia Commons"""
 
     @patch('fix_refs.bots.fix_images.get_url_json')
-    def test_existing_image(self, mock_urlopen):
+    def test_existing_image(self, mock_get_url_json):
         """Test that existing image returns True"""
-        mock_response = Mock()
-        mock_response.read.return_value = b'{"query":{"pages":{"12345":{"title":"File:Example.png"}}}}'
-        mock_response.__enter__ = Mock(return_value=mock_response)
-        mock_response.__exit__ = Mock(return_value=False)
-        mock_urlopen.return_value = mock_response
+        mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
 
         result = check_commons_image_exists("Example.png")
         assert result is True
 
     @patch('fix_refs.bots.fix_images.get_url_json')
-    def test_missing_image(self, mock_urlopen):
+    def test_missing_image(self, mock_get_url_json):
         """Test that missing image returns False"""
-        mock_response = Mock()
-        mock_response.read.return_value = b'{"query":{"pages":{"-1":{"missing":""}}}}'
-        mock_response.__enter__ = Mock(return_value=mock_response)
-        mock_response.__exit__ = Mock(return_value=False)
-        mock_urlopen.return_value = mock_response
+        mock_get_url_json.return_value = {"query": {"pages": {"-1": {"missing": ""}}}}
 
         result = check_commons_image_exists("NonExistent.png")
         assert result is False
@@ -51,33 +43,25 @@ class TestCheckCommonsImageExists:
         assert check_commons_image_exists("  ") is False
 
     @patch('fix_refs.bots.fix_images.get_url_json')
-    def test_file_prefix_removed(self, mock_urlopen):
+    def test_file_prefix_removed(self, mock_get_url_json):
         """Test that File: prefix is properly removed"""
-        mock_response = Mock()
-        mock_response.read.return_value = b'{"query":{"pages":{"12345":{"title":"File:Example.png"}}}}'
-        mock_response.__enter__ = Mock(return_value=mock_response)
-        mock_response.__exit__ = Mock(return_value=False)
-        mock_urlopen.return_value = mock_response
+        mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
 
         result = check_commons_image_exists("File:Example.png")
         assert result is True
 
     @patch('fix_refs.bots.fix_images.get_url_json')
-    def test_image_prefix_removed(self, mock_urlopen):
+    def test_image_prefix_removed(self, mock_get_url_json):
         """Test that Image: prefix is properly removed"""
-        mock_response = Mock()
-        mock_response.read.return_value = b'{"query":{"pages":{"12345":{"title":"File:Example.png"}}}}'
-        mock_response.__enter__ = Mock(return_value=mock_response)
-        mock_response.__exit__ = Mock(return_value=False)
-        mock_urlopen.return_value = mock_response
+        mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
 
         result = check_commons_image_exists("Image:Example.png")
         assert result is True
 
     @patch('fix_refs.bots.fix_images.get_url_json')
-    def test_api_error_returns_true(self, mock_urlopen):
+    def test_api_error_returns_true(self, mock_get_url_json):
         """Test that API errors return True to avoid removing valid images"""
-        mock_urlopen.side_effect = Exception("Network error")
+        mock_get_url_json.side_effect = Exception("Network error")
 
         result = check_commons_image_exists("Example.png")
         assert result is True
