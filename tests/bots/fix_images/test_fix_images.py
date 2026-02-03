@@ -21,7 +21,7 @@ from fix_refs.bots.fix_images import (
 class TestCheckCommonsImageExists:
     """Test checking if images exist on Wikimedia Commons"""
 
-    @patch('urllib.request.urlopen')
+    @patch('fix_refs.bots.fix_images.get_url_json')
     def test_existing_image(self, mock_urlopen):
         """Test that existing image returns True"""
         mock_response = Mock()
@@ -33,7 +33,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("Example.png")
         assert result is True
 
-    @patch('urllib.request.urlopen')
+    @patch('fix_refs.bots.fix_images.get_url_json')
     def test_missing_image(self, mock_urlopen):
         """Test that missing image returns False"""
         mock_response = Mock()
@@ -50,7 +50,7 @@ class TestCheckCommonsImageExists:
         assert check_commons_image_exists("") is False
         assert check_commons_image_exists("  ") is False
 
-    @patch('urllib.request.urlopen')
+    @patch('fix_refs.bots.fix_images.get_url_json')
     def test_file_prefix_removed(self, mock_urlopen):
         """Test that File: prefix is properly removed"""
         mock_response = Mock()
@@ -62,7 +62,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("File:Example.png")
         assert result is True
 
-    @patch('urllib.request.urlopen')
+    @patch('fix_refs.bots.fix_images.get_url_json')
     def test_image_prefix_removed(self, mock_urlopen):
         """Test that Image: prefix is properly removed"""
         mock_response = Mock()
@@ -74,7 +74,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("Image:Example.png")
         assert result is True
 
-    @patch('urllib.request.urlopen')
+    @patch('fix_refs.bots.fix_images.get_url_json')
     def test_api_error_returns_true(self, mock_urlopen):
         """Test that API errors return True to avoid removing valid images"""
         mock_urlopen.side_effect = Exception("Network error")
