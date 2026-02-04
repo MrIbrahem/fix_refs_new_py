@@ -15,7 +15,7 @@ class TestCitations:
 
     # Tests for get_citations function
 
-    def test_get_reg_citations_with_multiple_refs(self):
+    def test_get_regex_citations_with_multiple_refs(self):
         """Test extracting multiple citations from text"""
         text = '<ref name="ref1">Content 1</ref> Text <ref name="ref2">Content 2</ref>'
         citations = get_citations(text)
@@ -25,7 +25,7 @@ class TestCitations:
         assert citations[0].content == "Content 1"
         assert citations[0].tag == '<ref name="ref1">Content 1</ref>'
 
-    def test_get_reg_citations_with_no_refs(self):
+    def test_get_regex_citations_with_no_refs(self):
         """Test extracting citations from text with no references"""
         text = 'No references here'
         citations = get_citations(text)
