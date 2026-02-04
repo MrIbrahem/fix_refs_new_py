@@ -2,6 +2,7 @@
 HTTP client utilities - replaces PHP cURL
 """
 
+import json
 import requests
 from typing import Optional
 from .debug import echo_debug
@@ -27,7 +28,9 @@ def get_url(url: str, timeout: int = 5) -> str:
         return str(response.text)  # type: ignore
     except requests.RequestException as e:
         echo_debug(f"Request Error: {e}\n{url}")
-        return ""
+    except Exception as e:
+        echo_debug(f"Unexpected Error: {e}\n{url}")
+    return ""
 
 
 def get_url_json(url: str, timeout: int = 5) -> Optional[dict]:
@@ -50,4 +53,8 @@ def get_url_json(url: str, timeout: int = 5) -> Optional[dict]:
         return response.json()
     except requests.RequestException as e:
         echo_debug(f"Request Error: {e}\n{url}")
-        return None
+    except (json.JSONDecodeError, ValueError) as e:
+        echo_debug(f"JSON Decode Error: {e}\n{url}")
+    except Exception as e:
+        echo_debug(f"Unexpected Error: {e}\n{url}")
+    return None
