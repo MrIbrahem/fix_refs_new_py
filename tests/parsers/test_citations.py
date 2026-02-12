@@ -36,7 +36,7 @@ class TestGetCitations:
         assert citations[1].get_name() == "B"
 
 
-class TestGetShortCitations:
+class Testget_short_citations:
     """Test short citation extraction"""
 
     def test_short_citation(self):
