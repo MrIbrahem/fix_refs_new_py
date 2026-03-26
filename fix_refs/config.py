@@ -7,7 +7,7 @@ _env_file_path = None
 try:
     load_dotenv()
 except Exception:
-    _HOME = os.getenv("HOME")
+    _HOME = os.getenv("HOME", "")
     if _HOME:
         _env_file_path = Path(f"{_HOME}/.env")
         load_dotenv(_env_file_path)
