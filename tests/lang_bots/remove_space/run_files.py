@@ -1,6 +1,6 @@
 """
 
-python3 I:/mdwiki/fix_refs_new_py/tests/lang_bots/remove_space/run_files.py
+python3 I:/MD_TOOLS/mdwiki.toolforge.org/PYTHON_REPOS/fix_refs_repos/fix_refs_new_py/tests/lang_bots/remove_space/run_files.py
 
 """
 import sys
