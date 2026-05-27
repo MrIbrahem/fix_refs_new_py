@@ -9,7 +9,7 @@ description = "A library to parse and fix references in MediaWiki wikitext"
 authors = [
     {name = "Mr. Ibrahem", email = "ibrahem.al-radaei@outlook.com"}
 ]
-license = { text = "MIT" }
+license = { text = "GPL-3.0-or-later" }
 readme = "README.md"
 requires-python = ">=3.10"
 keywords = ["mediawiki", "parser", "wikitext", "wikipedia"]

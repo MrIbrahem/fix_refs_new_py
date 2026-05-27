@@ -14,7 +14,7 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
     if lang == "pl":
         text = pl_fixes(text)
 
-    if lang == "pt":
+    elif lang == "pt":
         text = pt_fixes(text)
 
     elif lang == "bg":
@@ -28,4 +28,5 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
 
     elif lang == "hy":
         text = hy_fixes(text)
+
     return text

@@ -62,9 +62,16 @@ class Citation:
         return self.name
 
     def get_attributes(self) -> str:
-        """Get citation options/attributes"""
-        str_attrs = str(self.ref.string).split(">")[0].replace("<ref", "").strip()
-        return str_attrs.strip()
+        """Get citation options/attributes as a string"""
+        tag_str = str(self.ref.string)
+        # Find the end of the opening tag: could be ">" or "/>"
+        close_idx = tag_str.find(">")
+        if close_idx == -1:
+            return ""
+        attrs_part = tag_str[len("<ref"):close_idx]
+        # Strip trailing "/" for self-closing tags
+        attrs_part = attrs_part.rstrip(" /")
+        return attrs_part.strip()
 
     def to_string_self_closing(self) -> str:
         """Convert to self-closing tag string"""
