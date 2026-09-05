@@ -64,3 +64,8 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             new_text = new_text.replace(key, value, 1)
 
     return new_text
+
+
+__all__ = [
+    "remove_duplicate_refs_with_attrs",
+]

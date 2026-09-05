@@ -56,3 +56,8 @@ def sw_fixes(text: str) -> str:
             result_lines.append(first_part + rest_part)
 
     return "\n".join(result_lines)
+
+
+__all__ = [
+    "sw_fixes",
+]

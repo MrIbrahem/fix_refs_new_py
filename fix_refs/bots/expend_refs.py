@@ -60,3 +60,9 @@ def refs_expand_work(first: str, alltext: str = "") -> str:
             first = first.replace(refe, rr)
 
     return first
+
+
+__all__ = [
+    "refs_expand",
+    "refs_expand_work",
+]

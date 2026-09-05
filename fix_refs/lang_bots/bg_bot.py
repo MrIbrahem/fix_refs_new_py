@@ -60,3 +60,9 @@ def bg_fixes(text: str, source_title: str, mdwiki_revid: int) -> str:
     text = re.sub(r"\[\[\s*(Категория|Category)\s*:\s*Translated from MDWiki\s*\]\]", "", text, flags=re.IGNORECASE)
 
     return text
+
+
+__all__ = [
+    "bg_section",
+    "bg_fixes",
+]

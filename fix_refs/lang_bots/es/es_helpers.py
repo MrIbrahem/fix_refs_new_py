@@ -115,3 +115,12 @@ def add_line_to_temp(line: str, text: str) -> str:
         new_text += section_ref
 
     return new_text
+
+
+__all__ = [
+    "remove_short_refs",
+    "start_end",
+    "fix_es_months_in_texts",
+    "fix_es_months_in_refs",
+    "add_line_to_temp",
+]

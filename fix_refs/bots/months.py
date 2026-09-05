@@ -96,3 +96,10 @@ def make_date_new_val_es(val: str) -> str:
         Date string with Spanish month
     """
     return new_date(val, "es")
+
+
+__all__ = [
+    "new_date",
+    "make_date_new_val_pt",
+    "make_date_new_val_es",
+]

@@ -16,3 +16,9 @@ def echo_debug(msg: str) -> None:
     """Print message if DEBUG is True"""
     if DEBUG:
         print(msg)
+
+
+__all__ = [
+    "echo_test",
+    "echo_debug",
+]

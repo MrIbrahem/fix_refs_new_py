@@ -169,3 +169,12 @@ def make_section_0(title, newtext):
         else:
             section_0 = newtext
     return section_0
+
+
+__all__ = [
+    "do_comments",
+    "expend_new",
+    "extract_templates_and_params",
+    "expand_infobox_in_text",
+    "make_section_0",
+]

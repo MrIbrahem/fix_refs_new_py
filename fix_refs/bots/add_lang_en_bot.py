@@ -59,3 +59,9 @@ def add_lang_en_to_refs(text: str) -> str:
             break  # Only process the first template
 
     return parsed.string
+
+
+__all__ = [
+    "add_lang_en_new",
+    "add_lang_en_to_refs",
+]

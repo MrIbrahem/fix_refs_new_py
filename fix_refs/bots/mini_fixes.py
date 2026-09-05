@@ -115,3 +115,13 @@ def mini_fixes(text: str, lang: str) -> str:
     text = fix_sections_titles(text, lang)
     text = remove_space_before_ref_tags(text, lang)
     return text
+
+
+__all__ = [
+    "fix_sections_titles",
+    "remove_space_before_ref_tags",
+    "refs_tags_spaces",
+    "fix_prefix",
+    "mini_fixes_after_fixing",
+    "mini_fixes",
+]

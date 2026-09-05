@@ -29,3 +29,8 @@ def move_dots_after_refs(text: str, lang: str) -> str:
     text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
 
     return text
+
+
+__all__ = [
+    "move_dots_after_refs",
+]

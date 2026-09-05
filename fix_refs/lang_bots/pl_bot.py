@@ -56,3 +56,9 @@ def pl_fixes(text: str) -> str:
     """
     text = add_missing_params_to_choroba_infobox(text)
     return text
+
+
+__all__ = [
+    "add_missing_params_to_choroba_infobox",
+    "pl_fixes",
+]

@@ -35,3 +35,8 @@ def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
         text += f"\n== Enlaces externos ==\n{temp}\n"
 
     return text
+
+
+__all__ = [
+    "es_section",
+]

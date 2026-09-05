@@ -107,3 +107,11 @@ def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
     text = refs_expand(short_refs, text, full_text)
 
     return text
+
+
+__all__ = [
+    "get_revision_file_path",
+    "find_mdwiki_revid",
+    "get_full_text",
+    "fix_missing_refs",
+]

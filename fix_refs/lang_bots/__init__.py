@@ -29,3 +29,8 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
         text = hy_fixes(text)
 
     return text
+
+
+__all__ = [
+    "apply_language_fixes",
+]

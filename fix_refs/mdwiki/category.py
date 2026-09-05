@@ -95,3 +95,11 @@ def add_translated_from_mdwiki(text: str, lang: str) -> str:
         text += f"\n[[{cat}]]\n"
 
     return text
+
+
+__all__ = [
+    "load_from_local_file",
+    "get_cats",
+    "get_mdwiki_category",
+    "add_translated_from_mdwiki",
+]

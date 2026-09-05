@@ -65,3 +65,10 @@ def has_category(text: str, category_name: str) -> bool:
     """
     categories = get_categories(text)
     return category_name in categories
+
+
+__all__ = [
+    "get_categories",
+    "get_category_list",
+    "has_category",
+]

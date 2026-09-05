@@ -116,3 +116,10 @@ def fix_es(text: str, title: str = "") -> str:
     newtext = fix_temps(newtext)
     newtext = mv_es_refs(newtext)
     return newtext
+
+
+__all__ = [
+    "work_one_temp",
+    "fix_temps",
+    "fix_es",
+]

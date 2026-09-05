@@ -53,3 +53,11 @@ def hy_fixes(text: str) -> str:
     text = remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
     text = remove_spaces_between_ref_and_punctuation(text)
     return text
+
+
+__all__ = [
+    "str_ends_with",
+    "str_starts_with",
+    "remove_spaces_between_ref_and_punctuation",
+    "hy_fixes",
+]

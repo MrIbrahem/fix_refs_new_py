@@ -46,3 +46,10 @@ def load_settings() -> dict:
             new[lang_code] = value
 
     return new
+
+
+__all__ = [
+    "load_settings_from_file",
+    "load_settings_from_server",
+    "load_settings",
+]

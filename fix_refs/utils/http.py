@@ -55,3 +55,9 @@ def get_url_json(url: str, timeout: int = 5) -> dict | None:
     except (json.JSONDecodeError, ValueError) as e:
         echo_debug(f"JSON Decode Error: {e}\n{url}")
     return None
+
+
+__all__ = [
+    "get_url",
+    "get_url_json",
+]
