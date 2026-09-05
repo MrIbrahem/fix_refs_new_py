@@ -34,7 +34,6 @@ class TestGetAllRefs:
         assert citations[0].name == "A"
         assert citations[1].name == "B"
 
-
     def test_get_regex_citations_with_multiple_refs(self):
         """Test extracting multiple citations from text"""
         text = '<ref name="ref1">Content 1</ref> Text <ref name="ref2">Content 2</ref>'
@@ -69,6 +68,7 @@ class TestGetAllRefs:
         assert citations[0].name == "test"
         assert "group" in citations[0].attrs
 
+
 class TestGetShortRefs:
     """Test short citation extraction"""
 
@@ -79,7 +79,6 @@ class TestGetShortRefs:
         assert len(citations) == 1
         assert citations[0].name == "test"
         assert citations[0].contents == ""
-
 
     def test_get_short_citations(self):
         """Test getting short/self-closing citations"""
@@ -112,6 +111,7 @@ class TestGetShortRefs:
         assert len(short_refs) == 1
         assert short_refs[0].name == "short"
 
+
 class TestGetFullRefs:
     """Test full references mapping"""
 
@@ -121,7 +121,6 @@ class TestGetFullRefs:
         refs = get_full_refs(text)
         assert "test" in refs
         assert "Content" in refs["test"]
-
 
     def test_get_full_refs(self):
         """Test getting full reference mapping"""

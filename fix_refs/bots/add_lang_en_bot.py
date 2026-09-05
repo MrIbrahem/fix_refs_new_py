@@ -43,7 +43,7 @@ def add_lang_en_to_refs(text: str) -> str:
     ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
-        contents = ref.contents
+        contents = ref.contents or ""
         # Only process if it looks like a template
         if not (contents.startswith("{{") and contents.endswith("}}")):
             continue

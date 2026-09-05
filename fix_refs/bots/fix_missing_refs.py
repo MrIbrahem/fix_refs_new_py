@@ -68,8 +68,6 @@ def get_full_text(sourcetitle: str, mdwiki_revid: int) -> str:
 
     file = get_revision_file_path(mdwiki_revid)
 
-    echo_test(file)
-
     if not Path(file).exists():
         echo_test(f"file not found: {file}")
         return ""

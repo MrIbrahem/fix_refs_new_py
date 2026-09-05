@@ -51,7 +51,7 @@ def fix_pt_months_in_refs(text: str) -> str:
     ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
-        contents = ref.contents
+        contents = ref.contents or ""
         # Only process if it looks like a template
         if not start_end(contents):
             continue
