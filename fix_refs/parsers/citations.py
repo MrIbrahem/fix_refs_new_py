@@ -5,7 +5,7 @@ Citation parser for WikiText reference tags
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, List, Dict
+
 import wikitextparser as wtp
 
 
@@ -18,29 +18,17 @@ class Citation:
         self.tag = self.ref.string
         self.contents = self.ref.contents or ""
         self.options = dict(self.ref.attrs)
+
         self.attrs = self.ref.attrs
 
     @property
     def name(self) -> str:
         """Get citation name"""
-        return self.ref.attrs.get("name", "")
-
-    def get_original_text(self) -> str:
-        """Get the original reference tag"""
-        return self.tag
-
-    def get_content(self) -> str:
-        """Get citation content"""
-        return self.contents
+        return self.ref.attrs.get("name", "").strip()
 
     def set_contents(self, new_content: str) -> None:
         """Set citation content"""
-        if new_content or self.ref.contents:
-            self.ref.contents = new_content
-
-    def get_name(self) -> str:
-        """Get citation name"""
-        return self.name
+        self.ref.contents = new_content
 
     def get_attributes(self) -> str:
         """Get citation options/attributes as a string"""
@@ -76,7 +64,7 @@ class Citation:
         return Citation(wtp._tag.Tag(ref_text))
 
 
-def get_citations(text: str) -> List[Citation]:
+def get_all_citations(text: str) -> list[Citation]:
     """Extract all citations from text
 
     Args:
@@ -85,9 +73,9 @@ def get_citations(text: str) -> List[Citation]:
     Returns:
         List of Citation objects
     """
-
     citations = []
     parsed = wtp.parse(text)
+
     for tag in parsed.get_tags():
         if tag.name == "ref":
             # citations.append(Citation.from_text(tag.string))
@@ -96,7 +84,7 @@ def get_citations(text: str) -> List[Citation]:
     return citations
 
 
-def get_full_refs(text: str) -> Dict[str, str]:
+def get_full_refs(text: str) -> dict[str, str]:
     """Get mapping of citation names to their full reference tags
 
     Args:
@@ -106,7 +94,7 @@ def get_full_refs(text: str) -> Dict[str, str]:
         Dictionary mapping citation names to their full tags
     """
     full = {}
-    citations = get_citations(text)
+    citations = get_all_citations(text)
 
     for cite in citations:
         if cite.contents and cite.name:
@@ -115,8 +103,9 @@ def get_full_refs(text: str) -> Dict[str, str]:
     return full
 
 
-def get_short_refs(text: str) -> List[Citation]:
-    """Extract short/empty citations (self-closing tags)
+def get_short_refs(text: str) -> list[Citation]:
+    """
+    Extract short/empty citations (self-closing tags)
 
     Args:
         text: Text containing short citations
@@ -132,3 +121,10 @@ def get_short_refs(text: str) -> List[Citation]:
             citations.append(Citation(tag))
 
     return citations
+
+
+__all__ = [
+    "get_all_citations",
+    "get_full_refs",
+    "get_short_refs",
+]

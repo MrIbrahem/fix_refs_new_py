@@ -2,7 +2,6 @@
 Tests for Swahili bot
 """
 
-import pytest
 from fix_refs.lang_bots.sw_bot import sw_fixes
 
 

@@ -1,5 +1,5 @@
-"""
-"""
+""" """
+
 from fix_refs.infobox.expend_infobox import do_comments
 
 

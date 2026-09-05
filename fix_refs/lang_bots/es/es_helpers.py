@@ -3,7 +3,9 @@ Spanish helper functions
 """
 
 import re
+
 import wikitextparser as wtp
+
 from ...bots.months import make_date_new_val_es
 
 
@@ -16,7 +18,7 @@ def remove_short_refs(text: str) -> str:
         if tag.name == "ref" and not tag.contents:
             tag.string = ""
     text = parsed.string
-    text = re.sub(r'\n+', '\n', text)
+    text = re.sub(r"\n+", "\n", text)
     return text
 
 
@@ -59,7 +61,7 @@ def fix_es_months_in_refs(text: str) -> str:
     parsed = wtp.parse(text)
 
     # Get all ref tags
-    ref_tags = parsed.get_tags('ref')
+    ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
         contents = ref.contents
@@ -83,7 +85,7 @@ def add_line_to_temp(line: str, text: str) -> str:
     # Find templates like {{reflist|...}} or {{listaref|...}}
     # Handle multi-line templates with nested braces by matching until the closing }}
     # that is on its own line or at end of content
-    pattern = r'(\{\{\s*(reflist|listaref)\s*\|[^}]*refs\s*=)(.*?)(\}\})'
+    pattern = r"(\{\{\s*(reflist|listaref)\s*\|[^}]*refs\s*=)(.*?)(\}\})"
     match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
 
     new_text = text
@@ -91,8 +93,8 @@ def add_line_to_temp(line: str, text: str) -> str:
 
     if match:
         template_start = match.group(1)  # {{Reflist|refs=
-        refs_content = match.group(3)     # existing refs content
-        template_end = match.group(4)     # }}
+        refs_content = match.group(3)  # existing refs content
+        template_end = match.group(4)  # }}
 
         # Clean up existing refs content
         refs_content = remove_short_refs(refs_content)
@@ -104,7 +106,7 @@ def add_line_to_temp(line: str, text: str) -> str:
         # Format: {{Reflist|refs=\n<refs content>}}
         # The }} stays on same line as the last ref to match expected output format
         new_template = f"{template_start}\n{combined_refs}{template_end}"
-        new_text = text[:match.start()] + new_template + text[match.end():]
+        new_text = text[: match.start()] + new_template + text[match.end() :]
         temp_already_in = True
 
     # If no template found, add section

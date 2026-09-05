@@ -2,9 +2,8 @@
 Remove duplicate references by converting them to named short references
 """
 
-import re
 import wikitextparser as wtp
-from typing import Dict, List
+
 from ..parsers.citations import Citation
 from ..utils.debug import echo_debug
 
@@ -21,9 +20,9 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
         Text with duplicate references converted to self-closing tags
     """
     new_text = text
-    refs_to_check: Dict[str, str] = {}
-    refs: Dict[str, str] = {}
-    citations : List[Citation] = []
+    refs_to_check: dict[str, str] = {}
+    refs: dict[str, str] = {}
+    citations: list[Citation] = []
 
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
@@ -56,7 +55,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             new_text = new_text.replace(cite_fulltext, short_tag)
         else:
             refs_to_check[short_tag] = cite_fulltext
-            refs[cite_attrs] = True
+            refs[cite_attrs] = True # pyright: ignore[reportArgumentType]
 
     for key, value in refs_to_check.items():
         if value not in new_text:

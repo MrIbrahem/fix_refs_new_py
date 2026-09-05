@@ -15,7 +15,7 @@ def page_is_redirect(title: str, text: str) -> bool:
     Returns:
         True if page is a redirect
     """
-    return bool(re.match(r'^#(пренасочване|redirect)', text, re.IGNORECASE))
+    return bool(re.match(r"^#(пренасочване|redirect)", text, re.IGNORECASE))
 
 
 def is_redirect(title: str, text: str) -> bool:

@@ -2,12 +2,11 @@
 Reference expansion utilities
 """
 
-from typing import List
-from ..parsers.citations import get_short_refs, get_full_refs, Citation
+from ..parsers.citations import Citation, get_full_refs, get_short_refs
 from ..utils.debug import echo_debug
 
 
-def refs_expand(short_refs: List[Citation], text: str, alltext: str) -> str:
+def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
     """Expand short references with full text from source
 
     Args:

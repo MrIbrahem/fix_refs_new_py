@@ -2,26 +2,28 @@
 
 Tests the functionality of checking and removing missing images from Wikimedia Commons.
 """
+
+from unittest.mock import patch
+
 import pytest
 import wikitextparser as wtp
 
-from unittest.mock import patch
 from fix_refs.bots.fix_images import (
+    _extract_filename_from_wikilink,
     check_commons_image_exists,
     check_commons_image_exists_cached,
-    remove_missing_infobox_images,
-    remove_missing_inline_images,
+    clear_image_cache,
     remove_missing_images,
     remove_missing_images_cached,
-    clear_image_cache,
-    _extract_filename_from_wikilink,
+    remove_missing_infobox_images,
+    remove_missing_inline_images,
 )
 
 
 class TestCheckCommonsImageExists:
     """Test checking if images exist on Wikimedia Commons"""
 
-    @patch('fix_refs.bots.fix_images.get_url_json')
+    @patch("fix_refs.bots.fix_images.get_url_json")
     def test_existing_image(self, mock_get_url_json):
         """Test that existing image returns True"""
         mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
@@ -29,7 +31,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("Example.png")
         assert result is True
 
-    @patch('fix_refs.bots.fix_images.get_url_json')
+    @patch("fix_refs.bots.fix_images.get_url_json")
     def test_missing_image(self, mock_get_url_json):
         """Test that missing image returns False"""
         mock_get_url_json.return_value = {"query": {"pages": {"-1": {"missing": ""}}}}
@@ -42,7 +44,7 @@ class TestCheckCommonsImageExists:
         assert check_commons_image_exists("") is False
         assert check_commons_image_exists("  ") is False
 
-    @patch('fix_refs.bots.fix_images.get_url_json')
+    @patch("fix_refs.bots.fix_images.get_url_json")
     def test_file_prefix_removed(self, mock_get_url_json):
         """Test that File: prefix is properly removed"""
         mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
@@ -50,7 +52,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("File:Example.png")
         assert result is True
 
-    @patch('fix_refs.bots.fix_images.get_url_json')
+    @patch("fix_refs.bots.fix_images.get_url_json")
     def test_image_prefix_removed(self, mock_get_url_json):
         """Test that Image: prefix is properly removed"""
         mock_get_url_json.return_value = {"query": {"pages": {"12345": {"title": "File:Example.png"}}}}
@@ -58,7 +60,7 @@ class TestCheckCommonsImageExists:
         result = check_commons_image_exists("Image:Example.png")
         assert result is True
 
-    @patch('fix_refs.bots.fix_images.get_url_json')
+    @patch("fix_refs.bots.fix_images.get_url_json")
     def test_api_error_returns_true(self, mock_get_url_json):
         """Test that API errors return True to avoid removing valid images"""
         mock_get_url_json.return_value = None
@@ -75,7 +77,7 @@ class TestCachedImageCheck:
         clear_image_cache()
         # Should not raise any exception
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_cache_is_used(self, mock_check):
         """Test that caching reduces API calls"""
         mock_check.return_value = True
@@ -129,7 +131,7 @@ class TestExtractFilenameFromWikilink:
 class TestRemoveMissingInlineImages:
     """Test removal of missing inline images"""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_remove_missing_inline_image(self, mock_check):
         """Test that missing inline image is removed"""
         mock_check.return_value = False
@@ -140,7 +142,7 @@ class TestRemoveMissingInlineImages:
         result = remove_missing_inline_images(input_text)
         assert result == expected
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_keep_existing_inline_image(self, mock_check):
         """Test that existing inline image is kept"""
         mock_check.return_value = True
@@ -150,7 +152,7 @@ class TestRemoveMissingInlineImages:
         result = remove_missing_inline_images(input_text)
         assert result == input_text
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_remove_image_prefix(self, mock_check):
         """Test removal with Image: prefix"""
         mock_check.return_value = False
@@ -161,7 +163,7 @@ class TestRemoveMissingInlineImages:
         result = remove_missing_inline_images(input_text)
         assert result == expected
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_keep_non_file_links(self, mock_check):
         """Test that non-file wikilinks are preserved"""
         input_text = "[[Article]] and [[Another Article|label]]"
@@ -169,7 +171,7 @@ class TestRemoveMissingInlineImages:
         result = remove_missing_inline_images(input_text)
         assert result == input_text
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_multiple_inline_images(self, mock_check):
         """Test handling multiple inline images"""
         # Wikilinks are processed in reverse order
@@ -187,12 +189,14 @@ class TestRemoveMissingInlineImages:
 class TestRemoveMissingInfoboxImages:
     """Test removal of missing infobox images"""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_empty_missing_infobox_image(self, mock_check):
         """Test that missing infobox image is set to empty"""
         mock_check.return_value = False
 
-        input_text = """{{Infobox\n|name = Example\n|image = Non_existent.png\n|caption = This caption for missing image\n}}"""
+        input_text = (
+            """{{Infobox\n|name = Example\n|image = Non_existent.png\n|caption = This caption for missing image\n}}"""
+        )
 
         result = remove_missing_infobox_images(input_text)
 
@@ -203,17 +207,17 @@ class TestRemoveMissingInfoboxImages:
         image_arg = None
         caption_arg = None
         for arg in template.arguments:
-            if arg.name.strip().lower() == 'image':
+            if arg.name.strip().lower() == "image":
                 image_arg = arg
-            elif arg.name.strip().lower() == 'caption':
+            elif arg.name.strip().lower() == "caption":
                 caption_arg = arg
 
         assert image_arg is not None
-        assert image_arg.value.strip() == ''
+        assert image_arg.value.strip() == ""
         assert caption_arg is not None
-        assert caption_arg.value.strip() == ''
+        assert caption_arg.value.strip() == ""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_keep_existing_infobox_image(self, mock_check):
         """Test that existing infobox image is kept"""
         mock_check.return_value = True
@@ -224,7 +228,7 @@ class TestRemoveMissingInfoboxImages:
         assert "Exists.png" in result
         assert "Valid caption" in result
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_numbered_image_parameters(self, mock_check):
         """Test handling of image2, image3 parameters"""
         mock_check.return_value = False
@@ -239,17 +243,17 @@ class TestRemoveMissingInfoboxImages:
         image2_arg = None
         caption2_arg = None
         for arg in template.arguments:
-            if arg.name.strip().lower() == 'image2':
+            if arg.name.strip().lower() == "image2":
                 image2_arg = arg
-            elif arg.name.strip().lower() == 'caption2':
+            elif arg.name.strip().lower() == "caption2":
                 caption2_arg = arg
 
         assert image2_arg is not None
-        assert image2_arg.value.strip() == ''
+        assert image2_arg.value.strip() == ""
         assert caption2_arg is not None
-        assert caption2_arg.value.strip() == ''
+        assert caption2_arg.value.strip() == ""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_skip_empty_image_values(self, mock_check):
         """Test that already empty image values are skipped"""
         input_text = """{{Infobox\n|image =\n|caption =\n}}"""
@@ -258,7 +262,7 @@ class TestRemoveMissingInfoboxImages:
         # Should not call the API for empty values
         assert mock_check.call_count == 0
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_multiple_templates(self, mock_check):
         """Test handling multiple templates in text"""
         mock_check.side_effect = [False, True]
@@ -276,12 +280,14 @@ class TestRemoveMissingInfoboxImages:
 class TestRemoveMissingImages:
     """Test main function that handles both infobox and inline images"""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_combined_infobox_and_inline(self, mock_check):
         """Test handling both infobox and inline images"""
         mock_check.return_value = False
 
-        input_text = """{{Infobox|image = Missing1.png\n|caption = Caption 1\n}}\nText with [[File:Missing2.png|thumb]] here."""
+        input_text = (
+            """{{Infobox|image = Missing1.png\n|caption = Caption 1\n}}\nText with [[File:Missing2.png|thumb]] here."""
+        )
 
         result = remove_missing_images(input_text)
 
@@ -289,19 +295,19 @@ class TestRemoveMissingImages:
         parsed = wtp.parse(result)
         template = parsed.templates[0]
         for arg in template.arguments:
-            if arg.name.strip().lower() == 'image':
-                assert arg.value.strip() == ''
+            if arg.name.strip().lower() == "image":
+                assert arg.value.strip() == ""
 
         # Check inline image is removed
         assert "[[File:Missing2.png" not in result
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_empty_text(self, mock_check):
         """Test handling empty text"""
         result = remove_missing_images("")
         assert result == ""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_text_without_images(self, mock_check):
         """Test handling text without images"""
         input_text = "This is plain text without any images."
@@ -312,7 +318,7 @@ class TestRemoveMissingImages:
 class TestRemoveMissingImagesCached:
     """Test cached version of remove_missing_images"""
 
-    @patch('fix_refs.bots.fix_images.check_commons_image_exists')
+    @patch("fix_refs.bots.fix_images.check_commons_image_exists")
     def test_uses_cache(self, mock_check):
         """Test that cached version uses caching"""
         mock_check.return_value = False

@@ -4,11 +4,12 @@ Fix missing references by expanding from source text
 
 import json
 from pathlib import Path
-from typing import Dict, Any
-from ..utils.debug import echo_test, echo_debug
-from ..parsers.citations import get_short_refs
-from .expend_refs import refs_expand
+from typing import Any
+
 from ..config import revisions_path
+from ..parsers.citations import get_short_refs
+from ..utils.debug import echo_debug, echo_test
+from .expend_refs import refs_expand
 
 
 def get_revision_file_path(mdwiki_revid) -> Path:
@@ -33,15 +34,15 @@ def find_mdwiki_revid(sourcetitle: str) -> str:
         return ""
 
     try:
-        with open(json_file, 'r', encoding='utf-8') as f:
-            data: Dict[str, Any] = json.load(f)  # type: ignore
+        with open(json_file, "r", encoding="utf-8") as f:
+            data: dict[str, Any] = json.load(f)  # type: ignore
 
         echo_test(f"url{json_file}")
         echo_test(f"count of data: {len(data)}")
 
         result = data.get(sourcetitle, "")
         return str(result) if isinstance(result, str) else ""
-    except (json.JSONDecodeError, IOError):
+    except (OSError, json.JSONDecodeError):
         return ""
 
 
@@ -76,9 +77,9 @@ def get_full_text(sourcetitle: str, mdwiki_revid: int) -> str:
     echo_test(f"url{file}")
 
     try:
-        with open(file, 'r', encoding='utf-8') as f:
+        with open(file, "r", encoding="utf-8") as f:
             return f.read()
-    except IOError:
+    except OSError:
         return ""
 
 

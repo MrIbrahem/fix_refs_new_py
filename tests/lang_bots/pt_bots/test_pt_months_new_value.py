@@ -2,7 +2,7 @@
 
 Converted from tests/pt_bots/pt_months_new_valueTest.php
 """
-import pytest
+
 from fix_refs.bots.months import make_date_new_val_pt
 
 

@@ -2,9 +2,10 @@
 
 Converted from tests/md_catTest.php
 """
-from unittest.mock import patch
-from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
+from unittest.mock import patch
+
+from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
 # Mock data for get_mdwiki_category responses
 MOCK_CATS = {

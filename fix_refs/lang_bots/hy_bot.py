@@ -32,11 +32,11 @@ def remove_spaces_between_ref_and_punctuation(text: str) -> str:
 
     # Keep punctuation right after <ref ... /> with no space
     # Pattern: <ref[^>]*/>\s*[punctuation]
-    text = re.sub(r'(<ref[^>]*\/>)\s*([' + escaped_punctuation + r'])', r'\1\2', text)
+    text = re.sub(r"(<ref[^>]*\/>)\s*([" + escaped_punctuation + r"])", r"\1\2", text)
 
     # Normalize endings: </ref> followed by any punctuation remains attached
     # Pattern: </ref>\s*[punctuation]
-    text = re.sub(r'<\/ref>\s*([' + escaped_punctuation + r'])', r'</ref>\1', text)
+    text = re.sub(r"<\/ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
 
     return text
 

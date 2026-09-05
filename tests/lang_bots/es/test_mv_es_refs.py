@@ -2,8 +2,9 @@
 
 Converted from tests/es_bots/es_refsTest.php
 """
+
 from pathlib import Path
-from fix_refs.lang_bots.es.es_refs import mv_es_refs
+
 from fix_refs.lang_bots.es.es_bot import fix_es
 
 
@@ -14,10 +15,10 @@ class TestEsRefs:
         """Test with file input for Spanish references"""
         tests_dir = Path(__file__).parent / "mv_es_refs_texts/1"
 
-        with open(tests_dir / "input.txt", 'r', encoding='utf-8') as f:
+        with open(tests_dir / "input.txt", "r", encoding="utf-8") as f:
             text_input = f.read()
 
-        with open(tests_dir / "expected.txt", 'r', encoding='utf-8') as f:
+        with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
             expected = f.read()
 
         # result = mv_es_refs(text_input)
@@ -25,7 +26,7 @@ class TestEsRefs:
 
         # write output for comparison
         output_file = tests_dir / "output.txt"
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             f.write(result)
 
         # Normalize line endings for comparison
@@ -35,10 +36,10 @@ class TestEsRefs:
         """Test with file input for Spanish references"""
         tests_dir = Path(__file__).parent / "mv_es_refs_texts/2"
 
-        with open(tests_dir / "input.txt", 'r', encoding='utf-8') as f:
+        with open(tests_dir / "input.txt", "r", encoding="utf-8") as f:
             text_input = f.read()
 
-        with open(tests_dir / "expected.txt", 'r', encoding='utf-8') as f:
+        with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
             expected = f.read()
 
         # result = mv_es_refs(text_input)
@@ -46,7 +47,7 @@ class TestEsRefs:
 
         # write output for comparison
         output_file = tests_dir / "output.txt"
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             f.write(result)
 
         # Normalize line endings for comparison

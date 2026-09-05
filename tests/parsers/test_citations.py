@@ -2,9 +2,8 @@
 Tests for citation parser
 """
 
-import pytest
 from fix_refs.parsers.citations import (
-    get_citations,
+    get_all_citations,
     get_full_refs,
     get_short_refs,
 )
@@ -16,7 +15,7 @@ class TestGetCitations:
     def test_simple_citation(self):
         """Test extracting simple citation"""
         text = '<ref name="test">Content</ref>'
-        citations = get_citations(text)
+        citations = get_all_citations(text)
         assert len(citations) == 1
         assert citations[0].name == "test"
         assert citations[0].contents == "Content"
@@ -24,13 +23,13 @@ class TestGetCitations:
     def test_no_citation(self):
         """Test with no citations"""
         text = "No citations here"
-        citations = get_citations(text)
+        citations = get_all_citations(text)
         assert len(citations) == 0
 
     def test_multiple_citations(self):
         """Test extracting multiple citations"""
         text = '<ref name="A">A</ref><ref name="B">B</ref>'
-        citations = get_citations(text)
+        citations = get_all_citations(text)
         assert len(citations) == 2
         assert citations[0].name == "A"
         assert citations[1].name == "B"

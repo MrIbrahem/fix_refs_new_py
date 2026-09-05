@@ -3,8 +3,8 @@ Infobox expansion functions
 """
 
 import re
-import wikitextparser as wtp
 
+import wikitextparser as wtp
 
 COMMENT_PATTERN = re.compile(
     r"\s*\n*\s*(<!-- (Monoclonal antibody data|External links|Names*|Clinical data|Legal data|Legal status|Pharmacokinetic data|Chemical and physical data|Definition and medical uses|Chemical data|\w+ \w+ data|\w+ \w+ \w+ data|\w+ data|\w+ status|Identifiers) -->)\s*\n*",
@@ -126,8 +126,8 @@ def expand_infobox_in_text(text, title, section_0):
     u = 0
     for temp in ingr:
         u += 1
-        params, template = temp['params'], temp['item']
-        if len(params) > 4 and section_0.find(f'>{template}') == -1:
+        params, template = temp["params"], temp["item"]
+        if len(params) > 4 and section_0.find(f">{template}") == -1:
             tempse_by_u[u] = temp
             # ---
             tempse[u] = len(template)
@@ -147,8 +147,8 @@ def expand_infobox_in_text(text, title, section_0):
     # ---
     # work in main_temp:
     if main_temp != {}:
-        main_temp_text = main_temp.get('item', '')
-        params = main_temp.get('params', [])
+        main_temp_text = main_temp.get("item", "")
+        params = main_temp.get("params", [])
         # ---
         new_temp = expend_new(main_temp_text)
         # ---
@@ -160,8 +160,8 @@ def expand_infobox_in_text(text, title, section_0):
 
 
 def make_section_0(title, newtext):
-    if newtext.find('==') != -1:
-        section_0 = newtext.split('==')[0]
+    if newtext.find("==") != -1:
+        section_0 = newtext.split("==")[0]
     else:
         tagg = f"'''{title}'''"
         if newtext.find(tagg) != -1:

@@ -45,7 +45,7 @@ def rm_str_from_start_and_end(text: str, find: str) -> str:
     text = text.strip()
 
     if str_starts_with(text, find) and str_ends_with(text, find):
-        text = text[len(find):-len(find)]
+        text = text[len(find) : -len(find)]
 
     return text.strip()
 

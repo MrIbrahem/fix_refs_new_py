@@ -2,12 +2,7 @@
 Tests for month handling
 """
 
-import pytest
-from fix_refs.bots.months import (
-    new_date,
-    make_date_new_val_pt,
-    make_date_new_val_es
-)
+from fix_refs.bots.months import make_date_new_val_es, make_date_new_val_pt, new_date
 
 
 class TestNewDate:
@@ -50,16 +45,40 @@ class TestNewDate:
 
     def test_all_months_portuguese(self):
         """Test all months in Portuguese with year"""
-        months = ["January", "February", "March", "April", "May", "June",
-                  "July", "August", "September", "October", "November", "December"]
+        months = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ]
         for month in months:
             result = new_date(f"{month} 2020", "pt")
             assert "2020" in result
 
     def test_all_months_spanish(self):
         """Test all months in Spanish with year"""
-        months = ["January", "February", "March", "April", "May", "June",
-                  "July", "August", "September", "October", "November", "December"]
+        months = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ]
         for month in months:
             result = new_date(f"{month} 2020", "es")
             assert "de 2020" in result

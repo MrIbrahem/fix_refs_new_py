@@ -1,16 +1,15 @@
-
-
 import functools
 import json
 import os
-from ..utils.http import get_url
+
 from ..config import resources_path
+from ..utils.http import get_url
 
 
 def load_settings_from_file() -> dict:
     file_path = resources_path / "language_settings.json"
     if file_path.exists():
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     return {}
 

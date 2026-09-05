@@ -3,10 +3,9 @@ Month and date handling for different languages
 """
 
 import re
-from typing import Dict, Optional
 
 
-def new_date(val: str, lang: str = 'pt') -> str:
+def new_date(val: str, lang: str = "pt") -> str:
     """Convert English month names to target language
 
     Args:
@@ -16,8 +15,8 @@ def new_date(val: str, lang: str = 'pt') -> str:
     Returns:
         Date string with translated month name
     """
-    months_translations: Dict[str, Dict[str, str]] = {
-        'pt': {
+    months_translations: dict[str, dict[str, str]] = {
+        "pt": {
             "January": "janeiro",
             "February": "fevereiro",
             "March": "março",
@@ -31,7 +30,7 @@ def new_date(val: str, lang: str = 'pt') -> str:
             "November": "novembro",
             "December": "dezembro",
         },
-        'es': {
+        "es": {
             "January": "enero",
             "February": "febrero",
             "March": "marzo",
@@ -61,13 +60,13 @@ def new_date(val: str, lang: str = 'pt') -> str:
     for pattern in patterns:
         match = re.match(pattern, val.strip(), re.IGNORECASE)
         if match:
-            day = match.group('d')
-            month = match.group('m').lower()
-            year = match.group('y')
+            day = match.group("d")
+            month = match.group("m").lower()
+            year = match.group("y")
             translated_month = months_lower.get(month, "")
 
             if translated_month:
-                if lang == 'es':
+                if lang == "es":
                     return f"{day} de {translated_month} de {year}".strip() if day else f"{translated_month} de {year}"
                 else:
                     return f"{day} de {translated_month} {year}".strip() if day else f"{translated_month} {year}"
@@ -84,7 +83,7 @@ def make_date_new_val_pt(val: str) -> str:
     Returns:
         Date string with Portuguese month
     """
-    return new_date(val, 'pt')
+    return new_date(val, "pt")
 
 
 def make_date_new_val_es(val: str) -> str:
@@ -96,4 +95,4 @@ def make_date_new_val_es(val: str) -> str:
     Returns:
         Date string with Spanish month
     """
-    return new_date(val, 'es')
+    return new_date(val, "es")

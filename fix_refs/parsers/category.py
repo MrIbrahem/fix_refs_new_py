@@ -3,10 +3,9 @@ Category parser for WikiText category tags
 """
 
 import re
-from typing import Dict, List
 
 
-def get_categories(text: str) -> Dict[str, str]:
+def get_categories(text: str) -> dict[str, str]:
     """Extract all categories from text
 
     Args:
@@ -15,22 +14,22 @@ def get_categories(text: str) -> Dict[str, str]:
     Returns:
         Dictionary mapping category names to their full category tags
     """
-    categories: Dict[str, str] = {}
+    categories: dict[str, str] = {}
 
     # Find all [[...]] patterns
-    for match in re.finditer(r'\[\[.+?\]\]', text):
+    for match in re.finditer(r"\[\[.+?\]\]", text):
         full_match = match.group(0)
 
         # Extract the word between [[ and :
-        prefix_match = re.match(r'\[\[([^\:]+?)\s*:', full_match)
+        prefix_match = re.match(r"\[\[([^\:]+?)\s*:", full_match)
         if prefix_match:
             prefix_word = prefix_match.group(1).strip().lower()
             # Check if it's "category" (case-insensitive)
-            if prefix_word == 'category':
+            if prefix_word == "category":
                 # Extract content after the colon
-                colon_pos = full_match.find(':')
+                colon_pos = full_match.find(":")
                 if colon_pos > 0:
-                    category_content = full_match[colon_pos+1:-2]
+                    category_content = full_match[colon_pos + 1 : -2]
 
                     parts = category_content.split("|")
                     category_name = parts[0].strip() if parts else category_content.strip()
@@ -41,7 +40,7 @@ def get_categories(text: str) -> Dict[str, str]:
     return categories
 
 
-def get_category_list(text: str) -> List[str]:
+def get_category_list(text: str) -> list[str]:
     """Extract category names as a list
 
     Args:

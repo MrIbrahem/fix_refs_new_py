@@ -2,37 +2,38 @@
 MDWiki category integration
 """
 
+import json
 import os
 import re
-import json
-from typing import Dict, Any
-from ..utils.http import get_url
+from typing import Any
+
 from ..config import resources_path
+from ..utils.http import get_url
 
 # Languages that should not receive the MDWiki translation category
 SKIP_LANGS_CATEGORY = ["it", "en", "bg"]
 
 
-def load_from_local_file() -> Dict[str, Any]:
+def load_from_local_file() -> dict[str, Any]:
     """Load MDWiki categories from local JSON file
 
     Returns:
         Dictionary of MDWiki categories or empty dict if file not found
     """
-    local_file = resources_path / 'mdwiki_categories.json'
+    local_file = resources_path / "mdwiki_categories.json"
 
     if not local_file.exists():
         return {}
 
     try:
-        with open(local_file, 'r', encoding='utf-8') as f:
-            result: Dict[str, Any] = json.load(f)  # type: ignore
+        with open(local_file, "r", encoding="utf-8") as f:
+            result: dict[str, Any] = json.load(f)  # type: ignore
             return result
-    except (json.JSONDecodeError, IOError):
+    except (OSError, json.JSONDecodeError):
         return {}
 
 
-def get_cats() -> Dict[str, Any]:
+def get_cats() -> dict[str, Any]:
     """Fetch MDWiki categories from Wikidata API with fallback to local file
 
     Returns:

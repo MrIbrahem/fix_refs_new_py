@@ -1,12 +1,11 @@
 """Language-specific bots"""
 
-
-from .pl_bot import pl_fixes
-from .pt_bot import pt_fixes
 from .bg_bot import bg_fixes
 from .es import fix_es_all
-from .sw_bot import sw_fixes
 from .hy_bot import hy_fixes
+from .pl_bot import pl_fixes
+from .pt_bot import pt_fixes
+from .sw_bot import sw_fixes
 
 
 def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:

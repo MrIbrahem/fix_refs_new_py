@@ -2,8 +2,9 @@
 
 Converted from tests/Parse/Citations_regTest.php
 """
+
 from fix_refs.parsers.citations import (
-    get_citations,
+    get_all_citations,
     get_full_refs,
     get_short_refs,
 )
@@ -12,12 +13,12 @@ from fix_refs.parsers.citations import (
 class TestCitations:
     """Test cases for citation parsing"""
 
-    # Tests for get_citations function
+    # Tests for get_all_citations function
 
     def test_get_regex_citations_with_multiple_refs(self):
         """Test extracting multiple citations from text"""
         text = '<ref name="ref1">Content 1</ref> Text <ref name="ref2">Content 2</ref>'
-        citations = get_citations(text)
+        citations = get_all_citations(text)
 
         assert len(citations) == 2
         assert citations[0].name == "ref1"
@@ -26,14 +27,14 @@ class TestCitations:
 
     def test_get_regex_citations_with_no_refs(self):
         """Test extracting citations from text with no references"""
-        text = 'No references here'
-        citations = get_citations(text)
+        text = "No references here"
+        citations = get_all_citations(text)
         assert len(citations) == 0
 
     def test_get_citations_with_no_name(self):
         """Test citations without name attribute"""
-        text = '<ref>Content without name</ref>'
-        citations = get_citations(text)
+        text = "<ref>Content without name</ref>"
+        citations = get_all_citations(text)
 
         assert len(citations) == 1
         assert citations[0].name == ""
@@ -42,7 +43,7 @@ class TestCitations:
     def test_get_citations_with_multiple_attributes(self):
         """Test citations with multiple attributes"""
         text = '<ref name="test" group="notes">Content</ref>'
-        citations = get_citations(text)
+        citations = get_all_citations(text)
 
         assert len(citations) == 1
         assert citations[0].name == "test"

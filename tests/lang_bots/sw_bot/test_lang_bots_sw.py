@@ -2,7 +2,7 @@
 
 Converted from tests/swTest.php
 """
-import pytest
+
 from fix_refs.lang_bots.sw_bot import sw_fixes
 
 
@@ -27,62 +27,32 @@ class TestSwFixes:
     def test_sw_fixes_comprehensive(self):
         tests = [
             # Case: Case insensitivity (lowercase)
-            {
-                "input": "=== marejeleo ===",
-                "expected": "=== Marejeo ==="
-            },
+            {"input": "=== marejeleo ===", "expected": "=== Marejeo ==="},
             # Case: Multiple occurrences
             {
                 "input": "== Marejeleo ==\nSome text\n== marejeleo ==",
-                "expected": "== Marejeo ==\nSome text\n== Marejeo =="
+                "expected": "== Marejeo ==\nSome text\n== Marejeo ==",
             },
             # Case: In the middle of content
-            {
-                "input": "This is a section: == Marejeleo ==",
-                "expected": "This is a section: == Marejeo =="
-            },
+            {"input": "This is a section: == Marejeleo ==", "expected": "This is a section: == Marejeo =="},
             # Case: Similar word that should NOT be replaced
-            {
-                "input": "== MarejeleoMengine ==",
-                "expected": "== MarejeleoMengine =="
-            },
+            {"input": "== MarejeleoMengine ==", "expected": "== MarejeleoMengine =="},
             # Case: Different word that should NOT be replaced
-            {
-                "input": "=== Viungo ===",
-                "expected": "=== Viungo ==="
-            },
+            {"input": "=== Viungo ===", "expected": "=== Viungo ==="},
             # Case: Empty string
-            {
-                "input": "",
-                "expected": ""
-            },
+            {"input": "", "expected": ""},
             # Case: No matching pattern
-            {
-                "input": "This is just regular text",
-                "expected": "This is just regular text"
-            },
+            {"input": "This is just regular text", "expected": "This is just regular text"},
             # Case: Multiple spaces between equals and word
-            {
-                "input": "==     Marejeleo     ==",
-                "expected": "== Marejeo =="
-            },
+            {"input": "==     Marejeleo     ==", "expected": "== Marejeo =="},
             # Case: Tabs instead of spaces
-            {
-                "input": "==\tMarejeleo\t==",
-                "expected": "== Marejeo =="
-            },
+            {"input": "==\tMarejeleo\t==", "expected": "== Marejeo =="},
             # Case: Mixed whitespace
-            {
-                "input": "== \t \n Marejeleo \n \t ==",
-                "expected": "== Marejeo =="
-            },
+            {"input": "== \t \n Marejeleo \n \t ==", "expected": "== Marejeo =="},
             # Case: Multiple occurrences in one line
-            {
-                "input": "== Marejeleo == and == marejeleo ==",
-                "expected": "== Marejeleo == and == Marejeo =="
-            }
+            {"input": "== Marejeleo == and == marejeleo ==", "expected": "== Marejeleo == and == Marejeo =="},
         ]
 
         for test in tests:
-            result = sw_fixes(test['input'])
-            assert result == test['expected'], f"Failed for: {test['input']}"
+            result = sw_fixes(test["input"])
+            assert result == test["expected"], f"Failed for: {test['input']}"

@@ -2,14 +2,13 @@
 Tests for mini fixes
 """
 
-import pytest
 from fix_refs.bots.mini_fixes import (
+    fix_prefix,
+    fix_sections_titles,
     mini_fixes,
     mini_fixes_after_fixing,
     refs_tags_spaces,
-    fix_sections_titles,
     remove_space_before_ref_tags,
-    fix_prefix
 )
 
 
@@ -27,20 +26,20 @@ class TestRefsTagsSpaces:
 
     def test_remove_space_between_refs(self):
         """Test removing space between closing and opening refs"""
-        text = "</ref> <ref name=\"test\">Content</ref>"
+        text = '</ref> <ref name="test">Content</ref>'
         result = refs_tags_spaces(text)
         assert "</ref> <ref" not in result
         assert "</ref><ref" in result
 
     def test_remove_space_self_closing(self):
         """Test removing space with self-closing ref"""
-        text = "<ref name=\"A\"/><ref name=\"B\">Content</ref>"
+        text = '<ref name="A"/><ref name="B">Content</ref>'
         result = refs_tags_spaces(text)
         assert "/><ref" in result
 
     def test_remove_space_after_ref(self):
         """Test removing space after ref"""
-        text = "> <ref name=\"test\">Content</ref>"
+        text = '> <ref name="test">Content</ref>'
         result = refs_tags_spaces(text)
         assert "> <ref" not in result
         assert "><ref" in result
@@ -73,13 +72,13 @@ class TestRemoveSpaceBeforeRefTags:
 
     def test_remove_space_before_dot(self):
         """Test removing space before dot"""
-        text = "Text .<ref name=\"test\">Content</ref>"
+        text = 'Text .<ref name="test">Content</ref>'
         result = remove_space_before_ref_tags(text, "en")
         assert "Text.<ref" in result
 
     def test_remove_space_before_comma(self):
         """Test removing space before comma"""
-        text = "Text ,<ref name=\"test\">Content</ref>"
+        text = 'Text ,<ref name="test">Content</ref>'
         result = remove_space_before_ref_tags(text, "en")
         assert "Text,<ref" in result
 
