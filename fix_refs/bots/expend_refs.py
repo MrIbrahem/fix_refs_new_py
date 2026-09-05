@@ -2,7 +2,7 @@
 Reference expansion utilities
 """
 
-from ..parsers.citations import Citation, get_full_refs, get_short_refs
+from ..parsers.citations import Citation, get_full_refs, get_short_citations
 from ..utils.debug import echo_debug
 
 
@@ -20,8 +20,8 @@ def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
     refs = get_full_refs(alltext)
 
     for cite in short_refs:
-        name = cite.name
-        refe = cite.tag
+        name = cite.get_name()
+        refe = cite.get_original_text()
 
         rr = refs.get(name, "")
 
@@ -49,11 +49,11 @@ def refs_expand_work(first: str, alltext: str = "") -> str:
         alltext = first
 
     refs = get_full_refs(alltext)
-    short_refs = get_short_refs(first)
+    short_refs = get_short_citations(first)
 
     for cite in short_refs:
-        name = cite.name
-        refe = cite.tag
+        name = cite.get_name()
+        refe = cite.get_original_text()
 
         rr = refs.get(name, "")
         if rr:

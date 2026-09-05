@@ -1,10 +1,9 @@
-"""
-Remove spaces between words and reference tags
-"""
+""" """
 
 import re
 
-from ..utils.debug import echo_debug
+# ------------------------
+# ------------------------
 
 
 def match_it(text: str, charters: str):
@@ -24,7 +23,7 @@ def get_parts(newtext: str, charters: str):
     if len(matches) == 1:
         matches = newtext.split("\r\n\r\n")
 
-    echo_debug(f"count(matches)={len(matches)}")
+    print(f"count(matches)={len(matches)}")
 
     new_parts = []
     for p in matches:
@@ -32,7 +31,7 @@ def get_parts(newtext: str, charters: str):
         if chart:
             new_parts.append([p, chart])
 
-    echo_debug(f"count(new_parts)={len(new_parts)}")
+    print(f"count(new_parts)={len(new_parts)}")
     return new_parts
 
 
@@ -47,21 +46,21 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
     parts = get_parts(newtext, dots)
 
     for part, charter in parts:
-        echo_debug(f"charter={charter}")
+        print(f"charter={charter}")
 
         # Regex equivalent to:
         # /((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)/us
         regline = r"((?:\s*<ref[\s\S]+?(?:</ref|/)>)+)"
         last_ref_matches = re.findall(regline, part, flags=re.UNICODE | re.DOTALL)
 
-        echo_debug(f"count(last_ref)={len(last_ref_matches)}")
+        print(f"count(last_ref)={len(last_ref_matches)}")
 
         if last_ref_matches:
             ref_text = last_ref_matches[-1]
             end_part = ref_text + charter
 
             if part.endswith(end_part):
-                echo_debug("endswith")
+                print("endswith")
 
                 first_part_clean_end = part[: -len(end_part)]
                 first_part_clean_end = first_part_clean_end.rstrip()

@@ -4,14 +4,10 @@ MDWiki category integration
 
 import json
 import os
-import re
 from typing import Any
 
 from ..config import resources_path
 from ..utils.http import get_url
-
-# Languages that should not receive the MDWiki translation category
-SKIP_LANGS_CATEGORY = ["it", "en", "bg"]
 
 
 def load_from_local_file() -> dict[str, Any]:
@@ -65,7 +61,9 @@ def get_mdwiki_category(lang: str) -> str:
     Returns:
         Category name or empty string
     """
-    if lang in SKIP_LANGS_CATEGORY:
+    skip_langs = ["it", "en"]
+
+    if lang in skip_langs:
         return ""
 
     cats = get_cats()
@@ -83,7 +81,11 @@ def add_translated_from_mdwiki(text: str, lang: str) -> str:
     Returns:
         Text with MDWiki category added if not present
     """
-    if lang in SKIP_LANGS_CATEGORY:
+    import re
+
+    skip_langs = ["it", "en", "bg"]
+
+    if lang in skip_langs:
         return text
 
     if re.search(r":\s*Translated[ _]from[ _]MDWiki\s*\]\]", text, re.IGNORECASE):
