@@ -133,7 +133,6 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Previously Fixed Issues
 
-| 1   | Debug `print()` in production code       | `lang_bots/remove_space.py` | Replaced with `echo_debug()`                   |
 | #   | Issue                                    | Location                      | Fix Applied                                    |
 | --- | ---------------------------------------- | ----------------------------- | ---------------------------------------------- |
 | 1   | Debug `print()` in production code       | `lang_bots/remove_space.py`   | Replaced with `echo_debug()`                   |
