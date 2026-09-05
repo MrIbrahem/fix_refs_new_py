@@ -3,7 +3,7 @@ Reference expansion utilities
 """
 
 from typing import List
-from ..parsers.citations import get_short_citations, get_full_refs, Citation
+from ..parsers.citations import get_short_refs, get_full_refs, Citation
 from ..utils.debug import echo_debug
 
 
@@ -50,7 +50,7 @@ def refs_expand_work(first: str, alltext: str = "") -> str:
         alltext = first
 
     refs = get_full_refs(alltext)
-    short_refs = get_short_citations(first)
+    short_refs = get_short_refs(first)
 
     for cite in short_refs:
         name = cite.get_name()

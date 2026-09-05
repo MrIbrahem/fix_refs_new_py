@@ -6,7 +6,7 @@ import pytest
 from fix_refs.parsers.citations import (
     get_citations,
     get_full_refs,
-    get_short_citations,
+    get_short_refs,
 )
 
 
@@ -74,12 +74,12 @@ class TestCitations:
         full_refs = get_full_refs('<ref name="ref2"/>')
         assert len(full_refs) == 0
 
-    # Tests for get_short_citations function
+    # Tests for get_short_refs function
 
     def test_get_short_citations(self):
         """Test getting short/self-closing citations"""
         text = '<ref name="ref1"/> Text <ref name="ref2"/>'
-        short_refs = get_short_citations(text)
+        short_refs = get_short_refs(text)
 
         assert len(short_refs) == 2
         assert short_refs[0].name == "ref1"
@@ -88,7 +88,7 @@ class TestCitations:
     def test_get_short_citations_with_spaces(self):
         """Test short citations with extra spaces"""
         text = '<ref name="test" /> <ref name="test2"/>'
-        short_refs = get_short_citations(text)
+        short_refs = get_short_refs(text)
 
         assert len(short_refs) == 2
         assert short_refs[0].name == "test"
@@ -96,13 +96,13 @@ class TestCitations:
 
     def test_get_short_citations_empty(self):
         """Test short citations with empty text"""
-        short_refs = get_short_citations("")
+        short_refs = get_short_refs("")
         assert len(short_refs) == 0
 
     def test_get_short_citations_mixed_with_full(self):
         """Test extracting short citations mixed with full citations"""
         text = '<ref name="full">Full content</ref> <ref name="short"/>'
-        short_refs = get_short_citations(text)
+        short_refs = get_short_refs(text)
 
         assert len(short_refs) == 1
         assert short_refs[0].name == "short"

@@ -1,9 +1,12 @@
 """
 Citation parser for WikiText reference tags
 """
-import wikitextparser as wtp
+
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Any, List, Dict
+import wikitextparser as wtp
 
 
 @dataclass
@@ -15,14 +18,9 @@ class Citation:
         # self.ref = copy.deepcopy(ref) # AttributeError: property '_attrs_match' of 'Tag' object has no setter
         self.copy_object(ref)
 
-    def copy_object(self, ref):
-        parsed = wtp.parse(str(ref.string))
-
-        # to copy the tag object
-        for tag in parsed.get_tags():
-            if tag.string == parsed.string:
-                self.ref = tag
-                break
+    @classmethod
+    def from_text(cls, ref_text) -> Citation:
+        return Citation(wtp._tag.Tag(ref_text))
 
     @property
     def tag(self) -> str:
@@ -102,7 +100,7 @@ def get_citations(text: str) -> List[Citation]:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref":
-            citation = Citation(ref=tag)
+            citation = Citation.from_text(tag)
             citations.append(citation)
 
     return citations
@@ -127,7 +125,7 @@ def get_full_refs(text: str) -> Dict[str, str]:
     return full
 
 
-def get_short_citations(text: str) -> List[Citation]:
+def get_short_refs(text: str) -> List[Citation]:
     """Extract short/empty citations (self-closing tags)
 
     Args:
@@ -140,7 +138,6 @@ def get_short_citations(text: str) -> List[Citation]:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref" and not tag.contents:
-            citation = Citation(ref=tag)
-            citations.append(citation)
+            citations.append(Citation.from_text(tag))
 
     return citations
