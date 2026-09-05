@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import logging
-
 from .bg_bot import bg_fixes
 from .es import fix_es_all
 from .hy_bot import hy_fixes

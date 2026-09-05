@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import logging
-
 from .fix_page import fix_one_page
 
 __all__ = [
