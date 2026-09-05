@@ -2,8 +2,9 @@
 Citation parser for WikiText reference tags
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any
 
 import wikitextparser as wtp
 
@@ -12,61 +13,34 @@ import wikitextparser as wtp
 class Citation:
     """Represents a citation reference"""
 
-    def __init__(self, ref: Any) -> None:
-        self.ref = None
-        # self.ref = copy.deepcopy(ref) # AttributeError: property '_attrs_match' of 'Tag' object has no setter
-        self.copy_object(ref)
+    def __init__(self, ref: wtp._tag.Tag) -> None:
+        self.ref: wtp._tag.Tag = ref
+        self.tag = self.ref.string
+        self.contents = self.ref.contents or ""
+        self.options = dict(self.ref.attrs)
 
-    def copy_object(self, ref):
-        parsed = wtp.parse(str(ref.string))
-
-        # to copy the tag object
-        for tag in parsed.get_tags():
-            if tag.string == parsed.string:
-                self.ref = tag
-                break
-
-    @property
-    def tag(self) -> str:
-        """Get citation string"""
-        return self.ref.string
-
-    @property
-    def content(self) -> str:
-        """Get citation content"""
-        return self.ref.contents
+        self.attrs = self.ref.attrs
 
     @property
     def name(self) -> str:
         """Get citation name"""
-        return self.ref.attrs.get("name", "")
-
-    @property
-    def attrs(self) -> str:
-        """Get citation options/attributes"""
-        return self.ref.attrs
-
-    def get_original_text(self) -> str:
-        """Get the original reference tag"""
-        return self.tag
-
-    def get_content(self) -> str:
-        """Get citation content"""
-        return self.content
+        return self.ref.attrs.get("name", "").strip()
 
     def set_contents(self, new_content: str) -> None:
         """Set citation content"""
-        if new_content or self.ref.contents:
-            self.ref.contents = new_content
-
-    def get_name(self) -> str:
-        """Get citation name"""
-        return self.name
+        self.ref.contents = new_content
 
     def get_attributes(self) -> str:
-        """Get citation options/attributes"""
-        str_attrs = str(self.ref.string).split(">")[0].replace("<ref", "").strip()
-        return str_attrs.strip()
+        """Get citation options/attributes as a string"""
+        tag_str = str(self.ref.string)
+        # Find the end of the opening tag: could be ">" or "/>"
+        close_idx = tag_str.find(">")
+        if close_idx == -1:
+            return ""
+        attrs_part = tag_str[len("<ref") : close_idx]
+        # Strip trailing "/" for self-closing tags
+        attrs_part = attrs_part.rstrip(" /")
+        return attrs_part.strip()
 
     def to_string_self_closing(self) -> str:
         """Convert to self-closing tag string"""
@@ -77,13 +51,20 @@ class Citation:
 
     def to_string(self) -> str:
         """Convert back to reference tag string"""
-        if not self.content.strip():
+        if self.is_self_closing():
             return self.ref.string.replace("></ref>", " />")
 
         return self.ref.string
 
+    def is_self_closing(self) -> bool:
+        return not self.contents or not self.contents.strip()
 
-def get_citations(text: str) -> list[Citation]:
+    @classmethod
+    def from_text(cls, ref_text: str) -> Citation:
+        return Citation(wtp._tag.Tag(ref_text))
+
+
+def get_all_citations(text: str) -> list[Citation]:
     """Extract all citations from text
 
     Args:
@@ -92,13 +73,13 @@ def get_citations(text: str) -> list[Citation]:
     Returns:
         List of Citation objects
     """
-
     citations = []
     parsed = wtp.parse(text)
+
     for tag in parsed.get_tags():
         if tag.name == "ref":
-            citation = Citation(ref=tag)
-            citations.append(citation)
+            # citations.append(Citation.from_text(tag.string))
+            citations.append(Citation(tag))
 
     return citations
 
@@ -113,17 +94,18 @@ def get_full_refs(text: str) -> dict[str, str]:
         Dictionary mapping citation names to their full tags
     """
     full = {}
-    citations = get_citations(text)
+    citations = get_all_citations(text)
 
     for cite in citations:
-        if cite.content and cite.name:
+        if cite.contents and cite.name:
             full[cite.name] = cite.tag
 
     return full
 
 
-def get_short_citations(text: str) -> list[Citation]:
-    """Extract short/empty citations (self-closing tags)
+def get_short_refs(text: str) -> list[Citation]:
+    """
+    Extract short/empty citations (self-closing tags)
 
     Args:
         text: Text containing short citations
@@ -135,7 +117,14 @@ def get_short_citations(text: str) -> list[Citation]:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref" and not tag.contents:
-            citation = Citation(ref=tag)
-            citations.append(citation)
+            # citations.append(Citation.from_text(tag.string))
+            citations.append(Citation(tag))
 
     return citations
+
+
+__all__ = [
+    "get_all_citations",
+    "get_full_refs",
+    "get_short_refs",
+]
