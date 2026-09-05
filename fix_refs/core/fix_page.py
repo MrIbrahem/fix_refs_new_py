@@ -17,7 +17,7 @@ from ..mdwiki import add_translated_from_mdwiki
 from ..utils import echo_test
 
 
-def expand_infobox_if_needed(text, title, lang, expend_infobox):
+def _expand_infobox_if_needed(text, title, lang, expend_infobox):
     if expend_infobox or lang == "es":
         text = expand_infobox_in_text(text, title, "")
     return text
@@ -56,7 +56,7 @@ def fix_one_page(
     if is_redirect(title, text):
         return text
 
-    text = expand_infobox_if_needed(text, title, lang, expend_infobox)
+    text = _expand_infobox_if_needed(text, title, lang, expend_infobox)
 
     text = mini_fixes(text, lang)
     text = fix_missing_refs(text, source_title, mdwiki_revid)
@@ -75,7 +75,7 @@ def fix_one_page(
     if text_with_lang_fixes:
         text = text_with_lang_fixes
         # Re-expand infobox if language fixes made changes
-        text = expand_infobox_if_needed(text, title, lang, expend_infobox)
+        text = _expand_infobox_if_needed(text, title, lang, expend_infobox)
 
     if add_category:
         text = add_translated_from_mdwiki(text, lang)
@@ -86,3 +86,8 @@ def fix_one_page(
         return text_org
 
     return text
+
+
+__all__ = [
+    "fix_one_page",
+]
