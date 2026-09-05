@@ -3,7 +3,6 @@
 Converted from tests/Parse/CategoryTest.php
 """
 
-
 from fix_refs.parsers.category import get_categories
 
 

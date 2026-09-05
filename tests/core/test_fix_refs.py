@@ -2,7 +2,6 @@
 Tests for core fix_page functionality
 """
 
-
 from fix_refs.core.fix_page import fix_one_page
 
 

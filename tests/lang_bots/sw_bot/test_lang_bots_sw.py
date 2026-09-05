@@ -3,7 +3,6 @@
 Converted from tests/swTest.php
 """
 
-
 from fix_refs.lang_bots.sw_bot import sw_fixes
 
 

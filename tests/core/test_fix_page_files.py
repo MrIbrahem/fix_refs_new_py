@@ -5,7 +5,6 @@ Converted from tests/FixpageTest.php
 
 from pathlib import Path
 
-
 from fix_refs.core.fix_page import fix_one_page
 
 

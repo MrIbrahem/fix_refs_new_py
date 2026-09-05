@@ -141,7 +141,7 @@ def expand_infobox_in_text(text, title, section_0):
         PP = [[y1, u1] for u1, y1 in tempse.items()]
         PP.sort(reverse=True)
         # ---
-        for y2, u2 in PP:
+        for _y2, u2 in PP:
             main_temp = tempse_by_u[u2]
             break
     # ---

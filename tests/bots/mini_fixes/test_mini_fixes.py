@@ -2,7 +2,6 @@
 Tests for mini fixes
 """
 
-
 from fix_refs.bots.mini_fixes import (
     fix_prefix,
     fix_sections_titles,

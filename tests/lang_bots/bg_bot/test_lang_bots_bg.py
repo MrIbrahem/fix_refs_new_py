@@ -3,7 +3,6 @@
 Converted from tests/bg_bots/fix_bgTest.php
 """
 
-
 from fix_refs.lang_bots.bg_bot import bg_fixes, bg_section
 
 

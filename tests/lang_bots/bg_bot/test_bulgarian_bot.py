@@ -2,7 +2,6 @@
 Tests for Bulgarian bot
 """
 
-
 from fix_refs.lang_bots.bg_bot import bg_fixes
 
 

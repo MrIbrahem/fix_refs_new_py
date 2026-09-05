@@ -3,7 +3,6 @@
 Converted from tests/mv_dots_afterTest.php and tests/mv_dots_beforeTest.php
 """
 
-
 from fix_refs.bots.move_dots import move_dots_after_refs
 
 

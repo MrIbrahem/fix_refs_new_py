@@ -2,7 +2,6 @@
 Tests for Armenian bot
 """
 
-
 from fix_refs.lang_bots.hy_bot import hy_fixes
 
 

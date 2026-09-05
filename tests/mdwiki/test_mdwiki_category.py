@@ -3,7 +3,6 @@
 Converted from tests/md_catTest.php
 """
 
-
 from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
 

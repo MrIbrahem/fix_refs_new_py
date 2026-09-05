@@ -2,7 +2,6 @@
 Tests for month handling
 """
 
-
 from fix_refs.bots.months import make_date_new_val_es, make_date_new_val_pt, new_date
 
 

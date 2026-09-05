@@ -3,7 +3,6 @@
 Converted from tests/FixpageTest.php
 """
 
-
 from fix_refs.core.fix_page import fix_one_page
 
 

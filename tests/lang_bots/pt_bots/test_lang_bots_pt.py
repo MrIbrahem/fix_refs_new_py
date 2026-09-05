@@ -3,7 +3,6 @@
 Converted from tests/pt_bots/pt_monthsTest.php
 """
 
-
 from fix_refs.bots.months import make_date_new_val_pt
 from fix_refs.lang_bots.pt_bot import fix_pt_months_in_refs, fix_pt_months_in_texts, rm_ref_spaces, start_end
 

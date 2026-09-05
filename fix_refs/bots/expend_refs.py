@@ -2,7 +2,6 @@
 Reference expansion utilities
 """
 
-
 from ..parsers.citations import Citation, get_full_refs, get_short_citations
 from ..utils.debug import echo_debug
 

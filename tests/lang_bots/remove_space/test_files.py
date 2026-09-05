@@ -5,7 +5,6 @@ Converted from tests/remove_spaceTest.php
 
 from pathlib import Path
 
-
 from fix_refs.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref
 
 

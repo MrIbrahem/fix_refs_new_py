@@ -2,7 +2,6 @@
 Tests for Polish bot
 """
 
-
 from fix_refs.lang_bots.pl_bot import pl_fixes
 
 

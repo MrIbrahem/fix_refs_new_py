@@ -2,7 +2,6 @@
 Tests for category parser
 """
 
-
 from fix_refs.parsers.category import get_categories, get_category_list, has_category
 
 
