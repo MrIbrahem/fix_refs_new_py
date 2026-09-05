@@ -13,34 +13,17 @@ import wikitextparser as wtp
 class Citation:
     """Represents a citation reference"""
 
-    def __init__(self, ref: Any) -> None:
-        self.ref = None
-        # self.ref = copy.deepcopy(ref) # AttributeError: property '_attrs_match' of 'Tag' object has no setter
-        self.copy_object(ref)
-
-    @classmethod
-    def from_text(cls, ref_text) -> Citation:
-        return Citation(wtp._tag.Tag(ref_text))
-
-    @property
-    def tag(self) -> str:
-        """Get citation string"""
-        return self.ref.string
-
-    @property
-    def content(self) -> str:
-        """Get citation content"""
-        return self.ref.contents
+    def __init__(self, ref: wtp._tag.Tag) -> None:
+        self.ref: wtp._tag.Tag = ref
+        self.tag = self.ref.string
+        self.contents = self.ref.contents or ""
+        self.options = dict(self.ref.attrs)
+        self.attrs = self.ref.attrs
 
     @property
     def name(self) -> str:
         """Get citation name"""
         return self.ref.attrs.get("name", "")
-
-    @property
-    def attrs(self) -> str:
-        """Get citation options/attributes"""
-        return self.ref.attrs
 
     def get_original_text(self) -> str:
         """Get the original reference tag"""
@@ -48,7 +31,7 @@ class Citation:
 
     def get_content(self) -> str:
         """Get citation content"""
-        return self.content
+        return self.contents
 
     def set_contents(self, new_content: str) -> None:
         """Set citation content"""
@@ -66,7 +49,7 @@ class Citation:
         close_idx = tag_str.find(">")
         if close_idx == -1:
             return ""
-        attrs_part = tag_str[len("<ref"):close_idx]
+        attrs_part = tag_str[len("<ref") : close_idx]
         # Strip trailing "/" for self-closing tags
         attrs_part = attrs_part.rstrip(" /")
         return attrs_part.strip()
@@ -80,10 +63,17 @@ class Citation:
 
     def to_string(self) -> str:
         """Convert back to reference tag string"""
-        if not self.content.strip():
+        if self.is_self_closing():
             return self.ref.string.replace("></ref>", " />")
 
         return self.ref.string
+
+    def is_self_closing(self) -> bool:
+        return not self.contents or not self.contents.strip()
+
+    @classmethod
+    def from_text(cls, ref_text: str) -> Citation:
+        return Citation(wtp._tag.Tag(ref_text))
 
 
 def get_citations(text: str) -> List[Citation]:
@@ -100,8 +90,8 @@ def get_citations(text: str) -> List[Citation]:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref":
-            citation = Citation.from_text(tag)
-            citations.append(citation)
+            # citations.append(Citation.from_text(tag.string))
+            citations.append(Citation(tag))
 
     return citations
 
@@ -119,7 +109,7 @@ def get_full_refs(text: str) -> Dict[str, str]:
     citations = get_citations(text)
 
     for cite in citations:
-        if cite.content and cite.name:
+        if cite.contents and cite.name:
             full[cite.name] = cite.tag
 
     return full
@@ -138,6 +128,7 @@ def get_short_refs(text: str) -> List[Citation]:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref" and not tag.contents:
-            citations.append(Citation.from_text(tag))
+            # citations.append(Citation.from_text(tag.string))
+            citations.append(Citation(tag))
 
     return citations

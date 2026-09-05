@@ -2,7 +2,6 @@
 
 Converted from tests/Parse/Citations_regTest.php
 """
-import pytest
 from fix_refs.parsers.citations import (
     get_citations,
     get_full_refs,
@@ -22,7 +21,7 @@ class TestCitations:
 
         assert len(citations) == 2
         assert citations[0].name == "ref1"
-        assert citations[0].content == "Content 1"
+        assert citations[0].contents == "Content 1"
         assert citations[0].tag == '<ref name="ref1">Content 1</ref>'
 
     def test_get_regex_citations_with_no_refs(self):
@@ -38,7 +37,7 @@ class TestCitations:
 
         assert len(citations) == 1
         assert citations[0].name == ""
-        assert citations[0].content == "Content without name"
+        assert citations[0].contents == "Content without name"
 
     def test_get_citations_with_multiple_attributes(self):
         """Test citations with multiple attributes"""

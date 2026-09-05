@@ -18,8 +18,8 @@ class TestGetCitations:
         text = '<ref name="test">Content</ref>'
         citations = get_citations(text)
         assert len(citations) == 1
-        assert citations[0].get_name() == "test"
-        assert citations[0].get_content() == "Content"
+        assert citations[0].name == "test"
+        assert citations[0].contents == "Content"
 
     def test_no_citation(self):
         """Test with no citations"""
@@ -32,11 +32,11 @@ class TestGetCitations:
         text = '<ref name="A">A</ref><ref name="B">B</ref>'
         citations = get_citations(text)
         assert len(citations) == 2
-        assert citations[0].get_name() == "A"
-        assert citations[1].get_name() == "B"
+        assert citations[0].name == "A"
+        assert citations[1].name == "B"
 
 
-class Testget_short_citations:
+class TestGetShortCitations:
     """Test short citation extraction"""
 
     def test_short_citation(self):
@@ -44,8 +44,8 @@ class Testget_short_citations:
         text = '<ref name="test"/>'
         citations = get_short_refs(text)
         assert len(citations) == 1
-        assert citations[0].get_name() == "test"
-        assert citations[0].get_content() == ""
+        assert citations[0].name == "test"
+        assert citations[0].contents == ""
 
 
 class TestGetFullRefs:

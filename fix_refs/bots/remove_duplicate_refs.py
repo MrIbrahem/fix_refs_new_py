@@ -28,15 +28,16 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref":
-            citation = Citation.from_text(tag)
+            # citation = Citation.from_text(tag.string)
+            citation = Citation(tag)
             citations.append(citation)
 
     numb = 0
 
     for citation in citations:
-        cite_fulltext = citation.get_original_text()
+        cite_fulltext = citation.tag
         cite_attrs = citation.get_attributes()
-        content = citation.get_content().strip()
+        content = citation.contents.strip()
 
         if not content:
             continue

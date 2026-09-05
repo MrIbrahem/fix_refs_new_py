@@ -21,8 +21,8 @@ def refs_expand(short_refs: List[Citation], text: str, alltext: str) -> str:
     refs = get_full_refs(alltext)
 
     for cite in short_refs:
-        name = cite.get_name()
-        refe = cite.get_original_text()
+        name = cite.name
+        refe = cite.tag
 
         rr = refs.get(name, "")
 
@@ -53,8 +53,8 @@ def refs_expand_work(first: str, alltext: str = "") -> str:
     short_refs = get_short_refs(first)
 
     for cite in short_refs:
-        name = cite.get_name()
-        refe = cite.get_original_text()
+        name = cite.name
+        refe = cite.tag
 
         rr = refs.get(name, "")
         if rr:
