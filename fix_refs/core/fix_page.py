@@ -29,7 +29,7 @@ def fix_one_page(
     add_en_lang: bool = False,
     add_category: bool = False,
     source_title: str = "",
-    mdwiki_revid: int = 0,
+    mdwiki_revid: int | str = 0,
 ) -> str:
     """Main function to fix Wikipedia page references and formatting
 
@@ -48,6 +48,7 @@ def fix_one_page(
         Fixed page content
     """
     text_org = text
+    mdwiki_revid = int(mdwiki_revid)
 
     if is_redirect(title, text):
         return text

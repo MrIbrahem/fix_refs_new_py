@@ -6,8 +6,31 @@ from .fix_page import fix_one_page
 from .settings import load_settings
 
 
-def DoChangesToText1(source_title: str, title: str, text: str, lang: str, mdwiki_revid: int | str) -> str:
+def DoChangesToText1(
+    source_title: str,
+    title: str,
+    text: str,
+    lang: str,
+    mdwiki_revid: int | str,
+) -> str:
+    """
+    Apply configured text modifications to a specific page based on language settings.
 
+    This function loads global settings, retrieves the configuration for the
+    specified language, and parses boolean flags for various text transformation
+    rules. It then delegates the actual text processing to the `fix_one_page`
+    function with these parsed parameters.
+
+    Args:
+        source_title (str): The original title of the source page.
+        title (str): The title of the target page to be processed.
+        text (str): The raw text content of the page to be modified.
+        lang (str): The language code, used to fetch language-specific settings.
+        mdwiki_revid (int | str): The revision ID of the page from the MDWiki.
+
+    Returns:
+        str: The modified text content after applying all specified changes.
+    """
     setting = load_settings()
     lang_default = setting.get(lang, {})
 
