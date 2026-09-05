@@ -2,7 +2,13 @@
 Polish-specific bot fixes
 """
 
+from __future__ import annotations
+
+import logging
+
 import wikitextparser as wtp
+
+logger = logging.getLogger(__name__)
 
 
 def add_missing_params_to_choroba_infobox(text: str) -> str:
@@ -56,3 +62,9 @@ def pl_fixes(text: str) -> str:
     """
     text = add_missing_params_to_choroba_infobox(text)
     return text
+
+
+__all__ = [
+    "add_missing_params_to_choroba_infobox",
+    "pl_fixes",
+]

@@ -2,7 +2,12 @@
 Redirect detection
 """
 
+from __future__ import annotations
+
+import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 
 def page_is_redirect(title: str, text: str) -> bool:
@@ -29,3 +34,9 @@ def is_redirect(title: str, text: str) -> bool:
         True if page is a redirect
     """
     return page_is_redirect(title, text)
+
+
+__all__ = [
+    "page_is_redirect",
+    "is_redirect",
+]

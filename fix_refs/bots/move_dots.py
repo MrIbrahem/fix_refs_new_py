@@ -2,7 +2,12 @@
 Move punctuation after reference tags
 """
 
+from __future__ import annotations
+
+import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 
 def move_dots_after_refs(text: str, lang: str) -> str:
@@ -29,3 +34,8 @@ def move_dots_after_refs(text: str, lang: str) -> str:
     text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
 
     return text
+
+
+__all__ = [
+    "move_dots_after_refs",
+]

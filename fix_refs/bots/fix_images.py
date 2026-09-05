@@ -2,12 +2,17 @@
 Fix missing images by checking Wikimedia Commons and clearing invalid image references
 """
 
+from __future__ import annotations
+
+import logging
 import urllib.parse
 from functools import lru_cache
 
 import wikitextparser as wtp
 
 from ..utils.http import get_url_json
+
+logger = logging.getLogger(__name__)
 
 # User-Agent for Wikimedia API requests (required by Wikimedia policy)
 USER_AGENT = "fix_refs_bot/1.0 (https://github.com/MrIbrahem/fix_refs_new_py)"
@@ -248,3 +253,14 @@ def remove_missing_images_cached(text: str) -> str:
     text = remove_missing_infobox_images(text, use_cache=True)
     text = remove_missing_inline_images(text, use_cache=True)
     return text
+
+
+__all__ = [
+    "check_commons_image_exists",
+    "check_commons_image_exists_cached",
+    "clear_image_cache",
+    "remove_missing_infobox_images",
+    "remove_missing_inline_images",
+    "remove_missing_images",
+    "remove_missing_images_cached",
+]

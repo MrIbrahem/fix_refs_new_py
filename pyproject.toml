@@ -226,7 +226,7 @@ reportIncompatibleMethodOverride = "none"
 pythonVersion = "3.13"
 stubPath = "typings"
 # Paths to include and exclude from checking
-include = ["src", "src/new"]
+include = ["fix_refs"]
 exclude = [
     # System & Version Control
     "**/$RECYCLE.BIN/**",

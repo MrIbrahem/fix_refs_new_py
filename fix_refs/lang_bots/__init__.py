@@ -1,5 +1,7 @@
 """Language-specific bots"""
 
+from __future__ import annotations
+
 from .bg_bot import bg_fixes
 from .es import fix_es_all
 from .hy_bot import hy_fixes
@@ -13,7 +15,7 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
     if lang == "pl":
         text = pl_fixes(text)
 
-    if lang == "pt":
+    elif lang == "pt":
         text = pt_fixes(text)
 
     elif lang == "bg":
@@ -27,4 +29,10 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
 
     elif lang == "hy":
         text = hy_fixes(text)
+
     return text
+
+
+__all__ = [
+    "apply_language_fixes",
+]

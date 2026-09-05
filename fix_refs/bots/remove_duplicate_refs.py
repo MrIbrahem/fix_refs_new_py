@@ -2,10 +2,15 @@
 Remove duplicate references by converting them to named short references
 """
 
+from __future__ import annotations
+
+import logging
+
 import wikitextparser as wtp
 
-from ..parsers.citations import Citation
-from ..utils.debug import echo_debug
+from ..parsers.citations_parser import Citation
+
+logger = logging.getLogger(__name__)
 
 
 def remove_duplicate_refs_with_attrs(text: str) -> str:
@@ -27,15 +32,16 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
     parsed = wtp.parse(text)
     for tag in parsed.get_tags():
         if tag.name == "ref":
-            citation = Citation(ref=tag)
+            # citation = Citation.from_text(tag.string)
+            citation = Citation(tag)
             citations.append(citation)
 
     numb = 0
 
     for citation in citations:
-        cite_fulltext = citation.get_original_text()
+        cite_fulltext = citation.tag
         cite_attrs = citation.get_attributes()
-        content = citation.get_content().strip()
+        content = citation.contents.strip()
 
         if not content:
             continue
@@ -46,7 +52,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             citation.ref.attrs["name"] = name
             cite_attrs = citation.get_attributes()
 
-        echo_debug(f"\n cite_attrs: (({cite_attrs}))")
+        logger.debug(f"\n cite_attrs: (({cite_attrs}))")
 
         short_tag = citation.to_string_self_closing()
 
@@ -54,7 +60,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             new_text = new_text.replace(cite_fulltext, short_tag)
         else:
             refs_to_check[short_tag] = cite_fulltext
-            refs[cite_attrs] = True
+            refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
 
     for key, value in refs_to_check.items():
         if value not in new_text:
@@ -63,3 +69,8 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             new_text = new_text.replace(key, value, 1)
 
     return new_text
+
+
+__all__ = [
+    "remove_duplicate_refs_with_attrs",
+]

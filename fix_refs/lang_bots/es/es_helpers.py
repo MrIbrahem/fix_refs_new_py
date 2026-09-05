@@ -2,11 +2,16 @@
 Spanish helper functions
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 import wikitextparser as wtp
 
 from ...bots.months import make_date_new_val_es
+
+logger = logging.getLogger(__name__)
 
 
 def remove_short_refs(text: str) -> str:
@@ -64,7 +69,7 @@ def fix_es_months_in_refs(text: str) -> str:
     ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
-        contents = ref.contents
+        contents = ref.contents or ""
         # Only process if it looks like a template
         if not start_end(contents):
             continue
@@ -115,3 +120,12 @@ def add_line_to_temp(line: str, text: str) -> str:
         new_text += section_ref
 
     return new_text
+
+
+__all__ = [
+    "remove_short_refs",
+    "start_end",
+    "fix_es_months_in_texts",
+    "fix_es_months_in_refs",
+    "add_line_to_temp",
+]

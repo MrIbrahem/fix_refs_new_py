@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import functools
 import json
+import logging
 import os
 
 from ..config import resources_path
 from ..utils.http import get_url
+
+logger = logging.getLogger(__name__)
 
 
 def load_settings_from_file() -> dict:
@@ -46,3 +51,10 @@ def load_settings() -> dict:
             new[lang_code] = value
 
     return new
+
+
+__all__ = [
+    "load_settings_from_file",
+    "load_settings_from_server",
+    "load_settings",
+]

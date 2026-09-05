@@ -1,8 +1,13 @@
 """ """
 
+from __future__ import annotations
+
+import logging
 import re
 
 import wikitextparser as wtp
+
+logger = logging.getLogger(__name__)
 
 
 def make_line(refs) -> str:
@@ -130,3 +135,12 @@ def mv_es_refs(text):
         return text
     # ---
     return new_text
+
+
+__all__ = [
+    "make_line",
+    "get_refs",
+    "remove_short_refs",
+    "add_line_to_temp",
+    "mv_es_refs",
+]

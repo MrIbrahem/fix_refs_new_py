@@ -2,6 +2,12 @@
 Spanish template and parameter mappings
 """
 
+from __future__ import annotations
+
+import logging
+
+logger = logging.getLogger(__name__)
+
 # Template name mappings (English -> Spanish)
 REFS_TEMPS = {
     "cite web": "cita web",

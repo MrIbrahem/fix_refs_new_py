@@ -1,5 +1,7 @@
 """Language-specific bots"""
 
+from __future__ import annotations
+
 from .es_bot import fix_es
 from .es_section_bot import es_section
 
@@ -19,3 +21,8 @@ def fix_es_all(text: str, title: str, source_title: str, mdwiki_revid: int) -> s
     text = fix_es(text, title)
     text = es_section(source_title, text, str(mdwiki_revid))
     return text
+
+
+__all__ = [
+    "fix_es_all",
+]

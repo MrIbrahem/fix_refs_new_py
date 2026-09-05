@@ -2,11 +2,16 @@
 Portuguese-specific bot fixes
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 import wikitextparser as wtp
 
 from ..bots.months import make_date_new_val_pt
+
+logger = logging.getLogger(__name__)
 
 
 def start_end(cite_temp: str) -> bool:
@@ -51,7 +56,7 @@ def fix_pt_months_in_refs(text: str) -> str:
     ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
-        contents = ref.contents
+        contents = ref.contents or ""
         # Only process if it looks like a template
         if not start_end(contents):
             continue
@@ -90,3 +95,12 @@ def pt_fixes(text: str) -> str:
     text = fix_pt_months_in_refs(text)
     text = rm_ref_spaces(text)
     return text
+
+
+__all__ = [
+    "start_end",
+    "fix_pt_months_in_texts",
+    "fix_pt_months_in_refs",
+    "rm_ref_spaces",
+    "pt_fixes",
+]

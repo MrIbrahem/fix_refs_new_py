@@ -4,3 +4,7 @@
 tests/**/output.txt
 .coverage
 *.env
+_work_files/*
+!_work_files/test_tree.md
+!_work_files/tree.md
+

@@ -2,8 +2,13 @@
 Spanish section helper
 """
 
+from __future__ import annotations
+
+import logging
 import re
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
 def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
@@ -35,3 +40,8 @@ def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
         text += f"\n== Enlaces externos ==\n{temp}\n"
 
     return text
+
+
+__all__ = [
+    "es_section",
+]

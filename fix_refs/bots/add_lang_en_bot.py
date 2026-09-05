@@ -2,9 +2,13 @@
 Add English language parameter to references
 """
 
+from __future__ import annotations
+
+import logging
+
 import wikitextparser as wtp
 
-from ..utils.debug import echo_debug
+logger = logging.getLogger(__name__)
 
 
 def add_lang_en_new(temp_text: str) -> str:
@@ -36,14 +40,14 @@ def add_lang_en_to_refs(text: str) -> str:
     Returns:
         Text with language parameter added to references
     """
-    echo_debug("\n add_lang_en_to_refs:\n")
+    logger.debug("\n add_lang_en_to_refs:\n")
     parsed = wtp.parse(text)
 
     # Get all ref tags
     ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
-        contents = ref.contents
+        contents = ref.contents or ""
         # Only process if it looks like a template
         if not (contents.startswith("{{") and contents.endswith("}}")):
             continue
@@ -59,3 +63,9 @@ def add_lang_en_to_refs(text: str) -> str:
             break  # Only process the first template
 
     return parsed.string
+
+
+__all__ = [
+    "add_lang_en_new",
+    "add_lang_en_to_refs",
+]

@@ -46,7 +46,7 @@ class TestPtMonths:
         result = fix_pt_months_in_refs(input_text)
         assert result == expected
 
-    def test_temp_in_ref(self):
+    def test_temp_in_ref1(self):
         """Test fixing months in single reference"""
         input_text = '<ref name="test" group="notes">{{cite web|date=25  December 2016 |}}</ref>'
         expected = '<ref name="test" group="notes">{{cite web|date=25 de dezembro 2016|}}</ref>'

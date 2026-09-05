@@ -64,7 +64,7 @@ Language-specific processing modules. Each module handles fixes specific to a Wi
 
 ### parsers/
 Low-level parsers using `wikitextparser` library:
-- `citations.py` - Parses `<ref>` tags into `Citation` dataclass objects
+- `citations_parser.py` - Parses `<ref>` tags into `Citation` dataclass objects
 - `category.py` - Parses category links
 
 ### utils/

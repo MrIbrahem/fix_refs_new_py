@@ -2,7 +2,12 @@
 Category parser for WikiText category tags
 """
 
+from __future__ import annotations
+
+import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 
 def get_categories(text: str) -> dict[str, str]:
@@ -65,3 +70,10 @@ def has_category(text: str, category_name: str) -> bool:
     """
     categories = get_categories(text)
     return category_name in categories
+
+
+__all__ = [
+    "get_categories",
+    "get_category_list",
+    "has_category",
+]
