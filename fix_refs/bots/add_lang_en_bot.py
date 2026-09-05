@@ -8,7 +8,7 @@ import logging
 
 import wikitextparser as wtp
 
-from ..utils.debug import echo_debug
+logger = logging.getLogger(__name__)
 
 
 def add_lang_en_new(temp_text: str) -> str:
@@ -40,7 +40,7 @@ def add_lang_en_to_refs(text: str) -> str:
     Returns:
         Text with language parameter added to references
     """
-    echo_debug("\n add_lang_en_to_refs:\n")
+    logger.debug("\n add_lang_en_to_refs:\n")
     parsed = wtp.parse(text)
 
     # Get all ref tags

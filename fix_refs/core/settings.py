@@ -8,6 +8,8 @@ import os
 from ..config import resources_path
 from ..utils.http import get_url
 
+logger = logging.getLogger(__name__)
+
 
 def load_settings_from_file() -> dict:
     file_path = resources_path / "language_settings.json"

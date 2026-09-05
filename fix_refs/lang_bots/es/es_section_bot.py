@@ -8,6 +8,8 @@ import logging
 import re
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
+
 
 def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
     """Add Traducido ref template to Spanish text

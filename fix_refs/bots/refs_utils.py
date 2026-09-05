@@ -2,10 +2,11 @@
 Reference utilities for string manipulation
 """
 
-
 from __future__ import annotations
 
 import logging
+
+logger = logging.getLogger(__name__)
 
 
 def str_ends_with(string: str, end_string: str) -> bool:

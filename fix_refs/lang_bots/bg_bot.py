@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:
     """Add Bulgarian translation template to text

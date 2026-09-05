@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def sw_fixes(text: str) -> str:
     """Apply Swahili-specific fixes to text

@@ -11,6 +11,8 @@ import wikitextparser as wtp
 
 from ...bots.months import make_date_new_val_es
 
+logger = logging.getLogger(__name__)
+
 
 def remove_short_refs(text: str) -> str:
     """

@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def move_dots_after_refs(text: str, lang: str) -> str:
     """Move punctuation marks after reference tags

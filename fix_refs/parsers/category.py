@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def get_categories(text: str) -> dict[str, str]:
     """Extract all categories from text

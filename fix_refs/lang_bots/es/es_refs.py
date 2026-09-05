@@ -7,6 +7,8 @@ import re
 
 import wikitextparser as wtp
 
+logger = logging.getLogger(__name__)
+
 
 def make_line(refs) -> str:
     line = "\n"

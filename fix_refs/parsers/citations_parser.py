@@ -10,6 +10,8 @@ import wikitextparser as wtp
 
 from .citation import Citation
 
+logger = logging.getLogger(__name__)
+
 
 def get_all_citations(text: str) -> list[Citation]:
     citations = []

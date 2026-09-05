@@ -7,7 +7,8 @@ from __future__ import annotations
 import logging
 
 from ..parsers.citations_parser import Citation, get_full_refs, get_short_refs
-from ..utils.debug import echo_debug
+
+logger = logging.getLogger(__name__)
 
 
 def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
@@ -30,7 +31,7 @@ def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
         rr = refs.get(name, "")
 
         if rr:
-            echo_debug(f"refs_expand: {name}")
+            logger.debug(f"refs_expand: {name}")
             text = text.replace(refe, rr)
 
     return text

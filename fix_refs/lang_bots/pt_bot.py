@@ -11,6 +11,8 @@ import wikitextparser as wtp
 
 from ..bots.months import make_date_new_val_pt
 
+logger = logging.getLogger(__name__)
+
 
 def start_end(cite_temp: str) -> bool:
     """Check if string starts with {{ and ends with }}"""

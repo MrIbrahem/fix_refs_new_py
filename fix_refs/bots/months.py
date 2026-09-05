@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def new_date(val: str, lang: str = "pt") -> str:
     """Convert English month names to target language

@@ -8,6 +8,8 @@ import logging
 
 import wikitextparser as wtp
 
+logger = logging.getLogger(__name__)
+
 
 def add_missing_params_to_choroba_infobox(text: str) -> str:
     """Add missing medical code parameters to Choroba infobox templates

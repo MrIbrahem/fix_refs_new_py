@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def page_is_redirect(title: str, text: str) -> bool:
     """Check if page is a redirect

@@ -13,6 +13,8 @@ from typing import Any
 from ..config import resources_path
 from ..utils.http import get_url
 
+logger = logging.getLogger(__name__)
+
 # Languages that should not receive the MDWiki translation category
 SKIP_LANGS_CATEGORY = ["it", "en", "bg"]
 

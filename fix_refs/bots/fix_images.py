@@ -12,6 +12,8 @@ import wikitextparser as wtp
 
 from ..utils.http import get_url_json
 
+logger = logging.getLogger(__name__)
+
 # User-Agent for Wikimedia API requests (required by Wikimedia policy)
 USER_AGENT = "fix_refs_bot/1.0 (https://github.com/MrIbrahem/fix_refs_new_py)"
 

@@ -9,10 +9,11 @@ import re
 
 import wikitextparser as wtp
 
-from ...utils.debug import echo_test
 from .es_data import ARGS_TO, REFS_TEMPS
 from .es_helpers import fix_es_months_in_refs
 from .es_refs import mv_es_refs
+
+logger = logging.getLogger(__name__)
 
 
 def work_one_temp(temp_text: str, name: str) -> str:
@@ -107,7 +108,7 @@ def fix_es(text: str, title: str = "") -> str:
     # Check if text has fewer than 10 lines (skip in test mode)
     line_count = text.count("\n")
     if line_count < 10 and title != "test!":
-        echo_test("less than 10 lines\n")
+        logger.info("less than 10 lines\n")
 
     # Replace <references /> with {{listaref}}
     if "<references />" in text:

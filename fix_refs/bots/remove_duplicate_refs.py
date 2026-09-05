@@ -9,7 +9,8 @@ import logging
 import wikitextparser as wtp
 
 from ..parsers.citations_parser import Citation
-from ..utils.debug import echo_debug
+
+logger = logging.getLogger(__name__)
 
 
 def remove_duplicate_refs_with_attrs(text: str) -> str:
@@ -51,7 +52,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             citation.ref.attrs["name"] = name
             cite_attrs = citation.get_attributes()
 
-        echo_debug(f"\n cite_attrs: (({cite_attrs}))")
+        logger.debug(f"\n cite_attrs: (({cite_attrs}))")
 
         short_tag = citation.to_string_self_closing()
 

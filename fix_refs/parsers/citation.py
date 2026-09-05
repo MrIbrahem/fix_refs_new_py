@@ -9,6 +9,8 @@ from dataclasses import dataclass
 
 import wikitextparser as wtp
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Citation:

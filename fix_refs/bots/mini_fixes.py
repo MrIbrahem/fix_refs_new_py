@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+logger = logging.getLogger(__name__)
+
 
 def fix_sections_titles(text: str, lang: str) -> str:
     """Fix section titles for different languages

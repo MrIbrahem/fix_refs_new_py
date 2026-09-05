@@ -9,6 +9,8 @@ import re
 
 import wikitextparser as wtp
 
+logger = logging.getLogger(__name__)
+
 COMMENT_PATTERN = re.compile(
     r"\s*\n*\s*(<!-- (Monoclonal antibody data|External links|Names*|Clinical data|Legal data|Legal status|Pharmacokinetic data|Chemical and physical data|Definition and medical uses|Chemical data|\w+ \w+ data|\w+ \w+ \w+ data|\w+ data|\w+ status|Identifiers) -->)\s*\n*",
     re.IGNORECASE,

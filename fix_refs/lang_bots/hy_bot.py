@@ -9,6 +9,8 @@ import re
 
 from .remove_space import remove_spaces_between_last_word_and_beginning_of_ref
 
+logger = logging.getLogger(__name__)
+
 
 def str_ends_with(string: str, end_string: str) -> bool:
     """Check if string ends with substring"""

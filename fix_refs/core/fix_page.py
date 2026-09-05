@@ -18,7 +18,8 @@ from ..bots import (
 from ..infobox import expand_infobox_in_text
 from ..lang_bots import apply_language_fixes
 from ..mdwiki import add_translated_from_mdwiki
-from ..utils import echo_test
+
+logger = logging.getLogger(__name__)
 
 
 def _expand_infobox_if_needed(text, title, lang, expend_infobox):
@@ -67,11 +68,11 @@ def fix_one_page(
     text = remove_duplicate_refs_with_attrs(text)
 
     if move_dots:
-        echo_test("move_dots\n")
+        logger.info("move_dots\n")
         text = move_dots_after_refs(text, lang)
 
     if add_en_lang:
-        echo_test("add_en_lang\n")
+        logger.info("add_en_lang\n")
         text = add_lang_en_to_refs(text)
 
     text_with_lang_fixes = apply_language_fixes(text, title, lang, source_title, mdwiki_revid)
