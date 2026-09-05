@@ -6,15 +6,15 @@ The `utils/` module provides shared utility functions used across the fix_refs l
 
 ### Main Modules
 
-| File | Purpose |
-|------|---------|
-| `http.py` | HTTP client with `get_url()` and `get_url_json()` for API calls |
+| File       | Purpose                                                                 |
+| ---------- | ----------------------------------------------------------------------- |
+| `http.py`  | HTTP client with `get_url()` and `get_url_json()` for API calls         |
 | `debug.py` | Debug and test mode output control via `echo_debug()` and `echo_test()` |
 
 ### Technologies
 
-- **requests** - HTTP client library
-- **json** - JSON parsing
+-   **requests** - HTTP client library
+-   **json** - JSON parsing
 
 ---
 
@@ -26,9 +26,9 @@ Simple two-file structure. Both files are focused on a single concern.
 
 ### Design Patterns
 
-- **Global flags** for debug/test mode (`DEBUG`, `TEST_MODE`)
-- **Graceful degradation** - HTTP functions return empty/default values on failure
-- **User-Agent compliance** - Sets proper User-Agent for Wikimedia API requests
+-   **Global flags** for debug/test mode (`DEBUG`, `TEST_MODE`)
+-   **Graceful degradation** - HTTP functions return empty/default values on failure
+-   **User-Agent compliance** - Sets proper User-Agent for Wikimedia API requests
 
 ### Maintainability
 
@@ -80,11 +80,11 @@ The module is very thin. Common patterns across the codebase (like `start_end()`
 
 ## Areas That Need Attention
 
-- Replace `print()` with `logging` module
-- Remove bare `except Exception` clauses
-- Extract User-Agent string to a constant
-- Add retry logic for transient HTTP failures
-- Add request/session pooling for batch operations
+-   Replace `print()` with `logging` module
+-   Remove bare `except Exception` clauses
+-   Extract User-Agent string to a constant
+-   Add retry logic for transient HTTP failures
+-   Add request/session pooling for batch operations
 
 ---
 
@@ -111,10 +111,10 @@ The module is very thin. Common patterns across the codebase (like `start_end()`
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 7/10 | Functional but minimal; needs logging and better error handling |
-| **Production Readiness** | Moderate | Works but swallows errors silently |
-| **Technical Debt** | Low | Simple code, but bare exceptions and print-based debugging |
-| **Risk Assessment** | Low-Medium | Silent error swallowing could hide issues |
-| **Maintainability** | 8/10 | Simple and focused |
+| Metric                   | Score      | Notes                                                           |
+| ------------------------ | ---------- | --------------------------------------------------------------- |
+| **Overall Rating**       | 7/10       | Functional but minimal; needs logging and better error handling |
+| **Production Readiness** | Moderate   | Works but swallows errors silently                              |
+| **Technical Debt**       | Low        | Simple code, but bare exceptions and print-based debugging      |
+| **Risk Assessment**      | Low-Medium | Silent error swallowing could hide issues                       |
+| **Maintainability**      | 8/10       | Simple and focused                                              |

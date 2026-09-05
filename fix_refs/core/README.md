@@ -6,16 +6,16 @@ The `core/` module is the orchestration layer for the fix_refs library. It conta
 
 ### Main Modules
 
-| File | Purpose |
-|------|---------|
+| File          | Purpose                                                    |
+| ------------- | ---------------------------------------------------------- |
 | `fix_page.py` | Main `fix_one_page()` function - the pipeline orchestrator |
-| `settings.py` | Loads per-language settings from JSON file or remote API |
+| `settings.py` | Loads per-language settings from JSON file or remote API   |
 
 ### Technologies
 
-- Python 3.10+ with type hints
-- `functools.lru_cache` for settings caching
-- `wikitextparser` (indirectly, via bots)
+-   Python 3.10+ with type hints
+-   `functools.lru_cache` for settings caching
+-   `wikitextparser` (indirectly, via bots)
 
 ---
 
@@ -27,9 +27,9 @@ The module has a clean two-file structure: one for the pipeline, one for configu
 
 ### Design Patterns
 
-- **Pipeline pattern**: `fix_one_page()` applies 10 sequential transformation steps
-- **Facade pattern**: `DoChangesToText1()` wraps settings loading + pipeline invocation
-- **Cache-aside pattern**: `load_settings()` uses `lru_cache` to avoid repeated file/API reads
+-   **Pipeline pattern**: `fix_one_page()` applies 10 sequential transformation steps
+-   **Facade pattern**: `DoChangesToText1()` wraps settings loading + pipeline invocation
+-   **Cache-aside pattern**: `load_settings()` uses `lru_cache` to avoid repeated file/API reads
 
 ### Pipeline Steps (in order)
 
@@ -86,8 +86,8 @@ expand = bool(int(lang_default.get("expend", 1)))
 
 ### Missing Type Hints
 
-- `expand_infobox_if_needed()` lacks type annotations on parameters
-- `DoChangesToText1()` has `mdwiki_revid: int|str` which is unusual - should the caller normalize this?
+-   `expand_infobox_if_needed()` lacks type annotations on parameters
+-   `DoChangesToText1()` has `mdwiki_revid: int|str` which is unusual - should the caller normalize this?
 
 ### Docstring Mismatch
 
@@ -104,11 +104,11 @@ expand = bool(int(lang_default.get("expend", 1)))
 
 ## Areas That Need Attention
 
-- Fix the `or True` bug in `core/__init__.py:14`
-- Rename `DoChangesToText1()` to follow Python naming conventions
-- Fix "expend" typo to "expand" in all parameter names
-- Add missing type hints to `expand_infobox_if_needed()`
-- Update docstring in `fix_page.py` to match actual parameter names
+-   Fix the `or True` bug in `core/__init__.py:14`
+-   Rename `DoChangesToText1()` to follow Python naming conventions
+-   Fix "expend" typo to "expand" in all parameter names
+-   Add missing type hints to `expand_infobox_if_needed()`
+-   Update docstring in `fix_page.py` to match actual parameter names
 
 ---
 
@@ -130,10 +130,10 @@ expand = bool(int(lang_default.get("expend", 1)))
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 7/10 | Clean orchestration, but the `or True` bug is significant |
-| **Production Readiness** | Moderate | Pipeline works but config is partially broken |
-| **Technical Debt** | Low-Medium | Naming issues and one logic bug |
-| **Risk Assessment** | Medium | `or True` silently overrides configuration |
-| **Maintainability** | 8/10 | Clear, linear pipeline is easy to modify |
+| Metric                   | Score      | Notes                                                     |
+| ------------------------ | ---------- | --------------------------------------------------------- |
+| **Overall Rating**       | 7/10       | Clean orchestration, but the `or True` bug is significant |
+| **Production Readiness** | Moderate   | Pipeline works but config is partially broken             |
+| **Technical Debt**       | Low-Medium | Naming issues and one logic bug                           |
+| **Risk Assessment**      | Medium     | `or True` silently overrides configuration                |
+| **Maintainability**      | 8/10       | Clear, linear pipeline is easy to modify                  |

@@ -6,16 +6,16 @@ The `resources/` directory contains static data files and cached revision data u
 
 ### Contents
 
-| Path | Purpose |
-|------|---------|
+| Path                     | Purpose                                                     |
+| ------------------------ | ----------------------------------------------------------- |
 | `language_settings.json` | Per-language configuration (move_dots, expend, add_en_lang) |
-| `revisions/` | Cached MDWiki revision wikitext files |
-| `revisions/1469242/` | Example cached revision |
+| `revisions/`             | Cached MDWiki revision wikitext files                       |
+| `revisions/1469242/`     | Example cached revision                                     |
 
 ### Technologies
 
-- **JSON** - Configuration data format
-- **Plain text** - Cached wikitext files
+-   **JSON** - Configuration data format
+-   **Plain text** - Cached wikitext files
 
 ---
 
@@ -27,8 +27,8 @@ The resources directory serves as a local cache and fallback data source. When t
 
 ### File Organization
 
-- `language_settings.json` - Loaded by `core/settings.py`
-- `revisions/{id}/wikitext.txt` - Loaded by `bots/fix_missing_refs.py` for reference expansion
+-   `language_settings.json` - Loaded by `core/settings.py`
+-   `revisions/{id}/wikitext.txt` - Loaded by `bots/fix_missing_refs.py` for reference expansion
 
 ---
 
@@ -55,9 +55,9 @@ The resources directory serves as a local cache and fallback data source. When t
 
 ## Areas That Need Attention
 
-- Add `.gitignore` for `revisions/` directory or move to external storage
-- Document the JSON schema for `language_settings.json`
-- Add a script to update/download revision data
+-   Add `.gitignore` for `revisions/` directory or move to external storage
+-   Document the JSON schema for `language_settings.json`
+-   Add a script to update/download revision data
 
 ---
 
@@ -77,10 +77,10 @@ The resources directory serves as a local cache and fallback data source. When t
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 5/10 | Functional but lacks documentation and has cache in VCS |
-| **Production Readiness** | Good | Works as designed |
-| **Technical Debt** | Low | Cache data in git |
-| **Risk Assessment** | Low | Fallback data is supplementary |
-| **Maintainability** | 6/10 | Needs documentation |
+| Metric                   | Score | Notes                                                   |
+| ------------------------ | ----- | ------------------------------------------------------- |
+| **Overall Rating**       | 5/10  | Functional but lacks documentation and has cache in VCS |
+| **Production Readiness** | Good  | Works as designed                                       |
+| **Technical Debt**       | Low   | Cache data in git                                       |
+| **Risk Assessment**      | Low   | Fallback data is supplementary                          |
+| **Maintainability**      | 6/10  | Needs documentation                                     |

@@ -19,16 +19,16 @@ The main entry point `fix_one_page()` applies a 10-step transformation pipeline:
 
 ### Main Technologies
 
-| Technology | Role |
-|---|---|
-| Python 3.10+ | Runtime |
-| wikitextparser | AST-based wikitext parsing |
-| requests | HTTP client for Wikimedia/Commons/Wikidata APIs |
-| python-dotenv | Environment configuration |
-| hatchling | Build system |
-| pytest | Testing framework (407 tests) |
-| ruff / black / isort | Code formatting and linting |
-| mypy / pylint | Static analysis |
+| Technology           | Role                                            |
+| -------------------- | ----------------------------------------------- |
+| Python 3.10+         | Runtime                                         |
+| wikitextparser       | AST-based wikitext parsing                      |
+| requests             | HTTP client for Wikimedia/Commons/Wikidata APIs |
+| python-dotenv        | Environment configuration                       |
+| hatchling            | Build system                                    |
+| pytest               | Testing framework (407 tests)                   |
+| ruff / black / isort | Code formatting and linting                     |
+| mypy / pylint        | Static analysis                                 |
 
 ### General Architecture
 
@@ -48,28 +48,28 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ## Project Health Assessment
 
-| Dimension | Rating | Summary |
-|---|---|---|
+| Dimension                | Rating | Summary                                                                                                   |
+| ------------------------ | ------ | --------------------------------------------------------------------------------------------------------- |
 | **Overall Code Quality** | 6.5/10 | Functional and well-structured, but has a configuration-ignoring bug, code duplication, and naming issues |
-| **Maintainability** | 7/10 | Good modular decomposition; duplication and naming inconsistencies add friction |
-| **Scalability** | 6/10 | Stateless design enables parallel processing; repeated `wtp.parse()` calls are a bottleneck |
-| **Security Posture** | 7/10 | Proper User-Agent, timeouts, and HTTPS; bare `except Exception` removed; hardcoded localhost remains |
-| **Production Readiness** | 6.5/10 | Core pipeline works; configuration bug and missing CI/CD are blockers |
+| **Maintainability**      | 7/10   | Good modular decomposition; duplication and naming inconsistencies add friction                           |
+| **Scalability**          | 6/10   | Stateless design enables parallel processing; repeated `wtp.parse()` calls are a bottleneck               |
+| **Security Posture**     | 7/10   | Proper User-Agent, timeouts, and HTTPS; bare `except Exception` removed; hardcoded localhost remains      |
+| **Production Readiness** | 6.5/10 | Core pipeline works; configuration bug and missing CI/CD are blockers                                     |
 
 ### Per-Module Ratings
 
-| Module | Score | Key Concern |
-|---|---|---|
-| `core/` | 7/10 | `or True` bug ignores configuration (see Critical Findings) |
-| `bots/` | 7/10 | Trivial wrapper functions, `str.replace()` fragility |
-| `lang_bots/` | 7/10 | Dispatcher flow fixed; debug prints fixed |
-| `lang_bots/es/` | 7.5/10 | Best-structured module; minor duplication remains |
-| `parsers/` | 7/10 | Unused `@dataclass`, `get_attributes()` improved but still string-based |
-| `infobox/` | 5.5/10 | Cryptic variable names, missing docstrings, fragile template selection heuristic |
-| `mdwiki/` | 7/10 | Skip lists consolidated; `import re` moved to module level |
-| `utils/` | 7/10 | Bare `except Exception` removed; should adopt `logging` module |
-| `resources/` | 5/10 | Cached data in git, no format documentation |
-| `tests/` | 6.5/10 | Good structure; missing HTTP, config, and integration coverage |
+| Module          | Score  | Key Concern                                                                      |
+| --------------- | ------ | -------------------------------------------------------------------------------- |
+| `core/`         | 7/10   | `or True` bug ignores configuration (see Critical Findings)                      |
+| `bots/`         | 7/10   | Trivial wrapper functions, `str.replace()` fragility                             |
+| `lang_bots/`    | 7/10   | Dispatcher flow fixed; debug prints fixed                                        |
+| `lang_bots/es/` | 7.5/10 | Best-structured module; minor duplication remains                                |
+| `parsers/`      | 7/10   | Unused `@dataclass`, `get_attributes()` improved but still string-based          |
+| `infobox/`      | 5.5/10 | Cryptic variable names, missing docstrings, fragile template selection heuristic |
+| `mdwiki/`       | 7/10   | Skip lists consolidated; `import re` moved to module level                       |
+| `utils/`        | 7/10   | Bare `except Exception` removed; should adopt `logging` module                   |
+| `resources/`    | 5/10   | Cached data in git, no format documentation                                      |
+| `tests/`        | 6.5/10 | Good structure; missing HTTP, config, and integration coverage                   |
 
 ---
 
@@ -86,14 +86,14 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Repeated Weaknesses
 
-| Weakness | Occurrences | Files Affected |
-|---|---|---|
-| `str_ends_with` / `str_starts_with` trivial wrappers | 2 | `bots/refs_utils.py`, `lang_bots/hy_bot.py` |
-| `start_end()` duplication | 2 | `lang_bots/pt_bot.py`, `lang_bots/es/es_helpers.py` |
-| `remove_short_refs()` duplication | 2 | `lang_bots/es/es_refs.py`, `lang_bots/es/es_helpers.py` |
-| Month translation logic duplication | 2 | `bots/months.py` (via `es_helpers.py` and `pt_bot.py`) |
-| "expend" typo (should be "expand") | 8+ | `expend_refs.py`, `expend_infobox.py`, parameter names throughout |
-| String-based wikitext manipulation | 4+ | `remove_duplicate_refs.py`, `expend_refs.py`, `es_bot.py`, `expend_infobox.py` |
+| Weakness                                             | Occurrences | Files Affected                                                                 |
+| ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `str_ends_with` / `str_starts_with` trivial wrappers | 2           | `bots/refs_utils.py`, `lang_bots/hy_bot.py`                                    |
+| `start_end()` duplication                            | 2           | `lang_bots/pt_bot.py`, `lang_bots/es/es_helpers.py`                            |
+| `remove_short_refs()` duplication                    | 2           | `lang_bots/es/es_refs.py`, `lang_bots/es/es_helpers.py`                        |
+| Month translation logic duplication                  | 2           | `bots/months.py` (via `es_helpers.py` and `pt_bot.py`)                         |
+| "expend" typo (should be "expand")                   | 8+          | `expend_refs.py`, `expend_infobox.py`, parameter names throughout              |
+| String-based wikitext manipulation                   | 4+          | `remove_duplicate_refs.py`, `expend_refs.py`, `es_bot.py`, `expend_infobox.py` |
 
 ### Common Technical Debt
 
@@ -105,12 +105,12 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Dependency Issues
 
-| Issue | Detail | Status |
-|---|---|---|
-| `python-dotenv` not in pyproject.toml | Listed in `requirements.txt` and imported in `config.py` but missing from `[project.dependencies]` | **Unfixed** |
-| Python version mismatch | Tooling targets `py313` but `requires-python = ">=3.10"` | **Unfixed** |
-| License inconsistency | Was MIT in `pyproject.toml` vs GPLv3+ in classifiers | **Fixed** — now `GPL-3.0-or-later` |
-| Cached revisions in git | `resources/revisions/` bloats the repository | **Unfixed** |
+| Issue                                 | Detail                                                                                             | Status                             |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `python-dotenv` not in pyproject.toml | Listed in `requirements.txt` and imported in `config.py` but missing from `[project.dependencies]` | **Unfixed**                        |
+| Python version mismatch               | Tooling targets `py313` but `requires-python = ">=3.10"`                                           | **Unfixed**                        |
+| License inconsistency                 | Was MIT in `pyproject.toml` vs GPLv3+ in classifiers                                               | **Fixed** — now `GPL-3.0-or-later` |
+| Cached revisions in git               | `resources/revisions/` bloats the repository                                                       | **Unfixed**                        |
 
 ### Integration Concerns
 
@@ -125,50 +125,50 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Active Bugs
 
-| # | Issue | Location | Severity | Status |
-|---|---|---|---|---|
-| 1 | `or True` makes expand setting always `True` | `core/__init__.py:14` | **Critical** | **UNFIXED** — configuration is silently ignored |
-| 2 | String replacement can corrupt wikitext | `bots/remove_duplicate_refs.py:55` | **High** | **UNFIXED** — `str.replace()` matches substrings |
-| 3 | In-place modification during iteration | `lang_bots/es/es_refs.py:68` | **High** | **UNFIXED** — modifying tag strings while iterating |
+| #   | Issue                                        | Location                           | Severity     | Status                                              |
+| --- | -------------------------------------------- | ---------------------------------- | ------------ | --------------------------------------------------- |
+| 1   | `or True` makes expand setting always `True` | `core/__init__.py:14`              | **Critical** | **UNFIXED** — configuration is silently ignored     |
+| 2   | String replacement can corrupt wikitext      | `bots/remove_duplicate_refs.py:55` | **High**     | **UNFIXED** — `str.replace()` matches substrings    |
+| 3   | In-place modification during iteration       | `lang_bots/es/es_refs.py:68`       | **High**     | **UNFIXED** — modifying tag strings while iterating |
 
 ### Previously Fixed Issues
 
-| # | Issue | Location | Fix Applied |
-|---|---|---|---|
-| 1 | Debug `print()` in production code | `lang_bots/remove_space.py` | Replaced with `echo_debug()` |
-| 2 | Dispatcher control flow bug | `lang_bots/__init__.py` | Fixed to consistent `if`/`elif` chain |
-| 3 | Bare `except Exception` swallows errors | `utils/http.py` | Removed; only specific exceptions caught |
-| 4 | `get_attributes()` fragile `>` splitting | `parsers/citations.py` | Rewritten to find first `>` after `<ref` |
-| 5 | License inconsistency (MIT vs GPLv3+) | `pyproject.toml` | Changed to `GPL-3.0-or-later` |
-| 6 | Inconsistent skip lists | `mdwiki/category.py` | Consolidated to `SKIP_LANGS_CATEGORY` constant |
-| 7 | `import re` inside function | `mdwiki/category.py` | Moved to module top |
+| #   | Issue                                    | Location                    | Fix Applied                                    |
+| --- | ---------------------------------------- | --------------------------- | ---------------------------------------------- |
+| 1   | Debug `print()` in production code       | `lang_bots/remove_space.py` | Replaced with `echo_debug()`                   |
+| 2   | Dispatcher control flow bug              | `lang_bots/__init__.py`     | Fixed to consistent `if`/`elif` chain          |
+| 3   | Bare `except Exception` swallows errors  | `utils/http.py`             | Removed; only specific exceptions caught       |
+| 4   | `get_attributes()` fragile `>` splitting | `parsers/citations.py`      | Rewritten to find first `>` after `<ref`       |
+| 5   | License inconsistency (MIT vs GPLv3+)    | `pyproject.toml`            | Changed to `GPL-3.0-or-later`                  |
+| 6   | Inconsistent skip lists                  | `mdwiki/category.py`        | Consolidated to `SKIP_LANGS_CATEGORY` constant |
+| 7   | `import re` inside function              | `mdwiki/category.py`        | Moved to module top                            |
 
 ### Security Vulnerabilities
 
-| # | Vulnerability | Location | Risk | Status |
-|---|---|---|---|---|
-| 1 | Hardcoded localhost URL | `settings.py:19` | Could be used if `SERVER_NAME` is misconfigured | **Unfixed** |
-| 2 | No URL validation on HTTP requests | `utils/http.py` | SSRF risk if URLs come from untrusted sources | **Unfixed** |
-| 3 | No JSON schema validation | Multiple `json.load()` calls | Malformed API responses cause silent failures | **Unfixed** |
+| #   | Vulnerability                      | Location                     | Risk                                            | Status      |
+| --- | ---------------------------------- | ---------------------------- | ----------------------------------------------- | ----------- |
+| 1   | Hardcoded localhost URL            | `settings.py:19`             | Could be used if `SERVER_NAME` is misconfigured | **Unfixed** |
+| 2   | No URL validation on HTTP requests | `utils/http.py`              | SSRF risk if URLs come from untrusted sources   | **Unfixed** |
+| 3   | No JSON schema validation          | Multiple `json.load()` calls | Malformed API responses cause silent failures   | **Unfixed** |
 
 ### Performance Bottlenecks
 
-| # | Bottleneck | Location | Impact |
-|---|---|---|---|
-| 1 | Repeated `wtp.parse()` calls | All bots | Same text parsed up to 6 times per `fix_one_page()` call |
-| 2 | Non-compiled regex patterns | `bots/mini_fixes.py`, multiple files | Patterns compiled on every function call |
-| 3 | Uncached API calls in loops | `bots/fix_images.py` | Per-image HTTP requests without connection pooling |
+| #   | Bottleneck                   | Location                             | Impact                                                   |
+| --- | ---------------------------- | ------------------------------------ | -------------------------------------------------------- |
+| 1   | Repeated `wtp.parse()` calls | All bots                             | Same text parsed up to 6 times per `fix_one_page()` call |
+| 2   | Non-compiled regex patterns  | `bots/mini_fixes.py`, multiple files | Patterns compiled on every function call                 |
+| 3   | Uncached API calls in loops  | `bots/fix_images.py`                 | Per-image HTTP requests without connection pooling       |
 
 ### Missing Infrastructure
 
-| Missing Item | Impact |
-|---|---|
-| No CI/CD pipeline | No automated testing, linting, or deployment |
-| No `.github/` configuration | No issue templates, PR workflows, or Actions |
-| No `CHANGELOG.md` | No release history tracking |
-| No `py.typed` marker | PEP 561 non-compliant |
-| No integration tests | Full pipeline behavior untested end-to-end |
-| No HTTP mocking in tests | `utils/http.py` and API-dependent code untested |
+| Missing Item                | Impact                                          |
+| --------------------------- | ----------------------------------------------- |
+| No CI/CD pipeline           | No automated testing, linting, or deployment    |
+| No `.github/` configuration | No issue templates, PR workflows, or Actions    |
+| No `CHANGELOG.md`           | No release history tracking                     |
+| No `py.typed` marker        | PEP 561 non-compliant                           |
+| No integration tests        | Full pipeline behavior untested end-to-end      |
+| No HTTP mocking in tests    | `utils/http.py` and API-dependent code untested |
 
 ---
 
@@ -217,58 +217,58 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Immediate Fixes (1-2 days)
 
-| # | Fix | File | Effort |
-|---|---|---|---|
-| 1 | **Remove `or True` from expand setting** | `core/__init__.py:14` | 5 min |
-| 2 | Remove trivial wrapper functions (`str_ends_with`, `str_starts_with`) | `bots/refs_utils.py`, `lang_bots/hy_bot.py` | 30 min |
-| 3 | Add `python-dotenv` to `pyproject.toml` dependencies | `pyproject.toml` | 5 min |
-| 4 | Rename `DoChangesToText1()` to PEP 8 compliant name | `core/__init__.py` + callers | 30 min |
-| 5 | Remove unused `@dataclass` from `Citation` | `parsers/citations.py` | 10 min |
+| #   | Fix                                                                   | File                                        | Effort |
+| --- | --------------------------------------------------------------------- | ------------------------------------------- | ------ |
+| 1   | **Remove `or True` from expand setting**                              | `core/__init__.py:14`                       | 5 min  |
+| 2   | Remove trivial wrapper functions (`str_ends_with`, `str_starts_with`) | `bots/refs_utils.py`, `lang_bots/hy_bot.py` | 30 min |
+| 3   | Add `python-dotenv` to `pyproject.toml` dependencies                  | `pyproject.toml`                            | 5 min  |
+| 4   | Rename `DoChangesToText1()` to PEP 8 compliant name                   | `core/__init__.py` + callers                | 30 min |
+| 5   | Remove unused `@dataclass` from `Citation`                            | `parsers/citations.py`                      | 10 min |
 
 ### Short-Term Improvements (1-2 weeks)
 
-| # | Improvement | Scope | Effort |
-|---|---|---|---|
-| 1 | Consolidate duplicated functions (`start_end`, `remove_short_refs`, month translation) | `lang_bots/` | 2 hours |
-| 2 | Fix "expend" to "expand" typo throughout codebase | All files | 1 hour |
-| 3 | Replace `str.replace()` with AST-based operations for ref manipulation | `remove_duplicate_refs.py`, `expend_refs.py` | 4 hours |
-| 4 | Add missing type annotations to key functions | Multiple files | 4 hours |
-| 5 | Add `logging` module integration replacing `echo_debug()`/`echo_test()` | `utils/debug.py` | 2 hours |
-| 6 | Add `.gitignore` for `resources/revisions/` | Root | 5 min |
-| 7 | Remove dead code and commented-out code | Multiple files | 1 hour |
+| #   | Improvement                                                                            | Scope                                        | Effort  |
+| --- | -------------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
+| 1   | Consolidate duplicated functions (`start_end`, `remove_short_refs`, month translation) | `lang_bots/`                                 | 2 hours |
+| 2   | Fix "expend" to "expand" typo throughout codebase                                      | All files                                    | 1 hour  |
+| 3   | Replace `str.replace()` with AST-based operations for ref manipulation                 | `remove_duplicate_refs.py`, `expend_refs.py` | 4 hours |
+| 4   | Add missing type annotations to key functions                                          | Multiple files                               | 4 hours |
+| 5   | Add `logging` module integration replacing `echo_debug()`/`echo_test()`                | `utils/debug.py`                             | 2 hours |
+| 6   | Add `.gitignore` for `resources/revisions/`                                            | Root                                         | 5 min   |
+| 7   | Remove dead code and commented-out code                                                | Multiple files                               | 1 hour  |
 
 ### Medium-Term Improvements (1-2 months)
 
-| # | Improvement | Scope | Effort |
-|---|---|---|---|
-| 1 | Add integration tests for full `fix_one_page()` pipeline | `tests/` | 1 week |
-| 2 | Add HTTP tests with mocked responses | `tests/` | 3 days |
-| 3 | Implement wikitext parse caching (parse once, pass AST to all bots) | `core/fix_page.py` | 1 week |
-| 4 | Pre-compile regex patterns at module level | Multiple bot files | 2 days |
-| 5 | Use `requests.Session` for connection pooling | `utils/http.py` | 1 day |
-| 6 | Add batch Commons API calls for image checking | `bots/fix_images.py` | 1 week |
-| 7 | Create CI/CD pipeline (GitHub Actions) | `.github/` | 2 days |
-| 8 | Add `py.typed` marker for PEP 561 | Root | 5 min |
+| #   | Improvement                                                         | Scope                | Effort |
+| --- | ------------------------------------------------------------------- | -------------------- | ------ |
+| 1   | Add integration tests for full `fix_one_page()` pipeline            | `tests/`             | 1 week |
+| 2   | Add HTTP tests with mocked responses                                | `tests/`             | 3 days |
+| 3   | Implement wikitext parse caching (parse once, pass AST to all bots) | `core/fix_page.py`   | 1 week |
+| 4   | Pre-compile regex patterns at module level                          | Multiple bot files   | 2 days |
+| 5   | Use `requests.Session` for connection pooling                       | `utils/http.py`      | 1 day  |
+| 6   | Add batch Commons API calls for image checking                      | `bots/fix_images.py` | 1 week |
+| 7   | Create CI/CD pipeline (GitHub Actions)                              | `.github/`           | 2 days |
+| 8   | Add `py.typed` marker for PEP 561                                   | Root                 | 5 min  |
 
 ### Security Hardening Priorities
 
-| # | Priority | Action |
-|---|---|---|
-| 1 | Remove hardcoded `localhost` URL from `settings.py` | Replace with environment-only configuration |
-| 2 | Add URL validation to `get_url()`/`get_url_json()` | Restrict to known Wikimedia domains |
-| 3 | Add JSON schema validation for external API responses | Prevent malformed data from propagating |
-| 4 | Add timeout configuration | Currently hardcoded at 5s; make configurable |
+| #   | Priority                                              | Action                                       |
+| --- | ----------------------------------------------------- | -------------------------------------------- |
+| 1   | Remove hardcoded `localhost` URL from `settings.py`   | Replace with environment-only configuration  |
+| 2   | Add URL validation to `get_url()`/`get_url_json()`    | Restrict to known Wikimedia domains          |
+| 3   | Add JSON schema validation for external API responses | Prevent malformed data from propagating      |
+| 4   | Add timeout configuration                             | Currently hardcoded at 5s; make configurable |
 
 ### DevOps and Testing Recommendations
 
-| # | Recommendation | Priority |
-|---|---|---|
-| 1 | Set up GitHub Actions with `pytest` + `ruff check` + `mypy` | High |
-| 2 | Add coverage thresholds (target: 80%+) | High |
-| 3 | Add pre-commit hooks for formatting and linting | Medium |
-| 4 | Add property-based tests (hypothesis) for regex transformations | Medium |
-| 5 | Add performance benchmarks for batch processing | Low |
-| 6 | Add `CHANGELOG.md` and semantic versioning | Low |
+| #   | Recommendation                                                  | Priority |
+| --- | --------------------------------------------------------------- | -------- |
+| 1   | Set up GitHub Actions with `pytest` + `ruff check` + `mypy`     | High     |
+| 2   | Add coverage thresholds (target: 80%+)                          | High     |
+| 3   | Add pre-commit hooks for formatting and linting                 | Medium   |
+| 4   | Add property-based tests (hypothesis) for regex transformations | Medium   |
+| 5   | Add performance benchmarks for batch processing                 | Low      |
+| 6   | Add `CHANGELOG.md` and semantic versioning                      | Low      |
 
 ---
 
@@ -276,14 +276,14 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 
 ### Scoring
 
-| Metric | Score | Notes |
-|---|---|---|
-| **Overall Project Score** | **6.5/10** | Functional and well-architected at module level, but has a critical configuration bug, notable code duplication, and missing infrastructure |
-| **Risk Level** | **Medium** | The `or True` bug silently overrides configuration; string replacement could corrupt wikitext on edge cases |
-| **Technical Debt Level** | **Medium** | Duplicate code, inconsistent naming, missing type annotations |
-| **Estimated Production Readiness** | **70%** | Core pipeline works for common cases; configuration bug and lack of CI/CD are blockers |
-| **Maintainability** | **7/10** | Strong modular isolation; duplication and naming add friction |
-| **Test Coverage** | **6/10** | 407 tests with good structure; missing HTTP, config, settings, and integration tests |
+| Metric                             | Score      | Notes                                                                                                                                       |
+| ---------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Overall Project Score**          | **6.5/10** | Functional and well-architected at module level, but has a critical configuration bug, notable code duplication, and missing infrastructure |
+| **Risk Level**                     | **Medium** | The `or True` bug silently overrides configuration; string replacement could corrupt wikitext on edge cases                                 |
+| **Technical Debt Level**           | **Medium** | Duplicate code, inconsistent naming, missing type annotations                                                                               |
+| **Estimated Production Readiness** | **70%**    | Core pipeline works for common cases; configuration bug and lack of CI/CD are blockers                                                      |
+| **Maintainability**                | **7/10**   | Strong modular isolation; duplication and naming add friction                                                                               |
+| **Test Coverage**                  | **6/10**   | 407 tests with good structure; missing HTTP, config, settings, and integration tests                                                        |
 
 ### Summary Verdict
 
@@ -306,4 +306,4 @@ With these fixes, the project would move from **6.5/10 to approximately 8/10** a
 
 ---
 
-*End of Report*
+_End of Report_

@@ -6,20 +6,20 @@ The `es/` subpackage handles Spanish-specific wikitext transformations. It is th
 
 ### Main Modules
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Entry point - `fix_es_all()` orchestrates all Spanish fixes |
-| `es_bot.py` | Template name and parameter translation (English -> Spanish) |
-| `es_data.py` | Data tables: `REFS_TEMPS` (template names), `ARGS_TO`/`PARAMS_ES_UP` (parameter names) |
-| `es_helpers.py` | Shared helpers: month translation, ref cleanup, template line insertion |
-| `es_refs.py` | Reference reorganization: extracts refs and moves them into `{{listaref}}` template |
-| `es_section_bot.py` | Inserts `{{Traducido ref MDWiki}}` template for translation attribution |
+| File                | Purpose                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `__init__.py`       | Entry point - `fix_es_all()` orchestrates all Spanish fixes                            |
+| `es_bot.py`         | Template name and parameter translation (English -> Spanish)                           |
+| `es_data.py`        | Data tables: `REFS_TEMPS` (template names), `ARGS_TO`/`PARAMS_ES_UP` (parameter names) |
+| `es_helpers.py`     | Shared helpers: month translation, ref cleanup, template line insertion                |
+| `es_refs.py`        | Reference reorganization: extracts refs and moves them into `{{listaref}}` template    |
+| `es_section_bot.py` | Inserts `{{Traducido ref MDWiki}}` template for translation attribution                |
 
 ### Technologies
 
-- **wikitextparser** - AST-based template and reference manipulation
-- **re** - Regular expressions for template name/parameter replacement
-- **datetime** - Date insertion in translation templates
+-   **wikitextparser** - AST-based template and reference manipulation
+-   **re** - Regular expressions for template name/parameter replacement
+-   **datetime** - Date insertion in translation templates
 
 ---
 
@@ -28,18 +28,21 @@ The `es/` subpackage handles Spanish-specific wikitext transformations. It is th
 ### Code Organization
 
 Excellent decomposition for a language bot:
-- Data is separated from logic (`es_data.py`)
-- Helpers are reusable across modules
-- Ref processing is isolated from template translation
-- Section insertion is its own concern
+
+-   Data is separated from logic (`es_data.py`)
+-   Helpers are reusable across modules
+-   Ref processing is isolated from template translation
+-   Section insertion is its own concern
 
 ### Processing Pipeline
 
 `fix_es_all()` applies:
+
 1. `fix_es()` - Template translation, month translation, ref reorganization
 2. `es_section()` - Translation attribution template insertion
 
 `fix_es()` internally applies:
+
 1. Redirect detection
 2. `<references />` -> `{{listaref}}` replacement
 3. Month translation in refs
@@ -48,9 +51,9 @@ Excellent decomposition for a language bot:
 
 ### Design Patterns
 
-- **Data-driven transformation** - All template/parameter mappings in `es_data.py`
-- **Two-phase processing** - First translate templates, then reorganize refs
-- **Defensive insertion** - Checks for existing templates before inserting
+-   **Data-driven transformation** - All template/parameter mappings in `es_data.py`
+-   **Two-phase processing** - First translate templates, then reorganize refs
+-   **Defensive insertion** - Checks for existing templates before inserting
 
 ### Maintainability
 
@@ -73,11 +76,12 @@ Very good. The data/logic separation makes it easy to update Spanish template ma
 ### Code Duplication
 
 1. **`start_end()`** is duplicated with `pt_bot.py`:
-   ```python
-   # es_helpers.py:23-25 and pt_bot.py:10-12
-   def start_end(cite_temp: str) -> bool:
-       return cite_temp.startswith("{{") and cite_temp.endswith("}}")
-   ```
+
+    ```python
+    # es_helpers.py:23-25 and pt_bot.py:10-12
+    def start_end(cite_temp: str) -> bool:
+        return cite_temp.startswith("{{") and cite_temp.endswith("}}")
+    ```
 
 2. **`remove_short_refs()`** is duplicated in `es_refs.py:75-86` and `es_helpers.py:10-19` - identical implementations
 
@@ -101,6 +105,7 @@ The triple-dot relative imports (`...`) are fragile and hard to follow.
 ### Magic Strings
 
 `es_section_bot.py:32-33` uses hardcoded Spanish strings:
+
 ```python
 if re.search(r'==\s*Enlaces\s*externos\s*==', text, re.IGNORECASE):
 ```
@@ -119,11 +124,11 @@ These should be constants or configurable.
 
 ## Areas That Need Attention
 
-- Consolidate `remove_short_refs()` into a single shared function
-- Extract `start_end()` into a shared utility
-- Use constants for hardcoded Spanish strings in `es_section_bot.py`
-- Add tests for edge cases in `es_refs.py` (ref extraction/reorganization)
-- Consider using wikitextparser's API for template modification instead of string replacement
+-   Consolidate `remove_short_refs()` into a single shared function
+-   Extract `start_end()` into a shared utility
+-   Use constants for hardcoded Spanish strings in `es_section_bot.py`
+-   Add tests for edge cases in `es_refs.py` (ref extraction/reorganization)
+-   Consider using wikitextparser's API for template modification instead of string replacement
 
 ---
 
@@ -150,10 +155,10 @@ These should be constants or configurable.
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 7.5/10 | Best-structured language bot, but has duplication and some fragile patterns |
-| **Production Readiness** | Good | Handles complex Spanish transformations reliably |
-| **Technical Debt** | Low-Medium | Some duplication and magic strings |
-| **Risk Assessment** | Low-Medium | String replacement could cause edge-case issues |
-| **Maintainability** | 8/10 | Good decomposition, data/logic separation |
+| Metric                   | Score      | Notes                                                                       |
+| ------------------------ | ---------- | --------------------------------------------------------------------------- |
+| **Overall Rating**       | 7.5/10     | Best-structured language bot, but has duplication and some fragile patterns |
+| **Production Readiness** | Good       | Handles complex Spanish transformations reliably                            |
+| **Technical Debt**       | Low-Medium | Some duplication and magic strings                                          |
+| **Risk Assessment**      | Low-Medium | String replacement could cause edge-case issues                             |
+| **Maintainability**      | 8/10       | Good decomposition, data/logic separation                                   |

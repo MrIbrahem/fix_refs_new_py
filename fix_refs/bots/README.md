@@ -6,24 +6,24 @@ The `bots/` module contains individual transformation functions that operate on 
 
 ### Main Modules
 
-| File | Purpose | Lines |
-|------|---------|-------|
-| `mini_fixes.py` | Whitespace cleanup, section title translation, ref tag spacing, interwiki link simplification | 127 |
-| `fix_missing_refs.py` | Expands short refs (`<ref name="x"/>`) from MDWiki source text | 111 |
-| `remove_duplicate_refs.py` | Deduplicates references with identical content | 67 |
-| `move_dots.py` | Moves punctuation after refs to before refs (language-specific) | 32 |
-| `add_lang_en_bot.py` | Adds `|language=en` to English source citations | 61 |
-| `expend_refs.py` | Reference expansion utilities for short-to-full citation conversion | 64 |
-| `fix_images.py` | Validates images against Wikimedia Commons API, removes missing ones | 256 |
-| `months.py` | Translates English month names to Portuguese/Spanish | 100 |
-| `refs_utils.py` | String utility wrappers | 92 |
-| `redirect.py` | Redirect page detection | 32 |
+| File                       | Purpose                                                                                       | Lines                                    |
+| -------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------- | --- |
+| `mini_fixes.py`            | Whitespace cleanup, section title translation, ref tag spacing, interwiki link simplification | 127                                      |
+| `fix_missing_refs.py`      | Expands short refs (`<ref name="x"/>`) from MDWiki source text                                | 111                                      |
+| `remove_duplicate_refs.py` | Deduplicates references with identical content                                                | 67                                       |
+| `move_dots.py`             | Moves punctuation after refs to before refs (language-specific)                               | 32                                       |
+| `add_lang_en_bot.py`       | Adds `                                                                                        | language=en` to English source citations | 61  |
+| `expend_refs.py`           | Reference expansion utilities for short-to-full citation conversion                           | 64                                       |
+| `fix_images.py`            | Validates images against Wikimedia Commons API, removes missing ones                          | 256                                      |
+| `months.py`                | Translates English month names to Portuguese/Spanish                                          | 100                                      |
+| `refs_utils.py`            | String utility wrappers                                                                       | 92                                       |
+| `redirect.py`              | Redirect page detection                                                                       | 32                                       |
 
 ### Technologies
 
-- **wikitextparser** - Used in most bots for AST-based wikitext manipulation
-- **re** - Regular expressions for pattern matching
-- **requests** (via `utils/http.py`) - For Commons API calls in `fix_images.py`
+-   **wikitextparser** - Used in most bots for AST-based wikitext manipulation
+-   **re** - Regular expressions for pattern matching
+-   **requests** (via `utils/http.py`) - For Commons API calls in `fix_images.py`
 
 ---
 
@@ -35,9 +35,9 @@ Each bot file has a single responsibility. The module-level docstrings describe 
 
 ### Design Patterns
 
-- **Pure functions** - Most bots are stateless functions that take text in and return text out
-- **Decorator pattern** - `@lru_cache` for image existence caching
-- **Separation of concerns** - Each file handles one transformation type
+-   **Pure functions** - Most bots are stateless functions that take text in and return text out
+-   **Decorator pattern** - `@lru_cache` for image existence caching
+-   **Separation of concerns** - Each file handles one transformation type
 
 ### Maintainability
 
@@ -83,9 +83,9 @@ These are just wrappers around Python built-ins and should be replaced with dire
 
 ### Inconsistent Error Handling
 
-- `fix_images.py` has thorough error handling with fallbacks
-- `fix_missing_refs.py` silently returns empty strings on errors
-- `mini_fixes.py` has no error handling at all
+-   `fix_images.py` has thorough error handling with fallbacks
+-   `fix_missing_refs.py` silently returns empty strings on errors
+-   `mini_fixes.py` has no error handling at all
 
 ---
 
@@ -101,11 +101,11 @@ These are just wrappers around Python built-ins and should be replaced with dire
 
 ## Areas That Need Attention
 
-- Remove trivial wrapper functions from `refs_utils.py`
-- Consolidate `refs_expand()` and `refs_expand_work()` into one function
-- Add error handling to `mini_fixes.py`
-- Add tests for `refs_utils.py` edge cases (quote normalization)
-- Consider batch API calls in `fix_images.py` for Commons checks
+-   Remove trivial wrapper functions from `refs_utils.py`
+-   Consolidate `refs_expand()` and `refs_expand_work()` into one function
+-   Add error handling to `mini_fixes.py`
+-   Add tests for `refs_utils.py` edge cases (quote normalization)
+-   Consider batch API calls in `fix_images.py` for Commons checks
 
 ---
 
@@ -132,10 +132,10 @@ These are just wrappers around Python built-ins and should be replaced with dire
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 7/10 | Good functional decomposition, but some dead code and duplication |
-| **Production Readiness** | Good | Core transformations are reliable |
-| **Technical Debt** | Low-Medium | Trivial wrappers and minor duplication |
-| **Risk Assessment** | Low | Pure functions are easy to test and verify |
-| **Maintainability** | 7/10 | Independent modules, but some code smell |
+| Metric                   | Score      | Notes                                                             |
+| ------------------------ | ---------- | ----------------------------------------------------------------- |
+| **Overall Rating**       | 7/10       | Good functional decomposition, but some dead code and duplication |
+| **Production Readiness** | Good       | Core transformations are reliable                                 |
+| **Technical Debt**       | Low-Medium | Trivial wrappers and minor duplication                            |
+| **Risk Assessment**      | Low        | Pure functions are easy to test and verify                        |
+| **Maintainability**      | 7/10       | Independent modules, but some code smell                          |

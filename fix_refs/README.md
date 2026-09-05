@@ -6,27 +6,27 @@
 
 ### Main Modules and Components
 
-| Module | Purpose |
-|--------|---------|
-| `core/` | Entry points (`fix_one_page`, `DoChangesToText1`) and settings loader |
-| `bots/` | Individual transformation functions: ref expansion, deduplication, dot-moving, image fixing, mini-fixes |
-| `lang_bots/` | Language-specific processing for Bulgarian, Spanish, Armenian, Polish, Portuguese, Swahili |
-| `parsers/` | Low-level wikitext parsers for `<ref>` tags and category links |
-| `infobox/` | Infobox template expansion and formatting |
-| `mdwiki/` | MDWiki category integration via Wikidata API |
-| `utils/` | HTTP client and debug utilities |
-| `resources/` | Local JSON data files and cached revisions |
+| Module       | Purpose                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------- |
+| `core/`      | Entry points (`fix_one_page`, `DoChangesToText1`) and settings loader                                   |
+| `bots/`      | Individual transformation functions: ref expansion, deduplication, dot-moving, image fixing, mini-fixes |
+| `lang_bots/` | Language-specific processing for Bulgarian, Spanish, Armenian, Polish, Portuguese, Swahili              |
+| `parsers/`   | Low-level wikitext parsers for `<ref>` tags and category links                                          |
+| `infobox/`   | Infobox template expansion and formatting                                                               |
+| `mdwiki/`    | MDWiki category integration via Wikidata API                                                            |
+| `utils/`     | HTTP client and debug utilities                                                                         |
+| `resources/` | Local JSON data files and cached revisions                                                              |
 
 ### Technologies and Dependencies
 
-- **Python 3.10+** with type hints
-- **wikitextparser** - MediaWiki wikitext parsing
-- **requests** - HTTP client for API calls
-- **python-dotenv** - Environment variable loading
-- **hatchling** - Build system
-- **pytest** - Testing framework
-- **ruff/black/isort** - Code formatting and linting
-- **mypy** - Static type checking
+-   **Python 3.10+** with type hints
+-   **wikitextparser** - MediaWiki wikitext parsing
+-   **requests** - HTTP client for API calls
+-   **python-dotenv** - Environment variable loading
+-   **hatchling** - Build system
+-   **pytest** - Testing framework
+-   **ruff/black/isort** - Code formatting and linting
+-   **mypy** - Static type checking
 
 ---
 
@@ -58,29 +58,29 @@ fix_page.py (orchestration)
 
 ### Design Patterns
 
-- **Pipeline pattern** in `fix_one_page()` for sequential transformations
-- **Strategy pattern** for language-specific bots dispatched via `apply_language_fixes()`
-- **Dataclass** (`Citation`) for structured reference representation
-- **LRU caching** for settings and image existence checks
-- **Facade pattern** with `fix_one_page()` as the unified entry point
+-   **Pipeline pattern** in `fix_one_page()` for sequential transformations
+-   **Strategy pattern** for language-specific bots dispatched via `apply_language_fixes()`
+-   **Dataclass** (`Citation`) for structured reference representation
+-   **LRU caching** for settings and image existence checks
+-   **Facade pattern** with `fix_one_page()` as the unified entry point
 
 ### Maintainability
 
-- Each bot module is self-contained with a single responsibility
-- Language bots are isolated per language, making it easy to add new languages
-- The Spanish module (`es/`) is well-decomposed into data, helpers, refs, and section processing
+-   Each bot module is self-contained with a single responsibility
+-   Language bots are isolated per language, making it easy to add new languages
+-   The Spanish module (`es/`) is well-decomposed into data, helpers, refs, and section processing
 
 ### Readability
 
-- Functions generally have docstrings with Args/Returns sections
-- Module-level docstrings describe purpose
-- Variable names are generally descriptive (though some legacy short names remain)
+-   Functions generally have docstrings with Args/Returns sections
+-   Module-level docstrings describe purpose
+-   Variable names are generally descriptive (though some legacy short names remain)
 
 ### Scalability Considerations
 
-- LRU caches on settings and image checks reduce repeated API calls
-- Processing is stateless per page, enabling parallel batch processing
-- Local file fallbacks for API calls support offline development
+-   LRU caches on settings and image checks reduce repeated API calls
+-   Processing is stateless per page, enabling parallel batch processing
+-   Local file fallbacks for API calls support offline development
 
 ---
 
@@ -159,36 +159,36 @@ fix_page.py (orchestration)
 
 ### Missing Files
 
-- No `__init__.py` in `lang_bots/es/` subdirectories (though it exists at the es level)
-- No `py.typed` marker file for PEP 561 compliance
-- No `.github/` CI/CD configuration
-- No `CHANGELOG.md`
+-   No `__init__.py` in `lang_bots/es/` subdirectories (though it exists at the es level)
+-   No `py.typed` marker file for PEP 561 compliance
+-   No `.github/` CI/CD configuration
+-   No `CHANGELOG.md`
 
 ### Missing Documentation
 
-- No API documentation beyond docstrings
-- No architecture decision records
-- No contribution guidelines
-- No documentation for the processing pipeline order and its rationale
+-   No API documentation beyond docstrings
+-   No architecture decision records
+-   No contribution guidelines
+-   No documentation for the processing pipeline order and its rationale
 
 ### Lack of Tests
 
-- No tests for `utils/http.py` (HTTP client)
-- No tests for `utils/debug.py`
-- No tests for `config.py`
-- No tests for `settings.py`
-- No integration tests that verify the full pipeline end-to-end
-- No property-based tests for regex-heavy functions
+-   No tests for `utils/http.py` (HTTP client)
+-   No tests for `utils/debug.py`
+-   No tests for `config.py`
+-   No tests for `settings.py`
+-   No integration tests that verify the full pipeline end-to-end
+-   No property-based tests for regex-heavy functions
 
 ### Outdated Dependencies
 
-- `wikitextparser>=0.55.0` - check for latest version compatibility
-- Python target version in tooling config (`py313`) vs `requires-python` (`>=3.10`) mismatch
+-   `wikitextparser>=0.55.0` - check for latest version compatibility
+-   Python target version in tooling config (`py313`) vs `requires-python` (`>=3.10`) mismatch
 
 ### Configuration Issues
 
-- `pyproject.toml` declares `license = { text = "MIT" }` but classifiers say `GPLv3+` - contradictory licensing
-- `target-version = "py313"` in ruff config but `requires-python = ">=3.10"` in project metadata
+-   `pyproject.toml` declares `license = { text = "MIT" }` but classifiers say `GPLv3+` - contradictory licensing
+-   `target-version = "py313"` in ruff config but `requires-python = ">=3.10"` in project metadata
 
 ---
 
@@ -226,12 +226,12 @@ fix_page.py (orchestration)
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 6.5/10 | Functional and well-structured, but has notable bugs and code duplication |
-| **Production Readiness** | Moderate | Core pipeline works but has the `or True` bug and missing error handling |
-| **Technical Debt** | Medium | Duplicate code, inconsistent naming, debug prints in production code |
-| **Risk Assessment** | Medium-Low | The `or True` bug silently ignores configuration; string replacement could corrupt wikitext |
-| **Maintainability** | 7/10 | Good modular structure, but duplicated code and inconsistent patterns add friction |
-| **Test Coverage** | 6/10 | Good test structure, but missing coverage for HTTP, config, and integration scenarios |
-| **Code Quality** | 6/10 | Generally clean, but debug prints, trivial wrappers, and naming issues detract |
+| Metric                   | Score      | Notes                                                                                       |
+| ------------------------ | ---------- | ------------------------------------------------------------------------------------------- |
+| **Overall Rating**       | 6.5/10     | Functional and well-structured, but has notable bugs and code duplication                   |
+| **Production Readiness** | Moderate   | Core pipeline works but has the `or True` bug and missing error handling                    |
+| **Technical Debt**       | Medium     | Duplicate code, inconsistent naming, debug prints in production code                        |
+| **Risk Assessment**      | Medium-Low | The `or True` bug silently ignores configuration; string replacement could corrupt wikitext |
+| **Maintainability**      | 7/10       | Good modular structure, but duplicated code and inconsistent patterns add friction          |
+| **Test Coverage**        | 6/10       | Good test structure, but missing coverage for HTTP, config, and integration scenarios       |
+| **Code Quality**         | 6/10       | Generally clean, but debug prints, trivial wrappers, and naming issues detract              |

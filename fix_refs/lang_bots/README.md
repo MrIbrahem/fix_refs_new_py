@@ -6,20 +6,20 @@ The `lang_bots/` module contains language-specific transformation bots for proce
 
 ### Supported Languages
 
-| Language | Module | Complexity | Key Operations |
-|----------|--------|------------|----------------|
-| Spanish (es) | `es/` subpackage | High | Template name translation, parameter mapping, month translation, ref reorganization, section insertion |
-| Portuguese (pt) | `pt_bot.py` | Medium | Month translation, ref spacing |
-| Bulgarian (bg) | `bg_bot.py` | Medium | Translation template insertion, category cleanup |
-| Armenian (hy) | `hy_bot.py` | Medium | Ref-punctuation spacing, word-ref spacing |
-| Polish (pl) | `pl_bot.py` | Low | Medical infobox parameter insertion |
-| Swahili (sw) | `sw_bot.py` | Low | Section title correction |
+| Language        | Module           | Complexity | Key Operations                                                                                         |
+| --------------- | ---------------- | ---------- | ------------------------------------------------------------------------------------------------------ |
+| Spanish (es)    | `es/` subpackage | High       | Template name translation, parameter mapping, month translation, ref reorganization, section insertion |
+| Portuguese (pt) | `pt_bot.py`      | Medium     | Month translation, ref spacing                                                                         |
+| Bulgarian (bg)  | `bg_bot.py`      | Medium     | Translation template insertion, category cleanup                                                       |
+| Armenian (hy)   | `hy_bot.py`      | Medium     | Ref-punctuation spacing, word-ref spacing                                                              |
+| Polish (pl)     | `pl_bot.py`      | Low        | Medical infobox parameter insertion                                                                    |
+| Swahili (sw)    | `sw_bot.py`      | Low        | Section title correction                                                                               |
 
 ### Technologies
 
-- **wikitextparser** - AST-based wikitext manipulation (Spanish, Polish, Portuguese)
-- **re** - Regular expressions (all bots)
-- **datetime** - Date formatting (Spanish section bot)
+-   **wikitextparser** - AST-based wikitext manipulation (Spanish, Polish, Portuguese)
+-   **re** - Regular expressions (all bots)
+-   **datetime** - Date formatting (Spanish section bot)
 
 ---
 
@@ -28,17 +28,18 @@ The `lang_bots/` module contains language-specific transformation bots for proce
 ### Code Organization
 
 The module uses a dispatcher pattern via `apply_language_fixes()` in `__init__.py`. Each language has its own module. The Spanish subpackage (`es/`) is the most complex, decomposed into:
-- `es_bot.py` - Template transformation logic
-- `es_data.py` - Template/parameter name mappings
-- `es_helpers.py` - Shared helper functions
-- `es_refs.py` - Reference reorganization
-- `es_section_bot.py` - Section/template insertion
+
+-   `es_bot.py` - Template transformation logic
+-   `es_data.py` - Template/parameter name mappings
+-   `es_helpers.py` - Shared helper functions
+-   `es_refs.py` - Reference reorganization
+-   `es_section_bot.py` - Section/template insertion
 
 ### Design Patterns
 
-- **Dispatcher pattern** via `apply_language_fixes()` for language routing
-- **Data-driven transformation** - Spanish bot uses lookup tables (`REFS_TEMPS`, `ARGS_TO`) for template/parameter mapping
-- **Pure functions** - Each bot function takes text and returns transformed text
+-   **Dispatcher pattern** via `apply_language_fixes()` for language routing
+-   **Data-driven transformation** - Spanish bot uses lookup tables (`REFS_TEMPS`, `ARGS_TO`) for template/parameter mapping
+-   **Pure functions** - Each bot function takes text and returns transformed text
 
 ### Maintainability
 
@@ -87,6 +88,7 @@ These should use `echo_debug()` or be removed entirely.
 ### Dispatcher Bug
 
 `lang_bots/__init__.py:14-31`:
+
 ```python
 if lang == "pl":
     text = pl_fixes(text)
@@ -111,11 +113,11 @@ The first `if` for Polish is standalone, then the chain switches to `if`/`elif`.
 
 ## Areas That Need Attention
 
-- Remove or gate `print()` statements in `remove_space.py`
-- Consolidate duplicated functions (`start_end`, `remove_short_refs`, `str_ends_with`)
-- Fix the dispatcher control flow to use consistent `if`/`elif`
-- Add docstrings to `remove_space.py` module
-- Add tests for edge cases in each language bot
+-   Remove or gate `print()` statements in `remove_space.py`
+-   Consolidate duplicated functions (`start_end`, `remove_short_refs`, `str_ends_with`)
+-   Fix the dispatcher control flow to use consistent `if`/`elif`
+-   Add docstrings to `remove_space.py` module
+-   Add tests for edge cases in each language bot
 
 ---
 
@@ -142,10 +144,10 @@ The first `if` for Polish is standalone, then the chain switches to `if`/`elif`.
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 7/10 | Good language isolation, but has debug prints and duplication |
-| **Production Readiness** | Moderate | Works but has debug output in production code |
-| **Technical Debt** | Medium | Duplicated functions, debug prints, inconsistent control flow |
-| **Risk Assessment** | Low-Medium | Debug prints could expose internal state; dispatcher is fragile |
-| **Maintainability** | 7/10 | Per-language isolation is good; duplication adds friction |
+| Metric                   | Score      | Notes                                                           |
+| ------------------------ | ---------- | --------------------------------------------------------------- |
+| **Overall Rating**       | 7/10       | Good language isolation, but has debug prints and duplication   |
+| **Production Readiness** | Moderate   | Works but has debug output in production code                   |
+| **Technical Debt**       | Medium     | Duplicated functions, debug prints, inconsistent control flow   |
+| **Risk Assessment**      | Low-Medium | Debug prints could expose internal state; dispatcher is fragile |
+| **Maintainability**      | 7/10       | Per-language isolation is good; duplication adds friction       |

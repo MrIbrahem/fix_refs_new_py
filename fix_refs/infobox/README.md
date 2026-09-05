@@ -6,24 +6,24 @@ The `infobox/` module handles the expansion and formatting of MediaWiki infobox 
 
 ### Main Modules
 
-| File | Purpose |
-|------|---------|
+| File                | Purpose                                                             |
+| ------------------- | ------------------------------------------------------------------- |
 | `expend_infobox.py` | Infobox template expansion, comment formatting, parameter alignment |
 
 ### Key Functions
 
-| Function | Purpose |
-|----------|---------|
-| `expand_infobox_in_text()` | Main entry point - expands infobox in wikitext |
-| `expend_new()` | Reformats a single template with aligned parameters |
-| `do_comments()` | Converts HTML comment section headers to visible text |
-| `extract_templates_and_params()` | Extracts all templates and their parameters |
-| `make_section_0()` | Extracts the section before the first heading |
+| Function                         | Purpose                                               |
+| -------------------------------- | ----------------------------------------------------- |
+| `expand_infobox_in_text()`       | Main entry point - expands infobox in wikitext        |
+| `expend_new()`                   | Reformats a single template with aligned parameters   |
+| `do_comments()`                  | Converts HTML comment section headers to visible text |
+| `extract_templates_and_params()` | Extracts all templates and their parameters           |
+| `make_section_0()`               | Extracts the section before the first heading         |
 
 ### Technologies
 
-- **wikitextparser** - Template parsing and manipulation
-- **re** - Regular expressions for comment pattern matching
+-   **wikitextparser** - Template parsing and manipulation
+-   **re** - Regular expressions for comment pattern matching
 
 ---
 
@@ -35,8 +35,8 @@ Single-file module with focused responsibilities. Functions are ordered logicall
 
 ### Design Patterns
 
-- **Template processing** - Finds the largest template (by length) as the "main" infobox
-- **String manipulation** - Uses wikitextparser for parsing but falls back to string operations
+-   **Template processing** - Finds the largest template (by length) as the "main" infobox
+-   **String manipulation** - Uses wikitextparser for parsing but falls back to string operations
 
 ### Maintainability
 
@@ -63,11 +63,11 @@ Mixed. Variable names like `tempse_by_u`, `PP`, `u`, `y1`, `u1`, `y2`, `u2` are 
 1. **`expend_infobox`** - Misspelling of "expand" throughout
 2. **`expend_new()`** - Unclear name; should be `format_template()` or `align_template_params()`
 3. **Cryptic variable names**:
-   ```python
-   tempse_by_u = {}  # templates indexed by number
-   tempse = {}       # template sizes
-   PP = [[y1, u1] for u1, y1 in tempse.items()]  # sorted template sizes
-   ```
+    ```python
+    tempse_by_u = {}  # templates indexed by number
+    tempse = {}       # template sizes
+    PP = [[y1, u1] for u1, y1 in tempse.items()]  # sorted template sizes
+    ```
 
 ### Code Smell
 
@@ -77,9 +77,9 @@ Mixed. Variable names like `tempse_by_u`, `PP`, `u`, `y1`, `u1`, `y2`, `u2` are 
 
 ### Missing Documentation
 
-- `expend_new()` has no docstring
-- `make_section_0()` has no docstring
-- `extract_templates_and_params()` has no docstring
+-   `expend_new()` has no docstring
+-   `make_section_0()` has no docstring
+-   `extract_templates_and_params()` has no docstring
 
 ---
 
@@ -93,11 +93,11 @@ Mixed. Variable names like `tempse_by_u`, `PP`, `u`, `y1`, `u1`, `y2`, `u2` are 
 
 ## Areas That Need Attention
 
-- Fix "expend" -> "expand" typo in function names
-- Add docstrings to all functions
-- Improve variable naming
-- Add tests for edge cases (multiple infoboxes, nested templates)
-- Consider using wikitextparser's API for template modification instead of string replacement
+-   Fix "expend" -> "expand" typo in function names
+-   Add docstrings to all functions
+-   Improve variable naming
+-   Add tests for edge cases (multiple infoboxes, nested templates)
+-   Consider using wikitextparser's API for template modification instead of string replacement
 
 ---
 
@@ -124,10 +124,10 @@ Mixed. Variable names like `tempse_by_u`, `PP`, `u`, `y1`, `u1`, `y2`, `u2` are 
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| **Overall Rating** | 5.5/10 | Functional but has naming issues, missing docs, and fragile heuristics |
-| **Production Readiness** | Moderate | Works for common cases but has edge case risks |
-| **Technical Debt** | Medium | Naming, documentation, and fragile string operations |
-| **Risk Assessment** | Medium | Template selection heuristic could misidentify infoboxes |
-| **Maintainability** | 5/10 | Cryptic names and missing docs make modification risky |
+| Metric                   | Score    | Notes                                                                  |
+| ------------------------ | -------- | ---------------------------------------------------------------------- |
+| **Overall Rating**       | 5.5/10   | Functional but has naming issues, missing docs, and fragile heuristics |
+| **Production Readiness** | Moderate | Works for common cases but has edge case risks                         |
+| **Technical Debt**       | Medium   | Naming, documentation, and fragile string operations                   |
+| **Risk Assessment**      | Medium   | Template selection heuristic could misidentify infoboxes               |
+| **Maintainability**      | 5/10     | Cryptic names and missing docs make modification risky                 |

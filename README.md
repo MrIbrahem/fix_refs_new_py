@@ -12,14 +12,14 @@ Spanish, Portuguese, Bulgarian, Armenian, Polish, Swahili (with English as the s
 
 ### Key Capabilities
 
-- Expand short references (`<ref name="x"/>`) from MDWiki source text
-- Remove duplicate references
-- Move punctuation before/after reference tags (language-specific)
-- Translate citation templates (English -> Spanish/Portuguese)
-- Add `|language=en` parameter to English source citations
-- Expand and format infobox templates
-- Validate images against Wikimedia Commons
-- Add translation attribution categories
+-   Expand short references (`<ref name="x"/>`) from MDWiki source text
+-   Remove duplicate references
+-   Move punctuation before/after reference tags (language-specific)
+-   Translate citation templates (English -> Spanish/Portuguese)
+-   Add `|language=en` parameter to English source citations
+-   Expand and format infobox templates
+-   Validate images against Wikimedia Commons
+-   Add translation attribution categories
 
 ## Installation
 
@@ -139,24 +139,24 @@ ruff format fix_refs/
 
 ## Dependencies
 
-- **requests** >= 2.31.0 - HTTP client
-- **wikitextparser** >= 0.55.0 - MediaWiki wikitext parsing
-- **python-dotenv** - Environment variable loading
+-   **requests** >= 2.31.0 - HTTP client
+-   **wikitextparser** >= 0.55.0 - MediaWiki wikitext parsing
+-   **python-dotenv** - Environment variable loading
 
 ### Dev Dependencies
 
-- pytest, pytest-cov - Testing
-- mypy - Type checking
-- pylint - Linting
-- ruff, black, isort - Formatting
+-   pytest, pytest-cov - Testing
+-   mypy - Type checking
+-   pylint - Linting
+-   ruff, black, isort - Formatting
 
 ## Configuration
 
-| Environment Variable | Default | Purpose |
-|---------------------|---------|---------|
-| `RESOURCES_PATH` | `./resources` | Path to local data files |
-| `REVISIONS_PATH` | `$RESOURCES_PATH/revisions` | Path to cached revisions |
-| `SERVER_NAME` | (empty) | If set, loads settings from remote API |
+| Environment Variable | Default                     | Purpose                                |
+| -------------------- | --------------------------- | -------------------------------------- |
+| `RESOURCES_PATH`     | `./resources`               | Path to local data files               |
+| `REVISIONS_PATH`     | `$RESOURCES_PATH/revisions` | Path to cached revisions               |
+| `SERVER_NAME`        | (empty)                     | If set, loads settings from remote API |
 
 ## License
 
