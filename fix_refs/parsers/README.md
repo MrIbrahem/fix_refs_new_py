@@ -8,7 +8,7 @@ The `parsers/` module provides low-level parsing utilities for extracting struct
 
 | File           | Purpose                                                                              |
 | -------------- | ------------------------------------------------------------------------------------ |
-| `citations.py` | Parses `<ref>` tags into `Citation` dataclass objects; provides extraction functions |
+| `citations_parser.py` | Parses `<ref>` tags into `Citation` dataclass objects; provides extraction functions |
 | `category.py`  | Parses `[[Category:...]]` links into structured data                                 |
 
 ### Technologies
@@ -23,7 +23,7 @@ The `parsers/` module provides low-level parsing utilities for extracting struct
 
 ### Code Organization
 
-Clean two-file structure. `citations.py` provides a `Citation` class and extraction functions. `category.py` provides category parsing functions.
+Clean two-file structure. `citations_parser.py` provides a `Citation` class and extraction functions. `category.py` provides category parsing functions.
 
 ### Design Patterns
 

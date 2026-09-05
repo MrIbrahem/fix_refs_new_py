@@ -4,7 +4,7 @@ Remove duplicate references by converting them to named short references
 
 import wikitextparser as wtp
 
-from ..parsers.citations import Citation
+from ..parsers.citations_parser import Citation
 from ..utils.debug import echo_debug
 
 

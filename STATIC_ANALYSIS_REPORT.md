@@ -19,9 +19,9 @@ This report documents issues found during comprehensive static analysis of the f
 
 ## 1. Critical Issues
 
-### 1.1 Dataclass Anti-Pattern in `parsers/citations.py`
+### 1.1 Dataclass Anti-Pattern in `parsers/citations_parser.py`
 
-**Location:** `fix_refs/parsers/citations.py:9-25`
+**Location:** `fix_refs/parsers/citations_parser.py:9-25`
 
 **Issue:** The `Citation` class uses `@dataclass` decorator but defines `__init__` manually, defeating the purpose of dataclass and violating Python conventions.
 
@@ -332,7 +332,7 @@ The following functions lack return type annotations:
 
 ### 5.3 Use of `Any` Type
 
-**Location:** `fix_refs/parsers/citations.py:13`
+**Location:** `fix_refs/parsers/citations_parser.py:13`
 
 **Issue:** `Citation.__init__` takes `ref: Any` which bypasses type checking.
 
@@ -426,7 +426,7 @@ print(f"count(matches)={len(matches)}")
 
 ### Immediate Actions (Critical)
 
-1. Fix the dataclass anti-pattern in `parsers/citations.py`
+1. Fix the dataclass anti-pattern in `parsers/citations_parser.py`
 2. Fix the boolean logic error in `core/__init__.py` (`or True`)
 3. Remove duplicate code between `refs_utils.py` and `hy_bot.py`
 4. Consolidate `remove_short_refs` implementations
@@ -486,7 +486,7 @@ class TemplateProcessor(Protocol):
 
 | Priority | File | Status |
 |----------|------|--------|
-| Critical | `parsers/citations.py` | Partial |
+| Critical | `parsers/citations_parser.py` | Partial |
 | Critical | `core/__init__.py` | Partial |
 | High | `lang_bots/__init__.py` | None |
 | High | `lang_bots/es/es_refs.py` | None |

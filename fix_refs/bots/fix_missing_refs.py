@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from ..config import revisions_path
-from ..parsers.citations import get_short_refs
+from ..parsers.citations_parser import get_short_refs
 from ..utils.debug import echo_debug, echo_test
 from .expend_refs import refs_expand
 

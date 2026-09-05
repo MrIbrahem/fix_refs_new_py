@@ -138,7 +138,7 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 | 1   | Debug `print()` in production code       | `lang_bots/remove_space.py` | Replaced with `echo_debug()`                   |
 | 2   | Dispatcher control flow bug              | `lang_bots/__init__.py`     | Fixed to consistent `if`/`elif` chain          |
 | 3   | Bare `except Exception` swallows errors  | `utils/http.py`             | Removed; only specific exceptions caught       |
-| 4   | `get_attributes()` fragile `>` splitting | `parsers/citations.py`      | Rewritten to find first `>` after `<ref`       |
+| 4   | `get_attributes()` fragile `>` splitting | `parsers/citations_parser.py`      | Rewritten to find first `>` after `<ref`       |
 | 5   | License inconsistency (MIT vs GPLv3+)    | `pyproject.toml`            | Changed to `GPL-3.0-or-later`                  |
 | 6   | Inconsistent skip lists                  | `mdwiki/category.py`        | Consolidated to `SKIP_LANGS_CATEGORY` constant |
 | 7   | `import re` inside function              | `mdwiki/category.py`        | Moved to module top                            |
@@ -223,7 +223,7 @@ Each bot is a stateless pure function: text in, text out. The pipeline is determ
 | 2   | Remove trivial wrapper functions (`str_ends_with`, `str_starts_with`) | `bots/refs_utils.py`, `lang_bots/hy_bot.py` | 30 min |
 | 3   | Add `python-dotenv` to `pyproject.toml` dependencies                  | `pyproject.toml`                            | 5 min  |
 | 4   | Rename `DoChangesToText1()` to PEP 8 compliant name                   | `core/__init__.py` + callers                | 30 min |
-| 5   | Remove unused `@dataclass` from `Citation`                            | `parsers/citations.py`                      | 10 min |
+| 5   | Remove unused `@dataclass` from `Citation`                            | `parsers/citations_parser.py`                      | 10 min |
 
 ### Short-Term Improvements (1-2 weeks)
 

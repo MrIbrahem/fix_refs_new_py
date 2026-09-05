@@ -86,7 +86,7 @@ fix_refs/
 │   ├── pt_bot.py   # Portuguese
 │   └── sw_bot.py   # Swahili
 ├── parsers/        # Low-level wikitext parsers
-│   ├── citations.py
+│   ├── citations_parser.py
 │   └── category.py
 ├── infobox/        # Infobox template expansion
 ├── mdwiki/         # MDWiki category integration
