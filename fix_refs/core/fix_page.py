@@ -2,16 +2,19 @@
 Main fix_one_page function and interface
 """
 
-from ..bots.add_lang_en_bot import add_lang_en_to_refs
-from ..bots.fix_missing_refs import fix_missing_refs
-from ..bots.mini_fixes import mini_fixes, mini_fixes_after_fixing
-from ..bots.move_dots import move_dots_after_refs
-from ..bots.redirect import is_redirect
-from ..bots.remove_duplicate_refs import remove_duplicate_refs_with_attrs
-from ..infobox.expend_infobox import expand_infobox_in_text
+from ..bots import (
+    add_lang_en_to_refs,
+    fix_missing_refs,
+    is_redirect,
+    mini_fixes,
+    mini_fixes_after_fixing,
+    move_dots_after_refs,
+    remove_duplicate_refs_with_attrs,
+)
+from ..infobox import expand_infobox_in_text
 from ..lang_bots import apply_language_fixes
-from ..mdwiki.category import add_translated_from_mdwiki
-from ..utils.debug import echo_test
+from ..mdwiki import add_translated_from_mdwiki
+from ..utils import echo_test
 
 
 def expand_infobox_if_needed(text, title, lang, expend_infobox):
