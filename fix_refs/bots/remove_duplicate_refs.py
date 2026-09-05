@@ -55,7 +55,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
             new_text = new_text.replace(cite_fulltext, short_tag)
         else:
             refs_to_check[short_tag] = cite_fulltext
-            refs[cite_attrs] = True # pyright: ignore[reportArgumentType]
+            refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
 
     for key, value in refs_to_check.items():
         if value not in new_text:
