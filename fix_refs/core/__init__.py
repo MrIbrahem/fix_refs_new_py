@@ -6,7 +6,7 @@ from .fix_page import fix_one_page
 from .settings import load_settings
 
 
-def DoChangesToText1(
+def apply_text_modifications(
     source_title: str,
     title: str,
     text: str,
