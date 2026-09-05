@@ -2,6 +2,9 @@
 Fix missing images by checking Wikimedia Commons and clearing invalid image references
 """
 
+from __future__ import annotations
+
+import logging
 import urllib.parse
 from functools import lru_cache
 

@@ -2,6 +2,9 @@
 Remove spaces between words and reference tags
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 from ..utils.debug import echo_debug

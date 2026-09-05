@@ -2,6 +2,9 @@
 Move punctuation after reference tags
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 

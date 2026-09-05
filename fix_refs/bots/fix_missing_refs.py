@@ -2,7 +2,10 @@
 Fix missing references by expanding from source text
 """
 
+from __future__ import annotations
+
 import json
+import logging
 from pathlib import Path
 from typing import Any
 

@@ -4,6 +4,8 @@ Citation parser for WikiText reference tags
 
 from __future__ import annotations
 
+import logging
+
 import wikitextparser as wtp
 
 from .citation import Citation

@@ -1,5 +1,9 @@
 """Language-specific bots"""
 
+from __future__ import annotations
+
+import logging
+
 from .es_bot import fix_es
 from .es_section_bot import es_section
 

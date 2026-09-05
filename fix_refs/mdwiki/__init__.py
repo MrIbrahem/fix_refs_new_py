@@ -1,5 +1,9 @@
 """MDWiki integration"""
 
+from __future__ import annotations
+
+import logging
+
 from .category import add_translated_from_mdwiki
 
 __all__ = [

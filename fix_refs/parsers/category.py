@@ -2,6 +2,9 @@
 Category parser for WikiText category tags
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 

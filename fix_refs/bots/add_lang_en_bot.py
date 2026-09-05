@@ -2,6 +2,10 @@
 Add English language parameter to references
 """
 
+from __future__ import annotations
+
+import logging
+
 import wikitextparser as wtp
 
 from ..utils.debug import echo_debug

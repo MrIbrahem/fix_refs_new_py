@@ -3,6 +3,11 @@ Reference utilities for string manipulation
 """
 
 
+from __future__ import annotations
+
+import logging
+
+
 def str_ends_with(string: str, end_string: str) -> bool:
     """Check if string ends with a specific substring
 

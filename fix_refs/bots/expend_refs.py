@@ -2,6 +2,10 @@
 Reference expansion utilities
 """
 
+from __future__ import annotations
+
+import logging
+
 from ..parsers.citations_parser import Citation, get_full_refs, get_short_refs
 from ..utils.debug import echo_debug
 

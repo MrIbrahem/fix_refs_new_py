@@ -1,5 +1,9 @@
 """Core bot functions"""
 
+from __future__ import annotations
+
+import logging
+
 from .add_lang_en_bot import add_lang_en_to_refs
 from .fix_missing_refs import fix_missing_refs
 from .mini_fixes import mini_fixes, mini_fixes_after_fixing

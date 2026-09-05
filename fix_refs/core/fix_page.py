@@ -2,6 +2,10 @@
 Main fix_one_page function and interface
 """
 
+from __future__ import annotations
+
+import logging
+
 from ..bots import (
     add_lang_en_to_refs,
     fix_missing_refs,

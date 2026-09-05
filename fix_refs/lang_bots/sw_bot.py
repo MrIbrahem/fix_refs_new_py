@@ -2,6 +2,9 @@
 Swahili-specific bot fixes
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
 

@@ -2,6 +2,10 @@
 Debug and testing utilities
 """
 
+from __future__ import annotations
+
+import logging
+
 DEBUG: bool = False
 TEST_MODE: bool = False
 

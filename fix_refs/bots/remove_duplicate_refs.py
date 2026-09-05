@@ -2,6 +2,10 @@
 Remove duplicate references by converting them to named short references
 """
 
+from __future__ import annotations
+
+import logging
+
 import wikitextparser as wtp
 
 from ..parsers.citations_parser import Citation
