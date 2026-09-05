@@ -2,15 +2,15 @@
 Main fix_one_page function and interface
 """
 
-from ..bots.remove_duplicate_refs import remove_duplicate_refs_with_attrs
-from ..bots.mini_fixes import mini_fixes, mini_fixes_after_fixing
 from ..bots.add_lang_en_bot import add_lang_en_to_refs
-from ..bots.move_dots import move_dots_after_refs
 from ..bots.fix_missing_refs import fix_missing_refs
+from ..bots.mini_fixes import mini_fixes, mini_fixes_after_fixing
+from ..bots.move_dots import move_dots_after_refs
 from ..bots.redirect import is_redirect
-from ..mdwiki.category import add_translated_from_mdwiki
+from ..bots.remove_duplicate_refs import remove_duplicate_refs_with_attrs
 from ..infobox.expend_infobox import expand_infobox_in_text
 from ..lang_bots import apply_language_fixes
+from ..mdwiki.category import add_translated_from_mdwiki
 from ..utils.debug import echo_test
 
 
@@ -24,12 +24,12 @@ def fix_one_page(
     text: str,
     title: str,
     lang: str,
-    move_dots: bool=True,
-    expend_infobox: bool=True,
-    add_en_lang: bool=False,
-    add_category: bool=False,
+    move_dots: bool = True,
+    expend_infobox: bool = True,
+    add_en_lang: bool = False,
+    add_category: bool = False,
     source_title: str = "",
-    mdwiki_revid: int = 0
+    mdwiki_revid: int = 0,
 ) -> str:
     """Main function to fix Wikipedia page references and formatting
 

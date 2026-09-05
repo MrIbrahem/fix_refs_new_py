@@ -2,8 +2,9 @@
 
 Converted from tests/FixpageTest.php
 """
-import pytest
+
 from pathlib import Path
+
 
 from fix_refs.core.fix_page import fix_one_page
 
@@ -11,10 +12,10 @@ from fix_refs.core.fix_page import fix_one_page
 def test_file_ja():
     tests_dir = Path(__file__).parent / "texts/ja"
 
-    with open(tests_dir / "input.txt", 'r', encoding='utf-8') as f:
+    with open(tests_dir / "input.txt", "r", encoding="utf-8") as f:
         text_input = f.read()
 
-    with open(tests_dir / "expected.txt", 'r', encoding='utf-8') as f:
+    with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
         expected = f.read()
 
     result = fix_one_page(
@@ -26,12 +27,12 @@ def test_file_ja():
         add_en_lang=False,
         add_category=False,
         source_title="",
-        mdwiki_revid=0
+        mdwiki_revid=0,
     )
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(result)
 
     # Normalize line endings for comparison
@@ -41,10 +42,10 @@ def test_file_ja():
 def test_file_pl():
     tests_dir = Path(__file__).parent / "texts/pl"
 
-    with open(tests_dir / "input.txt", 'r', encoding='utf-8') as f:
+    with open(tests_dir / "input.txt", "r", encoding="utf-8") as f:
         text_input = f.read()
 
-    with open(tests_dir / "expected.txt", 'r', encoding='utf-8') as f:
+    with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
         expected = f.read()
 
     result = fix_one_page(
@@ -55,12 +56,12 @@ def test_file_pl():
         expend_infobox=True,
         add_en_lang=False,
         source_title="",
-        mdwiki_revid=0
+        mdwiki_revid=0,
     )
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(result)
 
     # Normalize line endings for comparison

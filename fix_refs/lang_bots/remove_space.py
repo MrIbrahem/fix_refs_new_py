@@ -1,6 +1,4 @@
-"""
-
-"""
+""" """
 
 import re
 
@@ -12,7 +10,7 @@ def match_it(text: str, charters: str):
     # Build regex equivalent to PHP:
     # /(<\/ref>|\/>)\s*([charters]\s*)$/u
     escaped = re.escape(charters)
-    pattern = rf'(</ref>|/>)\s*([{escaped}]\s*)$'
+    pattern = rf"(</ref>|/>)\s*([{escaped}]\s*)$"
     m = re.search(pattern, text, flags=re.UNICODE)
     if m:
         return m.group(2)
@@ -64,7 +62,7 @@ def remove_spaces_between_last_word_and_beginning_of_ref(newtext: str, lang: str
             if part.endswith(end_part):
                 print("endswith")
 
-                first_part_clean_end = part[:-len(end_part)]
+                first_part_clean_end = part[: -len(end_part)]
                 first_part_clean_end = first_part_clean_end.rstrip()
 
                 new_part = first_part_clean_end + ref_text.strip() + charter

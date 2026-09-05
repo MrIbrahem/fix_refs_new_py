@@ -2,7 +2,8 @@
 
 Converted from tests/remove_space2Test.php
 """
-import pytest
+
+
 from fix_refs.lang_bots.hy_bot import remove_spaces_between_ref_and_punctuation
 
 
@@ -23,8 +24,8 @@ class TestRemoveSpace2Extra:
 
     def test_closing_ref_double_punctuation(self):
         """Test with double punctuation after closing ref"""
-        input_text = 'Sentence</ref> .:'
-        expected = 'Sentence</ref>.:'  # space removed only before the first dot
+        input_text = "Sentence</ref> .:"
+        expected = "Sentence</ref>.:"  # space removed only before the first dot
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_ref_with_attributes(self):
@@ -35,8 +36,8 @@ class TestRemoveSpace2Extra:
 
     def test_empty_ref_tag(self):
         """Test with empty ref tag"""
-        input_text = 'Sentence<ref></ref> .'
-        expected = 'Sentence<ref></ref>.'
+        input_text = "Sentence<ref></ref> ."
+        expected = "Sentence<ref></ref>."
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_already_correct_should_stay_same(self):
@@ -53,8 +54,8 @@ class TestRemoveSpace2Extra:
 
     def test_malformed_nested_refs(self):
         """Test with malformed nested refs"""
-        input_text = 'Sentence <ref><ref /> 。'
-        expected = 'Sentence <ref><ref />。'
+        input_text = "Sentence <ref><ref /> 。"
+        expected = "Sentence <ref><ref />。"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
 
@@ -99,26 +100,26 @@ class TestRemoveSpace2(TestRemoveSpace2Extra):
 
     def test_remove_space_closing_ref_armenian(self):
         """Test closing ref tag with Armenian punctuation"""
-        input_text = 'Տեքստ</ref> ։'
-        expected = 'Տեքստ</ref>։'
+        input_text = "Տեքստ</ref> ։"
+        expected = "Տեքստ</ref>։"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_closing_ref_chinese(self):
         """Test closing ref tag with Chinese punctuation"""
-        input_text = '文本</ref> 。'
-        expected = '文本</ref>。'
+        input_text = "文本</ref> 。"
+        expected = "文本</ref>。"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_closing_ref_english(self):
         """Test closing ref tag with English punctuation"""
-        input_text = 'Text</ref> .'
-        expected = 'Text</ref>.'
+        input_text = "Text</ref> ."
+        expected = "Text</ref>."
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_closing_ref_colon(self):
         """Test closing ref tag with colon"""
-        input_text = 'Sentence</ref> :'
-        expected = 'Sentence</ref>:'
+        input_text = "Sentence</ref> :"
+        expected = "Sentence</ref>:"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_no_space_should_stay_same(self):
@@ -141,19 +142,23 @@ class TestRemoveSpace2(TestRemoveSpace2Extra):
 
     def test_closing_ref_multiple_marks(self):
         """Test closing ref with multiple punctuation marks"""
-        input_text = 'Text</ref> ։ More text</ref> . And again</ref> :'
-        expected = 'Text</ref>։ More text</ref>. And again</ref>:'
+        input_text = "Text</ref> ։ More text</ref> . And again</ref> :"
+        expected = "Text</ref>։ More text</ref>. And again</ref>:"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_long_mixed_paragraph(self):
         """Test long paragraph with mixed languages"""
-        input_text = ('Բուժումը ներառում է [[Therapy|թերապիա]] <ref name="NORD2004" /> ։ Կյանքի տևողությունը նորմալ է<ref name="Yo2002">{{Cite book}}</ref> ։ '
-                      'النص العربي <ref name="AR2020" /> : والنهاية طبيعية<ref name="AR2021" /> . '
-                      'Chinese 文本<ref name="CN1" /> 。 Final<ref name="EN1" /> :')
+        input_text = (
+            'Բուժումը ներառում է [[Therapy|թերապիա]] <ref name="NORD2004" /> ։ Կյանքի տևողությունը նորմալ է<ref name="Yo2002">{{Cite book}}</ref> ։ '
+            'النص العربي <ref name="AR2020" /> : والنهاية طبيعية<ref name="AR2021" /> . '
+            'Chinese 文本<ref name="CN1" /> 。 Final<ref name="EN1" /> :'
+        )
 
-        expected = ('Բուժումը ներառում է [[Therapy|թերապիա]] <ref name="NORD2004" />։ Կյանքի տևողությունը նորմալ է<ref name="Yo2002">{{Cite book}}</ref>։ '
-                    'النص العربي <ref name="AR2020" />: والنهاية طبيعية<ref name="AR2021" />. '
-                    'Chinese 文本<ref name="CN1" />。 Final<ref name="EN1" />:')
+        expected = (
+            'Բուժումը ներառում է [[Therapy|թերապիա]] <ref name="NORD2004" />։ Կյանքի տևողությունը նորմալ է<ref name="Yo2002">{{Cite book}}</ref>։ '
+            'النص العربي <ref name="AR2020" />: والنهاية طبيعية<ref name="AR2021" />. '
+            'Chinese 文本<ref name="CN1" />。 Final<ref name="EN1" />:'
+        )
 
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
@@ -180,8 +185,8 @@ class TestRemoveSpaceBetweenRefAndPunctuation:
 
     def test_closing_ref_double_punctuation(self):
         """Test double punctuation after closing ref"""
-        input_text = 'Sentence</ref> .:'
-        expected = 'Sentence</ref>.:'
+        input_text = "Sentence</ref> .:"
+        expected = "Sentence</ref>.:"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_ref_with_attributes(self):
@@ -192,8 +197,8 @@ class TestRemoveSpaceBetweenRefAndPunctuation:
 
     def test_empty_ref_tag(self):
         """Test empty ref tag"""
-        input_text = 'Sentence<ref></ref> .'
-        expected = 'Sentence<ref></ref>.'
+        input_text = "Sentence<ref></ref> ."
+        expected = "Sentence<ref></ref>."
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_already_correct_should_stay_same(self):
@@ -210,8 +215,8 @@ class TestRemoveSpaceBetweenRefAndPunctuation:
 
     def test_malformed_nested_refs(self):
         """Test malformed nested refs"""
-        input_text = 'Sentence <ref><ref /> 。'
-        expected = 'Sentence <ref><ref />。'
+        input_text = "Sentence <ref><ref /> 。"
+        expected = "Sentence <ref><ref />。"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_armenian(self):
@@ -246,20 +251,20 @@ class TestRemoveSpaceBetweenRefAndPunctuation:
 
     def test_remove_space_closing_ref_armenian(self):
         """Test Armenian punctuation after closing ref"""
-        input_text = 'Տեքստ</ref> ։'
-        expected = 'Տեքստ</ref>։'
+        input_text = "Տեքստ</ref> ։"
+        expected = "Տեքստ</ref>։"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_closing_ref_chinese(self):
         """Test Chinese punctuation after closing ref"""
-        input_text = '文本</ref> 。'
-        expected = '文本</ref>。'
+        input_text = "文本</ref> 。"
+        expected = "文本</ref>。"
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_remove_space_closing_ref_english(self):
         """Test English punctuation after closing ref"""
-        input_text = 'Text</ref> .'
-        expected = 'Text</ref>.'
+        input_text = "Text</ref> ."
+        expected = "Text</ref>."
         assert remove_spaces_between_ref_and_punctuation(input_text) == expected
 
     def test_no_space_should_stay_same(self):

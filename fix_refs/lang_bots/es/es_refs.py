@@ -1,6 +1,7 @@
-"""
-"""
+""" """
+
 import re
+
 import wikitextparser as wtp
 
 
@@ -82,7 +83,7 @@ def remove_short_refs(text: str) -> str:
             tag.string = ""
     text = parsed.string
     # Remove multiple newlines
-    text = re.sub(r'\n+', '\n', text)
+    text = re.sub(r"\n+", "\n", text)
     return text
 
 

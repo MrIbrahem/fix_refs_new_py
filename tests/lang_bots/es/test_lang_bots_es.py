@@ -2,13 +2,14 @@
 
 Converted from tests/es_bots/es_refsTest.php and tests/es_bots/es_monthsTest.php
 """
-from fix_refs.lang_bots.es.es_refs import mv_es_refs
+
+from fix_refs.bots.months import make_date_new_val_es
 from fix_refs.lang_bots.es.es_helpers import (
-    fix_es_months_in_texts,
     fix_es_months_in_refs,
+    fix_es_months_in_texts,
     start_end,
 )
-from fix_refs.bots.months import make_date_new_val_es
+from fix_refs.lang_bots.es.es_refs import mv_es_refs
 
 
 class TestEsMonths:
@@ -20,11 +21,15 @@ class TestEsMonths:
 
     def test_temp_in_wikitexts(self):
         """Test fixing months in references within wikitext"""
-        input_text = ('test: <ref name="AHFS2016">{{Citar web|titulo=Charcoal, Activated|url=https://www.drugs.com/monograph/charcoal-activated.html|publicado=The American Society of Health-System Pharmacists|acessodata=8 December 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 December 2016}}</ref>\n'
-                      '<ref name="AHFS2016">{{Citar web|acessodata=8 December 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 December 2016}} xxxxxxxxxxxxxxxx {{Webarchive|url=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|date=21 December 2016}}</ref>')
+        input_text = (
+            'test: <ref name="AHFS2016">{{Citar web|titulo=Charcoal, Activated|url=https://www.drugs.com/monograph/charcoal-activated.html|publicado=The American Society of Health-System Pharmacists|acessodata=8 December 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 December 2016}}</ref>\n'
+            '<ref name="AHFS2016">{{Citar web|acessodata=8 December 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 December 2016}} xxxxxxxxxxxxxxxx {{Webarchive|url=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|date=21 December 2016}}</ref>'
+        )
 
-        expected = ('test: <ref name="AHFS2016">{{Citar web|titulo=Charcoal, Activated|url=https://www.drugs.com/monograph/charcoal-activated.html|publicado=The American Society of Health-System Pharmacists|acessodata=8 de diciembre de 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 de diciembre de 2016}}</ref>\n'
-                    '<ref name="AHFS2016">{{Citar web|acessodata=8 de diciembre de 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 de diciembre de 2016}} xxxxxxxxxxxxxxxx {{Webarchive|url=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|date=21 de diciembre de 2016}}</ref>')
+        expected = (
+            'test: <ref name="AHFS2016">{{Citar web|titulo=Charcoal, Activated|url=https://www.drugs.com/monograph/charcoal-activated.html|publicado=The American Society of Health-System Pharmacists|acessodata=8 de diciembre de 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 de diciembre de 2016}}</ref>\n'
+            '<ref name="AHFS2016">{{Citar web|acessodata=8 de diciembre de 2016|urlmorta=live|arquivourl=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|arquivodata=21 de diciembre de 2016}} xxxxxxxxxxxxxxxx {{Webarchive|url=https://web.archive.org/web/20161221011707/https://www.drugs.com/monograph/charcoal-activated.html|date=21 de diciembre de 2016}}</ref>'
+        )
 
         result = fix_es_months_in_refs(input_text)
         assert result == expected
@@ -58,15 +63,15 @@ class TestSpanishHelpers:
 
     def test_temp_in_templates(self):
         """Test fixing months in templates"""
-        input_text = '{{cite web|date=10 January, 2023|}}'
-        expected = '{{cite web|date=10 de enero de 2023|}}'
+        input_text = "{{cite web|date=10 January, 2023|}}"
+        expected = "{{cite web|date=10 de enero de 2023|}}"
         result = fix_es_months_in_texts(input_text)
         assert result == expected
 
     def test_temp_in_templates_more(self):
         """Test fixing months in multiple templates"""
-        input_text = '{{cite web|date=10 January, 2023|}} {{cite book|time = test|date = 10 de enero de 2023 }}'
-        expected = '{{cite web|date=10 de enero de 2023|}} {{cite book|time = test|date = 10 de enero de 2023 }}'
+        input_text = "{{cite web|date=10 January, 2023|}} {{cite book|time = test|date = 10 de enero de 2023 }}"
+        expected = "{{cite web|date=10 de enero de 2023|}} {{cite book|time = test|date = 10 de enero de 2023 }}"
         result = fix_es_months_in_texts(input_text)
         assert result == expected
 

@@ -1,6 +1,7 @@
 """
 Tests for infobox expansion (expend_infobox.py)
 """
+
 from fix_refs.infobox.expend_infobox import expend_new
 
 # Test data from infoboxTest.php

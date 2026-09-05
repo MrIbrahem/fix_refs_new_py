@@ -2,7 +2,7 @@
 Tests for core fix_page functionality
 """
 
-import pytest
+
 from fix_refs.core.fix_page import fix_one_page
 
 
@@ -29,7 +29,7 @@ class TestFixRefs:
 
     def test_single_ref(self):
         """Test with single reference"""
-        input_text = "Text with <ref name=\"test1\">Reference content</ref> reference."
+        input_text = 'Text with <ref name="test1">Reference content</ref> reference.'
         result = fix_one_page(input_text, "", "en")
         assert "<ref" in result
         assert "</ref>" in result
@@ -52,7 +52,7 @@ class TestFixPage:
 
     def test_with_move_dots(self):
         """Test with move_dots enabled"""
-        input_text = "Text with dot. <ref name=\"test\">Reference</ref>"
+        input_text = 'Text with dot. <ref name="test">Reference</ref>'
         result = fix_one_page(input_text, "", "en")
         assert "<ref" in result
 

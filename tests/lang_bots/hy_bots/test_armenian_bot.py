@@ -2,7 +2,7 @@
 Tests for Armenian bot
 """
 
-import pytest
+
 from fix_refs.lang_bots.hy_bot import hy_fixes
 
 
@@ -11,13 +11,13 @@ class TestArmenianBot:
 
     def test_remove_space_before_punctuation(self):
         """Test removing space between ref and punctuation"""
-        text = "տեքստ <ref name=\"test\">content</ref>։"
+        text = 'տեքստ <ref name="test">content</ref>։'
         result = hy_fixes(text)
         assert "</ref>։" in result
 
     def test_keep_punctuation_attached(self):
         """Test keeping punctuation attached to self-closing ref"""
-        text = "Տեքստ <ref name=\"test\"/>."
+        text = 'Տեքստ <ref name="test"/>.'
         result = hy_fixes(text)
         assert "/>." in result
 

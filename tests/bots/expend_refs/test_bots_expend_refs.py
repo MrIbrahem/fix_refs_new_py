@@ -2,7 +2,8 @@
 
 Converted from tests/Bots/expend_refsTest.php
 """
-import pytest
+
+
 from fix_refs.bots.expend_refs import refs_expand_work
 
 
@@ -40,7 +41,7 @@ class TestExpendRefs:
 
     def test_refs_expand_work_with_no_refs(self):
         """Test with text that has no references"""
-        input_text = 'No references here'
+        input_text = "No references here"
         assert refs_expand_work(input_text) == input_text
 
     def test_refs_expand_work_preserves_original_formatting(self):
@@ -57,13 +58,13 @@ class TestExpendRefs:
 
     def test_refs_expand_work_with_single_quotes_in_name(self):
         """Test with single quotes in ref name attribute"""
-        input_text = '<ref name=\'ref1\'>Full content</ref> Text <ref name=\'ref1\'/>'
-        expected = '<ref name=\'ref1\'>Full content</ref> Text <ref name=\'ref1\'>Full content</ref>'
+        input_text = "<ref name='ref1'>Full content</ref> Text <ref name='ref1'/>"
+        expected = "<ref name='ref1'>Full content</ref> Text <ref name='ref1'>Full content</ref>"
         assert refs_expand_work(input_text) == expected
 
     def test_refs_expand_work_with_mixed_quotes(self):
         """Test with mixed quote styles in name attribute"""
-        input_text = '<ref name="ref1">Full content</ref> Text <ref name=\'ref1\'/>'
+        input_text = "<ref name=\"ref1\">Full content</ref> Text <ref name='ref1'/>"
         expected = '<ref name="ref1">Full content</ref> Text <ref name="ref1">Full content</ref>'
         assert refs_expand_work(input_text) == expected
 

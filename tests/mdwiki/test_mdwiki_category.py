@@ -2,7 +2,8 @@
 
 Converted from tests/md_catTest.php
 """
-import pytest
+
+
 from fix_refs.mdwiki.category import add_translated_from_mdwiki
 
 

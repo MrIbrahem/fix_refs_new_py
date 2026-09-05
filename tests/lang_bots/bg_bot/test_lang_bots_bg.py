@@ -2,8 +2,9 @@
 
 Converted from tests/bg_bots/fix_bgTest.php
 """
-import pytest
-from fix_refs.lang_bots.bg_bot import bg_section, bg_fixes
+
+
+from fix_refs.lang_bots.bg_bot import bg_fixes, bg_section
 
 
 class TestBgSection:
@@ -53,7 +54,9 @@ class TestBgSection:
     def test_bg_section_with_multiple_categories(self):
         """Text with multiple categories - should add template before first category"""
         text = "Text\n[[Category:First]]\n[[Категория:Second]]\n[[Category:Third]]"
-        expected = "Text\n{{Превод от|mdwiki|MultiCat|333}}\n[[Category:First]]\n[[Категория:Second]]\n[[Category:Third]]"
+        expected = (
+            "Text\n{{Превод от|mdwiki|MultiCat|333}}\n[[Category:First]]\n[[Категория:Second]]\n[[Category:Third]]"
+        )
         result = bg_section(text, "MultiCat", "333")
         assert result == expected
 

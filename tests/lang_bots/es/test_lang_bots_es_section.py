@@ -2,7 +2,8 @@
 
 Converted from tests/es_bots/esSectionTest.php
 """
-import pytest
+
+
 from fix_refs.lang_bots.es.es_section_bot import es_section
 
 
@@ -88,27 +89,27 @@ class TestEsSection:
         """Text already contains Traducido ref template"""
         text = "Some content {{Traducido ref|param=value}} more content"
         expected = "Some content {{Traducido ref|param=value}} more content"
-        result = es_section('Source Title', text, '123')
+        result = es_section("Source Title", text, "123")
         assert result == expected
 
     def test_add_after_existing_enlaces_externos(self):
         """Adding template after existing external links section"""
         text = "Content before\n== Enlaces externos ==\nMore content"
-        result = es_section('Source Title', text, '123')
+        result = es_section("Source Title", text, "123")
         assert "{{Traducido ref MDWiki|en|Source Title|oldid=123" in result
         assert "More content" in result
 
     def test_append_new_section_when_none_exists(self):
         """Append new section when none exists"""
         text = "No external links section here"
-        result = es_section('Source Title', text, '123')
+        result = es_section("Source Title", text, "123")
         assert "{{Traducido ref MDWiki|en|Source Title|oldid=123" in result
         assert "== Enlaces externos ==" in result
 
     def test_multiple_enlaces_externos_sections(self):
         """Multiple "Enlaces externos" sections (should only modify first)"""
         text = "== Enlaces externos ==\nFirst section\n== Enlaces externos ==\nSecond section"
-        result = es_section('Source Title', text, '123')
+        result = es_section("Source Title", text, "123")
         # Should only add template after first occurrence
         assert result.count("{{Traducido ref MDWiki") == 1
         assert "First section\n== Enlaces externos ==" in result
@@ -116,14 +117,14 @@ class TestEsSection:
     def test_case_variations_in_section_header(self):
         """Case variations in "Enlaces externos" """
         text = "== ENLACES EXTERNOS =="
-        result = es_section('Source Title', text, '123')
+        result = es_section("Source Title", text, "123")
         assert "== ENLACES EXTERNOS ==" in result
         assert "{{Traducido ref MDWiki|en|Source Title|oldid=123" in result
 
     def test_whitespace_around_section_header(self):
         """Leading/trailing whitespace around section header"""
         text = "  ==   Enlaces externos   ==  "
-        result = es_section('test!', text, '520')
+        result = es_section("test!", text, "520")
         assert "==   Enlaces externos   ==" in result
         assert "{{Traducido ref MDWiki|en|test!|oldid=520" in result
 

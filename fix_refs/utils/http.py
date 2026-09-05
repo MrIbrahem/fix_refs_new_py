@@ -3,8 +3,9 @@ HTTP client utilities - replaces PHP cURL
 """
 
 import json
+
 import requests
-from typing import Optional
+
 from .debug import echo_debug
 
 
@@ -19,7 +20,7 @@ def get_url(url: str, timeout: int = 5) -> str:
         Response text as string, empty string on error
     """
     headers = {
-        'User-Agent': 'WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)'
+        "User-Agent": "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)"
     }
 
     try:
@@ -33,7 +34,7 @@ def get_url(url: str, timeout: int = 5) -> str:
     return ""
 
 
-def get_url_json(url: str, timeout: int = 5) -> Optional[dict]:
+def get_url_json(url: str, timeout: int = 5) -> dict | None:
     """Fetch URL content and parse as JSON using requests library
 
     Args:
@@ -44,7 +45,7 @@ def get_url_json(url: str, timeout: int = 5) -> Optional[dict]:
         Parsed JSON as dictionary, None on error
     """
     headers = {
-        'User-Agent': 'WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)'
+        "User-Agent": "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)"
     }
 
     try:

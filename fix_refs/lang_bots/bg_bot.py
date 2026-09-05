@@ -19,7 +19,7 @@ def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:
         Text with translation template added
     """
     # Check if translation template already exists
-    pattern = r'\{\{\s*Превод\s*от\s*\|'
+    pattern = r"\{\{\s*Превод\s*от\s*\|"
     if re.search(pattern, text, re.IGNORECASE):
         return text
 
@@ -27,7 +27,7 @@ def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:
     temp = f"{{{{Превод от|mdwiki|{sourcetitle}|{mdwiki_revid}}}}}\n"
 
     # Insert before first [[Категория: or [[Category: if found, otherwise append
-    category_pattern = r'\[\[(Категория|Category):'
+    category_pattern = r"\[\[(Категория|Category):"
     match = re.search(category_pattern, text, re.IGNORECASE)
 
     if match:
@@ -57,11 +57,6 @@ def bg_fixes(text: str, source_title: str, mdwiki_revid: int) -> str:
     text = bg_section(text, source_title, mdwiki_revid)
 
     # Remove [[Category:Translated from MDWiki]] (Bulgarian pages don't need it)
-    text = re.sub(
-        r'\[\[\s*(Категория|Category)\s*:\s*Translated from MDWiki\s*\]\]',
-        '',
-        text,
-        flags=re.IGNORECASE
-    )
+    text = re.sub(r"\[\[\s*(Категория|Category)\s*:\s*Translated from MDWiki\s*\]\]", "", text, flags=re.IGNORECASE)
 
     return text

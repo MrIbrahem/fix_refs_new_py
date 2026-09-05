@@ -1,9 +1,11 @@
 """
 Citation parser for WikiText reference tags
 """
-import wikitextparser as wtp
+
 from dataclasses import dataclass
-from typing import Any, List, Dict
+from typing import Any
+
+import wikitextparser as wtp
 
 
 @dataclass
@@ -81,7 +83,7 @@ class Citation:
         return self.ref.string
 
 
-def get_citations(text: str) -> List[Citation]:
+def get_citations(text: str) -> list[Citation]:
     """Extract all citations from text
 
     Args:
@@ -101,7 +103,7 @@ def get_citations(text: str) -> List[Citation]:
     return citations
 
 
-def get_full_refs(text: str) -> Dict[str, str]:
+def get_full_refs(text: str) -> dict[str, str]:
     """Get mapping of citation names to their full reference tags
 
     Args:
@@ -120,7 +122,7 @@ def get_full_refs(text: str) -> Dict[str, str]:
     return full
 
 
-def get_short_citations(text: str) -> List[Citation]:
+def get_short_citations(text: str) -> list[Citation]:
     """Extract short/empty citations (self-closing tags)
 
     Args:

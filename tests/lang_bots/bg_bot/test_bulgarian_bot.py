@@ -2,7 +2,7 @@
 Tests for Bulgarian bot
 """
 
-import pytest
+
 from fix_refs.lang_bots.bg_bot import bg_fixes
 
 
@@ -32,7 +32,7 @@ class TestBulgarianBot:
         """Test inserting template before category"""
         text = "Content\n[[Category:Test]]"
         result = bg_fixes(text, "TestPage", 12345)
-        lines = result.split('\n')
+        lines = result.split("\n")
         assert len(lines) > 2
 
     def test_no_change_on_regular_text(self):

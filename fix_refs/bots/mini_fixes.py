@@ -3,7 +3,6 @@ Mini fixes for WikiText formatting
 """
 
 import re
-from typing import Dict
 
 
 def fix_sections_titles(text: str, lang: str) -> str:
@@ -16,21 +15,13 @@ def fix_sections_titles(text: str, lang: str) -> str:
     Returns:
         Text with translated section titles
     """
-    to_replace: Dict[str, Dict[str, str]] = {
+    to_replace: dict[str, dict[str, str]] = {
         "hr": {
             "Reference": "Izvori",
             "References": "Izvori",
         },
-        "sw": {
-            "Reference": "Marejeo",
-            "References": "Marejeo",
-            "Marejeleo": "Marejeo"
-        },
-        "ru": {
-            "Reference": "Примечания",
-            "References": "Примечания",
-            "Ссылки": "Примечания"
-        }
+        "sw": {"Reference": "Marejeo", "References": "Marejeo", "Marejeleo": "Marejeo"},
+        "ru": {"Reference": "Примечания", "References": "Примечания", "Ссылки": "Примечания"},
     }
 
     if lang not in to_replace:
@@ -38,8 +29,8 @@ def fix_sections_titles(text: str, lang: str) -> str:
 
     for key, value in to_replace[lang].items():
         k = re.escape(key)
-        pattern = rf'(=+)\s*{k}\s*\1'
-        replacement = rf'\1 {value} \1'
+        pattern = rf"(=+)\s*{k}\s*\1"
+        replacement = rf"\1 {value} \1"
         text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
 
     return text
@@ -90,8 +81,8 @@ def fix_prefix(text: str, lang: str) -> str:
     Returns:
         Text with simplified interwiki links
     """
-    text = re.sub(r'\[\[:en:', "[[", text)
-    text = re.sub(rf'\[\[:{re.escape(lang)}:', "[[", text, flags=re.IGNORECASE)
+    text = re.sub(r"\[\[:en:", "[[", text)
+    text = re.sub(rf"\[\[:{re.escape(lang)}:", "[[", text, flags=re.IGNORECASE)
     return text
 
 
@@ -105,7 +96,7 @@ def mini_fixes_after_fixing(text: str, lang: str) -> str:
     Returns:
         Fixed text
     """
-    text = re.sub(r'^\s*\n', "\n", text, flags=re.MULTILINE)
+    text = re.sub(r"^\s*\n", "\n", text, flags=re.MULTILINE)
     text = fix_prefix(text, lang)
     return text
 

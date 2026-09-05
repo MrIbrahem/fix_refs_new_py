@@ -3,7 +3,9 @@ Portuguese-specific bot fixes
 """
 
 import re
+
 import wikitextparser as wtp
+
 from ..bots.months import make_date_new_val_pt
 
 
@@ -46,7 +48,7 @@ def fix_pt_months_in_refs(text: str) -> str:
     parsed = wtp.parse(text)
 
     # Get all ref tags
-    ref_tags = parsed.get_tags('ref')
+    ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
         contents = ref.contents
@@ -68,8 +70,8 @@ def rm_ref_spaces(newtext: str) -> str:
     """
     dot = r"(\.|,|。|।)"
     regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
-    pattern = r'\s*' + dot + r'\s*' + regline
-    replacement = r'\1\2'
+    pattern = r"\s*" + dot + r"\s*" + regline
+    replacement = r"\1\2"
 
     newtext = re.sub(pattern, replacement, newtext)
 

@@ -3,6 +3,7 @@ Add English language parameter to references
 """
 
 import wikitextparser as wtp
+
 from ..utils.debug import echo_debug
 
 
@@ -18,9 +19,9 @@ def add_lang_en_new(temp_text: str) -> str:
     wikicode = wtp.parse(temp_text.strip())
 
     for wt_template in wikicode.templates:
-        language_arg = wt_template.get_arg('language')
+        language_arg = wt_template.get_arg("language")
         if not language_arg or not language_arg.value.strip():
-            wt_template.set_arg('language', 'en')
+            wt_template.set_arg("language", "en")
 
     new_text = wikicode.string
     return new_text
@@ -39,7 +40,7 @@ def add_lang_en_to_refs(text: str) -> str:
     parsed = wtp.parse(text)
 
     # Get all ref tags
-    ref_tags = parsed.get_tags('ref')
+    ref_tags = parsed.get_tags("ref")
 
     for ref in ref_tags:
         contents = ref.contents
@@ -52,9 +53,9 @@ def add_lang_en_to_refs(text: str) -> str:
 
         for temp in inner_templates:
             # Add language parameter if needed
-            language_arg = temp.get_arg('language')
+            language_arg = temp.get_arg("language")
             if not language_arg or not language_arg.value.strip():
-                temp.set_arg('language', 'en')
+                temp.set_arg("language", "en")
             break  # Only process the first template
 
     return parsed.string
