@@ -1,6 +1,6 @@
 # Dependencies
 requests>=2.31.0
-wikitextparser>=0.55.0
+wikitextparser>=2.0.0
 
 # Testing
 pytest>=7.4.0
