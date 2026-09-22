@@ -26,7 +26,7 @@ Spanish, Portuguese, Bulgarian, Armenian, Polish, Swahili (with English as the s
 ```bash
 pip install git+https://github.com/MrIbrahem/fix_refs_new_py.git
 
-# or
+# or for local development
 pip install -e .
 
 # with dev dependencies
