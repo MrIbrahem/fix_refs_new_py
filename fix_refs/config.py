@@ -19,4 +19,5 @@ except Exception:
         load_dotenv(_env_file_path)
 
 resources_path = Path(os.getenv("RESOURCES_PATH", Path(__file__).parent.parent / "resources")).expanduser()
+
 revisions_path = Path(os.getenv("REVISIONS_PATH", Path(resources_path) / "revisions")).expanduser()

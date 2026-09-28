@@ -57,6 +57,7 @@ def fix_one_page(
     """
     text_org = text
     mdwiki_revid = int(mdwiki_revid)
+    logger.info("start fix_one_page with mdwiki_revid:%s", mdwiki_revid)
 
     if is_redirect(title, text):
         return text
