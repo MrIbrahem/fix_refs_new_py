@@ -12,37 +12,37 @@ class TestFixRefs:
         """Test Armenian language fixes with simple case"""
         input_text = '[[Category:Translated from MDWiki]] ռետինոիդներ։ <ref name="NORD2006" /><ref name="Gli2017" />'
         expected = '[[Category:Translated from MDWiki]] ռետինոիդներ<ref name="NORD2006" /><ref name="Gli2017" />։'
-        result = fix_one_page(input_text, "", "hy")
+        result = fix_one_page(text=input_text, title="", lang="hy")
         assert result == expected
 
     def test_empty_text(self):
         """Test with empty text"""
-        assert fix_one_page("", "", "en") == ""
+        assert fix_one_page(text="", title="", lang="en") == ""
 
     def test_basic_text_no_refs(self):
         """Test with basic text without references"""
         input_text = "This is a simple text."
         expected = "This is a simple text."
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert result == expected
 
     def test_single_ref(self):
         """Test with single reference"""
         input_text = 'Text with <ref name="test1">Reference content</ref> reference.'
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert "<ref" in result
         assert "</ref>" in result
 
     def test_duplicate_refs(self):
         """Test duplicate reference removal"""
         input_text = 'Text <ref name="test">Content</ref> and <ref name="test">Content</ref> again.'
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert result.count("Content") == 1
 
     def test_multiple_refs(self):
         """Test with multiple references"""
         input_text = '<ref name="A"/>Text<ref name="B"/>More<ref name="A"/>'
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert "<ref" in result
 
 
@@ -52,11 +52,11 @@ class TestFixPage:
     def test_with_move_dots(self):
         """Test with move_dots enabled"""
         input_text = 'Text with dot. <ref name="test">Reference</ref>'
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert "<ref" in result
 
     def test_redirect_page(self):
         """Test redirect page is skipped"""
         input_text = "#REDIRECT [[Target Page]]"
-        result = fix_one_page(input_text, "", "en")
+        result = fix_one_page(text=input_text, title="", lang="en")
         assert result == input_text

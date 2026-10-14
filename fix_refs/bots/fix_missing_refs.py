@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from ..config import revisions_path
+from ..config import config
 from ..parsers.citations_parser import get_short_refs
 from .expend_refs import refs_expand
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 def get_revision_file_path(mdwiki_revid) -> Path:
 
-    file = revisions_path / f"{mdwiki_revid}/wikitext.txt"
+    file = config.revisions_path / f"{mdwiki_revid}/wikitext.txt"
 
     return file
 
@@ -32,7 +32,7 @@ def find_mdwiki_revid(sourcetitle: str) -> str:
     Returns:
         MDWiki revision ID or empty string
     """
-    json_file = f"{revisions_path}/json_data.json"
+    json_file = f"{config.revisions_path}/json_data.json"
 
     if not Path(json_file).exists():
         return ""

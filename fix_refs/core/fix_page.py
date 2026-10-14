@@ -1,5 +1,5 @@
 """
-Main fix_one_page function and interface
+Main PageFixer class and fix_one_page interface
 """
 
 from __future__ import annotations
@@ -29,6 +29,7 @@ def _expand_infobox_if_needed(text, title, lang, expend_infobox):
 
 
 def fix_one_page(
+    *,
     text: str,
     title: str,
     lang: str,
