@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import re
 
+import wikitextparser as wtp
+
 logger = logging.getLogger(__name__)
 
 
@@ -79,32 +81,58 @@ def new_date(val: str, lang: str = "pt") -> str:
     return val.strip()
 
 
-def make_date_new_val_pt(val: str) -> str:
-    """Convert date to Portuguese format
+def fix_months_in_texts(temp_text: str, lang: str) -> str:
+    """
+    Translate English months to lang within template parameters
 
     Args:
-        val: Date string with English month
+        temp_text: Template text (can contain multiple templates)
 
     Returns:
-        Date string with Portuguese month
+        Template text with translated months
     """
-    return new_date(val, "pt")
+    parsed = wtp.parse(temp_text)
+
+    for temp in parsed.templates:
+        arguments = temp.arguments
+        for arg in arguments:
+            old_val = arg.value
+            new_val = new_date(old_val, lang)
+            if new_val and new_val.strip() != old_val.strip():
+                temp.set_arg(arg.name, new_val)
+
+    return parsed.string
 
 
-def make_date_new_val_es(val: str) -> str:
-    """Convert date to Spanish format
+def start_end(cite_temp: str) -> bool:
+    """Check if string starts with {{ and ends with }}"""
+    return cite_temp.startswith("{{") and cite_temp.endswith("}}")
+
+
+def fix_months_in_refs(text: str, lang: str) -> str:
+    """Translate English months to Spanish within citations
 
     Args:
-        val: Date string with English month
+        text: Text containing citations
 
     Returns:
-        Date string with Spanish month
+        Text with translated months in citations
     """
-    return new_date(val, "es")
+    parsed = wtp.parse(text)
+
+    # Get all ref tags
+    ref_tags = parsed.get_tags("ref")
+
+    for ref in ref_tags:
+        contents = ref.contents or ""
+        # Only process if it looks like a template
+        if not start_end(contents):
+            continue
+        ref.contents = fix_months_in_texts(contents, lang)
+    return parsed.string
 
 
 __all__ = [
-    "new_date",
-    "make_date_new_val_pt",
-    "make_date_new_val_es",
+    "fix_months_in_texts",
+    "fix_months_in_refs",
 ]

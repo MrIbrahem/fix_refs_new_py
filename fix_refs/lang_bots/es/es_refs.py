@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import logging
-import re
 
 import wikitextparser as wtp
+
+from .es_helpers import remove_short_refs
 
 logger = logging.getLogger(__name__)
 
@@ -76,20 +77,6 @@ def get_refs(text):
     new_text = parsed.string
     # ---
     return refs, new_text
-
-
-def remove_short_refs(text: str) -> str:
-    """
-    Remove short citations from text
-    """
-    parsed = wtp.parse(text)
-    for tag in parsed.get_tags():
-        if tag.name == "ref" and not tag.contents:
-            tag.string = ""
-    text = parsed.string
-    # Remove multiple newlines
-    text = re.sub(r"\n+", "\n", text)
-    return text
 
 
 def add_line_to_temp(line, new_text):

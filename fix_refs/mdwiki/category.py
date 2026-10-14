@@ -10,7 +10,7 @@ import os
 import re
 from typing import Any
 
-from ..config import resources_path
+from ..config import config
 from ..utils.http import get_url
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ def load_from_local_file() -> dict[str, Any]:
     Returns:
         Dictionary of MDWiki categories or empty dict if file not found
     """
-    local_file = resources_path / "mdwiki_categories.json"
+    local_file = config.resources_path / "mdwiki_categories.json"
 
     if not local_file.exists():
         return {}

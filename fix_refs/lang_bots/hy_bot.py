@@ -12,16 +12,6 @@ from .remove_space import remove_spaces_between_last_word_and_beginning_of_ref
 logger = logging.getLogger(__name__)
 
 
-def str_ends_with(string: str, end_string: str) -> bool:
-    """Check if string ends with substring"""
-    return string.endswith(end_string)
-
-
-def str_starts_with(text: str, start: str) -> bool:
-    """Check if string starts with substring"""
-    return text.startswith(start)
-
-
 def remove_spaces_between_ref_and_punctuation(text: str) -> str:
     """Remove spaces between ref tags and punctuation
 
@@ -61,8 +51,6 @@ def hy_fixes(text: str) -> str:
 
 
 __all__ = [
-    "str_ends_with",
-    "str_starts_with",
     "remove_spaces_between_ref_and_punctuation",
     "hy_fixes",
 ]

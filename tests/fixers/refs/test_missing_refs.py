@@ -3,7 +3,7 @@
 Converted from tests/helps_bots/missing_refsTest.php
 """
 
-from fix_refs.bots.fix_missing_refs import fix_missing_refs
+from fix_refs.fixers.refs.fix_missing_refs import fix_missing_refs
 
 
 class TestMissingRefs:

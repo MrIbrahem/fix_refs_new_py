@@ -3,13 +3,45 @@
 Converted from tests/es_bots/es_refsTest.php and tests/es_bots/es_monthsTest.php
 """
 
-from fix_refs.bots.months import make_date_new_val_es
-from fix_refs.lang_bots.es.es_helpers import (
-    fix_es_months_in_refs,
-    fix_es_months_in_texts,
-    start_end,
-)
+from fix_refs.fixers.months import fix_months_in_refs, fix_months_in_texts, new_date
 from fix_refs.lang_bots.es.es_refs import mv_es_refs
+
+
+def fix_es_months_in_refs(text: str) -> str:
+    """Translate English months to Spanish within citations
+
+    Args:
+        text: Text containing citations
+
+    Returns:
+        Text with translated months in citations
+    """
+    return fix_months_in_refs(text, "es")
+
+
+def make_date_new_val_es(val: str) -> str:
+    """Convert date to Spanish format
+
+    Args:
+        val: Date string with English month
+
+    Returns:
+        Date string with Spanish month
+    """
+    return new_date(val, "es")
+
+
+def fix_es_months_in_texts(temp_text: str) -> str:
+    """
+    Translate English months to Spanish within template parameters
+
+    Args:
+        temp_text: Template text (can contain multiple templates)
+
+    Returns:
+        Template text with translated months
+    """
+    return fix_months_in_texts(temp_text, "es")
 
 
 class TestEsMonths:
@@ -111,15 +143,6 @@ class TestSpanishHelpers:
         expected = '<ref name="test" group="notes">{{cite web|date=25 de diciembre de 2016|}}</ref>'
         result = fix_es_months_in_refs(input_text)
         assert result == expected
-
-    # Tests for utility functions
-
-    def test_start_end(self):
-        """Test start_end function"""
-        assert start_end("{{template}}") is True
-        assert start_end("{{template") is False
-        assert start_end("template}}") is False
-        assert start_end("template") is False
 
     def test_mv_es_refs_basic(self):
         """Test mv_es_refs basic functionality"""

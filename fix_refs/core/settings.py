@@ -5,14 +5,14 @@ import json
 import logging
 import os
 
-from ..config import resources_path
+from ..config import config
 from ..utils.http import get_url
 
 logger = logging.getLogger(__name__)
 
 
 def load_settings_from_file() -> dict:
-    file_path = resources_path / "language_settings.json"
+    file_path = config.resources_path / "language_settings.json"
     if file_path.exists():
         with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)

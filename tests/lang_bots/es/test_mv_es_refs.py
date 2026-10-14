@@ -5,7 +5,9 @@ Converted from tests/es_bots/es_refsTest.php
 
 from pathlib import Path
 
+from fix_refs.fixers.months import fix_months_in_refs
 from fix_refs.lang_bots.es.es_bot import fix_es
+from fix_refs.lang_bots.es.es_refs import mv_es_refs
 
 
 class TestEsRefs:
@@ -21,8 +23,9 @@ class TestEsRefs:
         with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
             expected = f.read()
 
-        # result = mv_es_refs(text_input)
         result = fix_es(text_input)
+        result = fix_months_in_refs(result, "es")
+        result = mv_es_refs(result)
 
         # write output for comparison
         output_file = tests_dir / "output.txt"
@@ -44,6 +47,8 @@ class TestEsRefs:
 
         # result = mv_es_refs(text_input)
         result = fix_es(text_input)
+        result = fix_months_in_refs(result, "es")
+        result = mv_es_refs(result)
 
         # write output for comparison
         output_file = tests_dir / "output.txt"

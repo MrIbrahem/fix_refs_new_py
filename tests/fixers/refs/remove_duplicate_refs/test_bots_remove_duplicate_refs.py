@@ -1,11 +1,11 @@
 """Tests for remove duplicate references (remove_duplicate_refs.py)
 
-Converted from tests/Bots/remove_duplicate_refsTest.php
+Converted from tests/fixers/refs/remove_duplicate_refsTest.php
 """
 
 from pathlib import Path
 
-from fix_refs.bots.remove_duplicate_refs import remove_duplicate_refs_with_attrs
+from fix_refs.fixers.refs.remove_duplicate_refs import remove_duplicate_refs_with_attrs
 
 # Tests for remove_duplicate_refs_with_attrs
 

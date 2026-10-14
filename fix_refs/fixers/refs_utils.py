@@ -9,32 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def str_ends_with(string: str, end_string: str) -> bool:
-    """Check if string ends with a specific substring
-
-    Args:
-        string: String to check
-        end_string: Substring to look for at the end
-
-    Returns:
-        True if string ends with end_string
-    """
-    return string.endswith(end_string)
-
-
-def str_starts_with(text: str, start: str) -> bool:
-    """Check if string starts with a specific substring
-
-    Args:
-        text: String to check
-        start: Substring to look for at the start
-
-    Returns:
-        True if string starts with start
-    """
-    return text.startswith(start)
-
-
 def rm_str_from_start_and_end(text: str, find: str) -> str:
     """Remove string from both start and end if present
 
@@ -50,7 +24,7 @@ def rm_str_from_start_and_end(text: str, find: str) -> str:
 
     text = text.strip()
 
-    if str_starts_with(text, find) and str_ends_with(text, find):
+    if text.startswith(find) and text.endswith(find):
         text = text[len(find) : -len(find)]
 
     return text.strip()
@@ -98,8 +72,6 @@ def remove_start_end_quotes(text: str) -> str:
 
 
 __all__ = [
-    "str_ends_with",
-    "str_starts_with",
     "rm_str_from_start_and_end",
     "remove_start_end_quotes",
 ]

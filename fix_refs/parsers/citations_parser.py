@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_all_citations(text: str) -> list[Citation]:
-    citations = []
+    citations: list[Citation] = []
     parsed = wtp.parse(text)
 
     for tag in parsed.get_tags():
