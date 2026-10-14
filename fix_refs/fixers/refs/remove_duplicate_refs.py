@@ -8,7 +8,7 @@ import logging
 
 import wikitextparser as wtp
 
-from ..parsers.citations_parser import Citation
+from ...parsers.citations_parser import Citation
 
 logger = logging.getLogger(__name__)
 

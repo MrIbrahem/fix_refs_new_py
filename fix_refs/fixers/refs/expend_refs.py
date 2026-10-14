@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import logging
 
-from ..parsers.citations_parser import Citation, get_full_refs, get_short_refs
+from ...parsers.citations_parser import Citation, get_full_refs, get_short_refs
 
 logger = logging.getLogger(__name__)
 
@@ -53,18 +53,9 @@ def refs_expand_work(first: str, alltext: str = "") -> str:
     if not alltext:
         alltext = first
 
-    refs = get_full_refs(alltext)
     short_refs = get_short_refs(first)
 
-    for cite in short_refs:
-        name = cite.name
-        refe = cite.tag
-
-        rr = refs.get(name, "")
-        if rr:
-            first = first.replace(refe, rr)
-
-    return first
+    return refs_expand(short_refs, first, alltext)
 
 
 __all__ = [

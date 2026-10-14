@@ -4,11 +4,11 @@ Main PageFixer class and fix_one_page interface
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
 import logging
+from dataclasses import asdict, dataclass
 from typing import Any
 
-from ..bots import (
+from ..fixers import (
     add_lang_en_to_refs,
     fix_missing_refs,
     is_redirect,
@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class LangSetting:
     """Per-language fixing options."""
+
     lang: str
     move_dots: bool = True
     expend_infobox: bool = True
@@ -43,6 +44,7 @@ class LangSetting:
             return setting
 
         return cls(**setting)
+
 
 class PageFixer:
     """Fix Wikipedia page references and formatting.

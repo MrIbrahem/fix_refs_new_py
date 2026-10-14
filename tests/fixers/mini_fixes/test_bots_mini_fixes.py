@@ -1,9 +1,9 @@
 """Tests for mini fixes (mini_fixes.py)
 
-Converted from tests/Bots/mini_fixes_botTest.php
+Converted from tests/fixers/refs/mini_fixes_botTest.php
 """
 
-from fix_refs.bots.mini_fixes import fix_prefix, fix_sections_titles, refs_tags_spaces, remove_space_before_ref_tags
+from fix_refs.fixers.mini_fixes import fix_prefix, fix_sections_titles, refs_tags_spaces, remove_space_before_ref_tags
 
 
 class TestMiniFixes:

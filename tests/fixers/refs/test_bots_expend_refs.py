@@ -1,9 +1,9 @@
 """Tests for expend_refs (expend_refsTest.php)
 
-Converted from tests/Bots/expend_refsTest.php
+Converted from tests/fixers/refs/expend_refsTest.php
 """
 
-from fix_refs.bots.expend_refs import refs_expand_work
+from fix_refs.fixers.refs.expend_refs import refs_expand_work
 
 
 class TestExpendRefs:

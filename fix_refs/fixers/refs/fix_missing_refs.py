@@ -9,21 +9,14 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from ..config import config
-from ..parsers.citations_parser import get_short_refs
+from ...config import config
+from ...parsers.citations_parser import get_short_refs
 from .expend_refs import refs_expand
 
 logger = logging.getLogger(__name__)
 
 
-def get_revision_file_path(mdwiki_revid) -> Path:
-
-    file = config.revisions_path / f"{mdwiki_revid}/wikitext.txt"
-
-    return file
-
-
-def find_mdwiki_revid(sourcetitle: str) -> str:
+def _find_mdwiki_revid(sourcetitle: str) -> str:
     """Find MDWiki revision ID from JSON file
 
     Args:
@@ -50,7 +43,7 @@ def find_mdwiki_revid(sourcetitle: str) -> str:
         return ""
 
 
-def get_full_text(sourcetitle: str, mdwiki_revid: int) -> str:
+def _get_full_text(sourcetitle: str, mdwiki_revid: int) -> str:
     """Get full text from MDWiki revision
 
     Args:
@@ -63,14 +56,14 @@ def get_full_text(sourcetitle: str, mdwiki_revid: int) -> str:
     sourcetitle = sourcetitle.replace(" ", "_")
 
     if mdwiki_revid == 0:
-        revid_str = find_mdwiki_revid(sourcetitle)
+        revid_str = _find_mdwiki_revid(sourcetitle)
         mdwiki_revid = int(revid_str) if revid_str.isdigit() else 0
 
     if mdwiki_revid == 0:
         logger.info(f"empty mdwiki_revid, sourcetitle:({sourcetitle})")
         return ""
 
-    file = get_revision_file_path(mdwiki_revid)
+    file = config.get_revision_file_path(mdwiki_revid)
 
     if not Path(file).exists():
         logger.info(f"file not found: {file}")
@@ -103,7 +96,7 @@ def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
     if not short_refs:
         return text
 
-    full_text = get_full_text(sourcetitle, mdwiki_revid)
+    full_text = _get_full_text(sourcetitle, mdwiki_revid)
 
     if not full_text:
         return text
@@ -114,8 +107,5 @@ def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
 
 
 __all__ = [
-    "get_revision_file_path",
-    "find_mdwiki_revid",
-    "get_full_text",
     "fix_missing_refs",
 ]

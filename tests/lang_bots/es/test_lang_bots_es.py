@@ -3,7 +3,7 @@
 Converted from tests/es_bots/es_refsTest.php and tests/es_bots/es_monthsTest.php
 """
 
-from fix_refs.bots.months import make_date_new_val_es
+from fix_refs.fixers.months import make_date_new_val_es
 from fix_refs.lang_bots.es.es_helpers import (
     fix_es_months_in_refs,
     fix_es_months_in_texts,

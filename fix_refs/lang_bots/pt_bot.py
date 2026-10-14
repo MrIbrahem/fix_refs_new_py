@@ -9,7 +9,7 @@ import re
 
 import wikitextparser as wtp
 
-from ..bots.months import make_date_new_val_pt
+from ..fixers.months import make_date_new_val_pt
 
 logger = logging.getLogger(__name__)
 

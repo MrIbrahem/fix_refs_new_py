@@ -9,9 +9,9 @@ from __future__ import annotations
 __version__ = "0.1.0"
 
 from .core.fix_page import (
-    fix_one_page,
     LangSetting,
     PageFixer,
+    fix_one_page,
 )
 
 __all__ = [
