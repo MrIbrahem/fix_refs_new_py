@@ -2,7 +2,7 @@
 Tests for month handling
 """
 
-from fix_refs.fixers.months import make_date_new_val_es, make_date_new_val_pt, new_date
+from fix_refs.fixers.months import new_date
 
 
 class TestNewDate:
@@ -89,7 +89,7 @@ class TestMakeDateNewValPt:
 
     def test_portuguese_wrapper(self):
         """Test Portuguese date wrapper function"""
-        result = make_date_new_val_pt("January 2020")
+        result = new_date("January 2020", "pt")
         assert "janeiro" in result
 
 
@@ -98,5 +98,5 @@ class TestMakeDateNewValEs:
 
     def test_spanish_wrapper(self):
         """Test Spanish date wrapper function"""
-        result = make_date_new_val_es("January 2020")
+        result = new_date("January 2020", "es")
         assert "enero" in result

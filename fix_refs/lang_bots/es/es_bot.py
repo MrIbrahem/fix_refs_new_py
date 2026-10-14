@@ -10,13 +10,11 @@ import re
 import wikitextparser as wtp
 
 from .es_data import ARGS_TO, REFS_TEMPS
-from .es_helpers import fix_es_months_in_refs
-from .es_refs import mv_es_refs
 
 logger = logging.getLogger(__name__)
 
 
-def work_one_temp(temp_text: str, name: str) -> str:
+def _work_one_temp(temp_text: str, name: str) -> str:
     """Transform a single template with Spanish name and parameters
 
     Args:
@@ -60,7 +58,7 @@ def work_one_temp(temp_text: str, name: str) -> str:
     return new_temp
 
 
-def fix_temps(text: str) -> str:
+def _fix_temps(text: str) -> str:
     """Transform templates to Spanish equivalents
 
     Args:
@@ -85,7 +83,7 @@ def fix_temps(text: str) -> str:
             continue
 
         old_text_template = str(template)
-        new_text_str = work_one_temp(old_text_template, name)
+        new_text_str = _work_one_temp(old_text_template, name)
         new_text = new_text.replace(old_text_template, new_text_str)
 
     return new_text
@@ -116,14 +114,10 @@ def fix_es(text: str, title: str = "") -> str:
 
     # Apply transformations
     newtext = text
-    newtext = fix_es_months_in_refs(newtext)
-    newtext = fix_temps(newtext)
-    newtext = mv_es_refs(newtext)
+    newtext = _fix_temps(newtext)
     return newtext
 
 
 __all__ = [
-    "work_one_temp",
-    "fix_temps",
     "fix_es",
 ]

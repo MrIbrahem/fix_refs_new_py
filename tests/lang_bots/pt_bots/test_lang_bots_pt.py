@@ -3,9 +3,25 @@
 Converted from tests/pt_bots/pt_monthsTest.php
 """
 
-from fix_refs.fixers.months import make_date_new_val_pt
-from fix_refs.lang_bots.pt_bot import fix_pt_months_in_refs, fix_pt_months_in_texts, rm_ref_spaces, start_end
+from fix_refs.fixers.months import fix_months_in_texts, new_date, fix_months_in_refs
+from fix_refs.lang_bots.pt_bot import rm_ref_spaces
 
+def fix_pt_months_in_refs(text: str) -> str:
+    """Translate English months to Portuguese within citations
+
+    Args:
+        text: Text containing citations
+
+    Returns:
+        Text with translated months in citations
+    """
+    return fix_months_in_refs(text, "pt")
+
+def fix_pt_months_in_texts(temp_text: str) -> str:
+    return fix_months_in_texts(temp_text, "pt")
+
+def make_date_new_val_pt(val: str) -> str:
+    return new_date(val, "pt")
 
 class TestPortugueseBot:
     """Test cases for Portuguese language bot"""
@@ -24,8 +40,6 @@ class TestPortugueseBot:
     def test_make_date_new_val_pt_day_month_year(self):
         """Test converting day month year to Portuguese format"""
         assert make_date_new_val_pt("10 January, 2023") == "10 de janeiro 2023"
-
-    # Tests for fix_pt_months_in_texts
 
 
 class TestPtMonths:
@@ -135,12 +149,3 @@ class TestPtMonths:
         input_text = "This is a sentence . Without ref."
         expected = input_text
         assert rm_ref_spaces(input_text) == expected
-
-    # Tests for utility functions
-
-    def test_start_end(self):
-        """Test start_end function"""
-        assert start_end("{{template}}") is True
-        assert start_end("{{template") is False
-        assert start_end("template}}") is False
-        assert start_end("template") is False

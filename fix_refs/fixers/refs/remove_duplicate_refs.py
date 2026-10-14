@@ -6,9 +6,8 @@ from __future__ import annotations
 
 import logging
 
-import wikitextparser as wtp
 
-from ...parsers.citations_parser import Citation
+from ...parsers.citations_parser import Citation, get_all_citations
 
 logger = logging.getLogger(__name__)
 
@@ -27,14 +26,7 @@ def remove_duplicate_refs_with_attrs(text: str) -> str:
     new_text = text
     refs_to_check: dict[str, str] = {}
     refs: dict[str, str] = {}
-    citations: list[Citation] = []
-
-    parsed = wtp.parse(text)
-    for tag in parsed.get_tags():
-        if tag.name == "ref":
-            # citation = Citation.from_text(tag.string)
-            citation = Citation(tag)
-            citations.append(citation)
+    citations: list[Citation] = get_all_citations(text)
 
     numb = 0
 

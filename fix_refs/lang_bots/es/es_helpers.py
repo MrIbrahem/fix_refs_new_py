@@ -8,11 +8,7 @@ import logging
 import re
 
 import wikitextparser as wtp
-
-from ...fixers.months import make_date_new_val_es
-
 logger = logging.getLogger(__name__)
-
 
 def remove_short_refs(text: str) -> str:
     """
@@ -23,59 +19,9 @@ def remove_short_refs(text: str) -> str:
         if tag.name == "ref" and not tag.contents:
             tag.string = ""
     text = parsed.string
+    # Remove multiple newlines
     text = re.sub(r"\n+", "\n", text)
     return text
-
-
-def start_end(cite_temp: str) -> bool:
-    """Check if string starts with {{ and ends with }}"""
-    return cite_temp.startswith("{{") and cite_temp.endswith("}}")
-
-
-def fix_es_months_in_texts(temp_text: str) -> str:
-    """Translate English months to Spanish within template parameters
-
-    Args:
-        temp_text: Template text (can contain multiple templates)
-
-    Returns:
-        Template text with translated months
-    """
-    parsed = wtp.parse(temp_text)
-
-    for temp in parsed.templates:
-        arguments = temp.arguments
-        for arg in arguments:
-            old_val = arg.value
-            new_val = make_date_new_val_es(old_val)
-            if new_val and new_val.strip() != old_val.strip():
-                temp.set_arg(arg.name, new_val)
-
-    return parsed.string
-
-
-def fix_es_months_in_refs(text: str) -> str:
-    """Translate English months to Spanish within citations
-
-    Args:
-        text: Text containing citations
-
-    Returns:
-        Text with translated months in citations
-    """
-    parsed = wtp.parse(text)
-
-    # Get all ref tags
-    ref_tags = parsed.get_tags("ref")
-
-    for ref in ref_tags:
-        contents = ref.contents or ""
-        # Only process if it looks like a template
-        if not start_end(contents):
-            continue
-        ref.contents = fix_es_months_in_texts(contents)
-    return parsed.string
-
 
 def add_line_to_temp(line: str, text: str) -> str:
     """Add reference line to ref template
@@ -124,8 +70,5 @@ def add_line_to_temp(line: str, text: str) -> str:
 
 __all__ = [
     "remove_short_refs",
-    "start_end",
-    "fix_es_months_in_texts",
-    "fix_es_months_in_refs",
     "add_line_to_temp",
 ]
