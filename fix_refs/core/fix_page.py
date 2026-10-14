@@ -12,8 +12,7 @@ from ..fixers import (
     add_lang_en_to_refs,
     fix_missing_refs,
     is_redirect,
-    mini_fixes,
-    mini_fixes_after_fixing,
+    MiniFixes,
     move_dots_after_refs,
     remove_duplicate_refs_with_attrs,
 )
@@ -81,7 +80,7 @@ class PageFixer:
             self.text = expand_infobox_in_text(self.text, self.title, "")
 
     def _apply_basic_fixes(self) -> None:
-        self.text = mini_fixes(self.text, self.lang_setting.lang)
+        self.text = MiniFixes().mini_fixes(self.text, self.lang_setting.lang)
         self.text = fix_missing_refs(self.text, self.source_title, self.mdwiki_revid)
         self.text = remove_duplicate_refs_with_attrs(self.text)
 
@@ -131,7 +130,7 @@ class PageFixer:
 
         self._apply_language_fixes()
         self._add_mdwiki_category()
-        self.text = mini_fixes_after_fixing(self.text, self.lang_setting.lang)
+        self.text = MiniFixes().mini_fixes_after_fixing(self.text, self.lang_setting.lang)
 
         if not self.text.strip():
             return self.text_org
