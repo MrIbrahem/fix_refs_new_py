@@ -4,8 +4,9 @@ Main PageFixer class and fix_one_page interface
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import logging
+from typing import Any
 
 from ..bots import (
     add_lang_en_to_refs,
@@ -22,17 +23,34 @@ from ..mdwiki import add_translated_from_mdwiki
 
 logger = logging.getLogger(__name__)
 
+
+@dataclass
+class LangSetting:
+    """Per-language fixing options."""
+    lang: str
+    move_dots: bool = True
+    expend_infobox: bool = True
+    add_en_lang: bool = False
+    add_category: bool = False
+
+    def to_json(self) -> dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_any(cls, setting: LangSetting | dict[str, Any]) -> LangSetting:
+        """Create LangSetting from any input."""
+        if isinstance(setting, LangSetting):
+            return setting
+
+        return cls(**setting)
+
 class PageFixer:
     """Fix Wikipedia page references and formatting.
 
     Args:
         text: Page content
         title: Page title
-        lang: Language code
-        move_dots: Whether to move dots after references
-        expend_infobox: Whether to expand infobox
-        add_en_lang: Whether to add English language parameter to refs
-        add_category: Whether to add category for MDWiki translations
+        lang_setting: Per-language options (LangSetting). Defaults to LangSetting().
         source_title: Source page title
         mdwiki_revid: MDWiki revision ID
     """
@@ -42,22 +60,14 @@ class PageFixer:
         *,
         text: str,
         title: str,
-        lang: str,
+        lang_setting: LangSetting | dict[str, Any],
         source_title: str = "",
         mdwiki_revid: int | str = 0,
-        move_dots: bool = True,
-        expend_infobox: bool = True,
-        add_en_lang: bool = False,
-        add_category: bool = False,
     ) -> None:
         self.text_org = text
         self.text = text
         self.title = title
-        self.lang = lang
-        self.move_dots = move_dots
-        self.expend_infobox = expend_infobox
-        self.add_en_lang = add_en_lang
-        self.add_category = add_category
+        self.lang_setting = LangSetting.from_any(lang_setting)
         self.source_title = source_title
         self.mdwiki_revid = int(mdwiki_revid)
 
@@ -65,17 +75,17 @@ class PageFixer:
     # Steps
     # ------------------------------------------------------------------
     def _expand_infobox_if_needed(self) -> None:
-        if self.expend_infobox or self.lang == "es":
+        if self.lang_setting.expend_infobox or self.lang_setting.lang == "es":
             self.text = expand_infobox_in_text(self.text, self.title, "")
 
     def _apply_basic_fixes(self) -> None:
-        self.text = mini_fixes(self.text, self.lang)
+        self.text = mini_fixes(self.text, self.lang_setting.lang)
         self.text = fix_missing_refs(self.text, self.source_title, self.mdwiki_revid)
         self.text = remove_duplicate_refs_with_attrs(self.text)
 
     def _move_dots(self) -> None:
         logger.info("move_dots\n")
-        self.text = move_dots_after_refs(self.text, self.lang)
+        self.text = move_dots_after_refs(self.text, self.lang_setting.lang)
 
     def _add_en_lang(self) -> None:
         logger.info("add_en_lang\n")
@@ -83,7 +93,11 @@ class PageFixer:
 
     def _apply_language_fixes(self) -> None:
         fixed = apply_language_fixes(
-            self.text, self.title, self.lang, self.source_title, self.mdwiki_revid
+            self.text,
+            self.title,
+            self.lang_setting.lang,
+            self.source_title,
+            self.mdwiki_revid,
         )
         if fixed:
             self.text = fixed
@@ -91,8 +105,8 @@ class PageFixer:
             self._expand_infobox_if_needed()
 
     def _add_mdwiki_category(self) -> None:
-        if self.add_category:
-            self.text = add_translated_from_mdwiki(self.text, self.lang)
+        if self.lang_setting.add_category:
+            self.text = add_translated_from_mdwiki(self.text, self.lang_setting.lang)
 
     # ------------------------------------------------------------------
     # Public API
@@ -107,15 +121,15 @@ class PageFixer:
         self._expand_infobox_if_needed()
         self._apply_basic_fixes()
 
-        if self.move_dots:
+        if self.lang_setting.move_dots:
             self._move_dots()
 
-        if self.add_en_lang:
+        if self.lang_setting.add_en_lang:
             self._add_en_lang()
 
         self._apply_language_fixes()
         self._add_mdwiki_category()
-        self.text = mini_fixes_after_fixing(self.text, self.lang)
+        self.text = mini_fixes_after_fixing(self.text, self.lang_setting.lang)
 
         if not self.text.strip():
             return self.text_org
@@ -127,29 +141,43 @@ def fix_one_page(
     *,
     text: str,
     title: str,
+    source_title: str = "",
+    mdwiki_revid: int | str = 0,
+    lang_setting: LangSetting | None = None,
     lang: str,
     move_dots: bool = True,
     expend_infobox: bool = True,
     add_en_lang: bool = False,
     add_category: bool = False,
-    source_title: str = "",
-    mdwiki_revid: int | str = 0,
 ) -> str:
-    """Backward-compatible wrapper around PageFixer."""
-    return PageFixer(
+    """
+    Backward-compatible wrapper around PageFixer.
+
+    If ``lang_setting`` is given it takes precedence; otherwise one is built
+    from the individual keyword arguments (kept for backward compatibility).
+    """
+    if lang_setting is None:
+        lang_setting = LangSetting(
+            lang=lang,
+            move_dots=move_dots,
+            expend_infobox=expend_infobox,
+            add_en_lang=add_en_lang,
+            add_category=add_category,
+        )
+
+    fixer = PageFixer(
         text=text,
         title=title,
-        lang=lang,
-        move_dots=move_dots,
-        expend_infobox=expend_infobox,
-        add_en_lang=add_en_lang,
-        add_category=add_category,
         source_title=source_title,
         mdwiki_revid=mdwiki_revid,
-    ).run()
+        lang_setting=lang_setting,
+    )
+
+    return fixer.run()
 
 
 __all__ = [
+    "LangSetting",
     "PageFixer",
     "fix_one_page",
 ]
