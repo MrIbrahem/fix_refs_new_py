@@ -22,6 +22,7 @@ def is_redirect(title: str, text: str) -> bool:
     """
     return bool(re.match(r"^#(пренасочване|redirect)", text, re.IGNORECASE))
 
+
 __all__ = [
     "is_redirect",
 ]

@@ -129,7 +129,6 @@ class TestMiniFixes:
             result = fixer.fix_prefix(test["text"], test["lang"])
             assert result == test["expected"], f"Failed for: {test['text']}"
 
-
     def test_minimal_text(self):
         """Test with minimal text"""
         result = MiniFixes().mini_fixes("Test", "en")

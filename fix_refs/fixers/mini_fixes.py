@@ -9,6 +9,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
+
 class MiniFixes:
 
     def fix_sections_titles(self, text: str, lang: str) -> str:
@@ -41,7 +42,6 @@ class MiniFixes:
 
         return text
 
-
     def remove_space_before_ref_tags(self, text: str, lang: str) -> str:
         """Remove space before reference tags after punctuation
 
@@ -55,7 +55,6 @@ class MiniFixes:
         pattern = r"\s*(\.|,|。|।)\s*<ref"
         text = re.sub(pattern, r"\1<ref", text, flags=re.IGNORECASE)
         return text
-
 
     def refs_tags_spaces(self, text: str) -> str:
         """Remove spaces between reference tags
@@ -76,7 +75,6 @@ class MiniFixes:
 
         return text
 
-
     def fix_prefix(self, text: str, lang: str) -> str:
         """Fix language prefix in interwiki links
 
@@ -91,7 +89,6 @@ class MiniFixes:
         text = re.sub(rf"\[\[:{re.escape(lang)}:", "[[", text, flags=re.IGNORECASE)
         return text
 
-
     def mini_fixes_after_fixing(self, text: str, lang: str) -> str:
         """Apply fixes after main fixing process
 
@@ -105,7 +102,6 @@ class MiniFixes:
         text = re.sub(r"^\s*\n", "\n", text, flags=re.MULTILINE)
         text = self.fix_prefix(text, lang)
         return text
-
 
     def mini_fixes(self, text: str, lang: str) -> str:
         """Apply mini fixes to text

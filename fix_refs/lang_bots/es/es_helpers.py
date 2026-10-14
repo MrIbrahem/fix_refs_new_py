@@ -8,7 +8,9 @@ import logging
 import re
 
 import wikitextparser as wtp
+
 logger = logging.getLogger(__name__)
+
 
 def remove_short_refs(text: str) -> str:
     """
@@ -22,6 +24,7 @@ def remove_short_refs(text: str) -> str:
     # Remove multiple newlines
     text = re.sub(r"\n+", "\n", text)
     return text
+
 
 def add_line_to_temp(line: str, text: str) -> str:
     """Add reference line to ref template

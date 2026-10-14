@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 
 import wikitextparser as wtp
+
 from .es_helpers import remove_short_refs
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,6 @@ def get_refs(text):
     new_text = parsed.string
     # ---
     return refs, new_text
-
 
 
 def add_line_to_temp(line, new_text):

@@ -11,6 +11,7 @@ from ..fixers.months import fix_months_in_refs
 
 logger = logging.getLogger(__name__)
 
+
 def rm_ref_spaces(newtext: str) -> str:
     """Remove spaces between punctuation and ref tags
 

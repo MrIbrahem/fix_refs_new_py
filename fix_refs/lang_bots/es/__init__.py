@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from ...fixers.months import fix_months_in_refs
-
 from .es_bot import fix_es
-from .es_section_bot import es_section
 from .es_refs import mv_es_refs
+from .es_section_bot import es_section
+
 
 def fix_es_all(text: str, title: str, source_title: str, mdwiki_revid: int) -> str:
     """Apply all Spanish-specific fixes to text

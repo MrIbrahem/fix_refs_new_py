@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 
-
 from ...parsers.citations_parser import Citation, get_all_citations
 
 logger = logging.getLogger(__name__)

@@ -9,10 +9,10 @@ from dataclasses import asdict, dataclass
 from typing import Any
 
 from ..fixers import (
+    MiniFixes,
     add_lang_en_to_refs,
     fix_missing_refs,
     is_redirect,
-    MiniFixes,
     move_dots_after_refs,
     remove_duplicate_refs_with_attrs,
 )

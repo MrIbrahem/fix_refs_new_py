@@ -9,6 +9,7 @@ from fix_refs.fixers.months import new_date
 def make_date_new_val_pt(val: str) -> str:
     return new_date(val, "pt")
 
+
 class TestPtMonthsNewValue:
     """Test cases for Portuguese date transformation"""
 

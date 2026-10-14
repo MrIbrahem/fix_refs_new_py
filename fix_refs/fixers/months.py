@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import re
+
 import wikitextparser as wtp
 
 logger = logging.getLogger(__name__)
@@ -79,6 +80,7 @@ def new_date(val: str, lang: str = "pt") -> str:
 
     return val.strip()
 
+
 def fix_months_in_texts(temp_text: str, lang: str) -> str:
     """
     Translate English months to lang within template parameters
@@ -128,6 +130,7 @@ def fix_months_in_refs(text: str, lang: str) -> str:
             continue
         ref.contents = fix_months_in_texts(contents, lang)
     return parsed.string
+
 
 __all__ = [
     "fix_months_in_texts",

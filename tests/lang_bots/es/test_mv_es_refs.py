@@ -6,8 +6,8 @@ Converted from tests/es_bots/es_refsTest.php
 from pathlib import Path
 
 from fix_refs.fixers.months import fix_months_in_refs
-from fix_refs.lang_bots.es.es_refs import mv_es_refs
 from fix_refs.lang_bots.es.es_bot import fix_es
+from fix_refs.lang_bots.es.es_refs import mv_es_refs
 
 
 class TestEsRefs:

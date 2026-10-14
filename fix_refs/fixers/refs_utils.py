@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def rm_str_from_start_and_end(text: str, find: str) -> str:
     """Remove string from both start and end if present
 

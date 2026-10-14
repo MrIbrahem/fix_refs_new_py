@@ -3,8 +3,9 @@
 Converted from tests/es_bots/es_refsTest.php and tests/es_bots/es_monthsTest.php
 """
 
-from fix_refs.fixers.months import fix_months_in_texts, new_date, fix_months_in_refs
+from fix_refs.fixers.months import fix_months_in_refs, fix_months_in_texts, new_date
 from fix_refs.lang_bots.es.es_refs import mv_es_refs
+
 
 def fix_es_months_in_refs(text: str) -> str:
     """Translate English months to Spanish within citations
@@ -17,6 +18,7 @@ def fix_es_months_in_refs(text: str) -> str:
     """
     return fix_months_in_refs(text, "es")
 
+
 def make_date_new_val_es(val: str) -> str:
     """Convert date to Spanish format
 
@@ -27,6 +29,7 @@ def make_date_new_val_es(val: str) -> str:
         Date string with Spanish month
     """
     return new_date(val, "es")
+
 
 def fix_es_months_in_texts(temp_text: str) -> str:
     """

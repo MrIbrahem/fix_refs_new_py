@@ -3,8 +3,9 @@
 Converted from tests/pt_bots/pt_monthsTest.php
 """
 
-from fix_refs.fixers.months import fix_months_in_texts, new_date, fix_months_in_refs
+from fix_refs.fixers.months import fix_months_in_refs, fix_months_in_texts, new_date
 from fix_refs.lang_bots.pt_bot import rm_ref_spaces
+
 
 def fix_pt_months_in_refs(text: str) -> str:
     """Translate English months to Portuguese within citations
@@ -17,11 +18,14 @@ def fix_pt_months_in_refs(text: str) -> str:
     """
     return fix_months_in_refs(text, "pt")
 
+
 def fix_pt_months_in_texts(temp_text: str) -> str:
     return fix_months_in_texts(temp_text, "pt")
 
+
 def make_date_new_val_pt(val: str) -> str:
     return new_date(val, "pt")
+
 
 class TestPortugueseBot:
     """Test cases for Portuguese language bot"""
