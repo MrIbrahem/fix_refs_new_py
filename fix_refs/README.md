@@ -19,14 +19,14 @@
 
 ### Technologies and Dependencies
 
--   **Python 3.10+** with type hints
--   **wikitextparser** - MediaWiki wikitext parsing
--   **requests** - HTTP client for API calls
--   **python-dotenv** - Environment variable loading
--   **hatchling** - Build system
--   **pytest** - Testing framework
--   **ruff/black/isort** - Code formatting and linting
--   **mypy** - Static type checking
+- **Python 3.10+** with type hints
+- **wikitextparser** - MediaWiki wikitext parsing
+- **requests** - HTTP client for API calls
+- **python-dotenv** - Environment variable loading
+- **hatchling** - Build system
+- **pytest** - Testing framework
+- **ruff/black/isort** - Code formatting and linting
+- **mypy** - Static type checking
 
 ---
 
@@ -58,29 +58,29 @@ fix_page.py (orchestration)
 
 ### Design Patterns
 
--   **Pipeline pattern** in `fix_one_page()` for sequential transformations
--   **Strategy pattern** for language-specific bots dispatched via `apply_language_fixes()`
--   **Dataclass** (`Citation`) for structured reference representation
--   **LRU caching** for settings and image existence checks
--   **Facade pattern** with `fix_one_page()` as the unified entry point
+- **Pipeline pattern** in `fix_one_page()` for sequential transformations
+- **Strategy pattern** for language-specific bots dispatched via `apply_language_fixes()`
+- **Dataclass** (`Citation`) for structured reference representation
+- **LRU caching** for settings and image existence checks
+- **Facade pattern** with `fix_one_page()` as the unified entry point
 
 ### Maintainability
 
--   Each bot module is self-contained with a single responsibility
--   Language bots are isolated per language, making it easy to add new languages
--   The Spanish module (`es/`) is well-decomposed into data, helpers, refs, and section processing
+- Each bot module is self-contained with a single responsibility
+- Language bots are isolated per language, making it easy to add new languages
+- The Spanish module (`es/`) is well-decomposed into data, helpers, refs, and section processing
 
 ### Readability
 
--   Functions generally have docstrings with Args/Returns sections
--   Module-level docstrings describe purpose
--   Variable names are generally descriptive (though some legacy short names remain)
+- Functions generally have docstrings with Args/Returns sections
+- Module-level docstrings describe purpose
+- Variable names are generally descriptive (though some legacy short names remain)
 
 ### Scalability Considerations
 
--   LRU caches on settings and image checks reduce repeated API calls
--   Processing is stateless per page, enabling parallel batch processing
--   Local file fallbacks for API calls support offline development
+- LRU caches on settings and image checks reduce repeated API calls
+- Processing is stateless per page, enabling parallel batch processing
+- Local file fallbacks for API calls support offline development
 
 ---
 
@@ -159,36 +159,36 @@ fix_page.py (orchestration)
 
 ### Missing Files
 
--   No `__init__.py` in `lang_bots/es/` subdirectories (though it exists at the es level)
--   No `py.typed` marker file for PEP 561 compliance
--   No `.github/` CI/CD configuration
--   No `CHANGELOG.md`
+- No `__init__.py` in `lang_bots/es/` subdirectories (though it exists at the es level)
+- No `py.typed` marker file for PEP 561 compliance
+- No `.github/` CI/CD configuration
+- No `CHANGELOG.md`
 
 ### Missing Documentation
 
--   No API documentation beyond docstrings
--   No architecture decision records
--   No contribution guidelines
--   No documentation for the processing pipeline order and its rationale
+- No API documentation beyond docstrings
+- No architecture decision records
+- No contribution guidelines
+- No documentation for the processing pipeline order and its rationale
 
 ### Lack of Tests
 
--   No tests for `utils/http.py` (HTTP client)
--   No tests for `utils/debug.py`
--   No tests for `config.py`
--   No tests for `settings.py`
--   No integration tests that verify the full pipeline end-to-end
--   No property-based tests for regex-heavy functions
+- No tests for `utils/http.py` (HTTP client)
+- No tests for `utils/debug.py`
+- No tests for `config.py`
+- No tests for `settings.py`
+- No integration tests that verify the full pipeline end-to-end
+- No property-based tests for regex-heavy functions
 
 ### Outdated Dependencies
 
--   `wikitextparser>=0.55.0` - check for latest version compatibility
--   Python target version in tooling config (`py313`) vs `requires-python` (`>=3.10`) mismatch
+- `wikitextparser>=0.55.0` - check for latest version compatibility
+- Python target version in tooling config (`py313`) vs `requires-python` (`>=3.10`) mismatch
 
 ### Configuration Issues
 
--   `pyproject.toml` declares `license = { text = "MIT" }` but classifiers say `GPLv3+` - contradictory licensing
--   `target-version = "py313"` in ruff config but `requires-python = ">=3.10"` in project metadata
+- `pyproject.toml` declares `license = { text = "MIT" }` but classifiers say `GPLv3+` - contradictory licensing
+- `target-version = "py313"` in ruff config but `requires-python = ">=3.10"` in project metadata
 
 ---
 
