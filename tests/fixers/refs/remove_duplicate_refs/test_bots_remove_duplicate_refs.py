@@ -8,15 +8,15 @@ from pathlib import Path
 from src.fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 
 
-def remove_duplicate_refs_with_attrs(text: str) -> str:
-    return DuplicateRefRemover().remove_duplicate_refs_with_attrs(text)
+def remove(text: str) -> str:
+    return DuplicateRefRemover().remove(text)
 
 
-# Tests for remove_duplicate_refs_with_attrs
+# Tests for remove
 
 
 def test_remove_duplicate_refs():
-    """اختبارات دالة remove_duplicate_refs_with_attrs"""
+    """اختبارات دالة remove"""
     tests = [
         [
             {
@@ -57,7 +57,7 @@ def test_remove_duplicate_refs():
 
     for test_group in tests:
         for test in test_group:
-            result = remove_duplicate_refs_with_attrs(test["input"])
+            result = remove(test["input"])
             assert result == test["expected"], f"Failed for: {test['input']}"
 
 
@@ -65,7 +65,7 @@ def test_remove_group_refs_diff():
     """Test removing duplicate refs with group attribute"""
     input_text = '<ref name="test" group="notes">Ref</ref> <ref name="test" group="notes">Ref</ref>'
     expected = '<ref name="test" group="notes">Ref</ref> <ref name="test" group="notes" />'
-    result = remove_duplicate_refs_with_attrs(input_text)
+    result = remove(input_text)
     assert result == expected
 
 
@@ -73,7 +73,7 @@ def test_remove_med_refs():
     """Test removing complex medical references"""
     input_text = '<ref name="PI2023">{{Cite web|title=DailyMed - SKYCLARYS- omaveloxolone capsule|url=https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|website=dailymed.nlm.nih.gov|access-date=24 May 2023|archive-date=1 July 2023|archive-url=https://web.archive.org/web/20230701174203/https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|url-status=live}}</ref> ଅତିକମରେ ୧୬ ବର୍ଷ ବୟସରେ ଏହା ବ୍ୟବହୃତ ହୁଏ ।<ref name="PI2023" /> ଏହା ପାଟିରେ ଦିଆଯାଏ ।<ref name="PI2023">{{Cite web|title=DailyMed - SKYCLARYS- omaveloxolone capsule|url=https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|website=dailymed.nlm.nih.gov|access-date=24 May 2023|archive-date=1 July 2023|archive-url=https://web.archive.org/web/20230701174203/https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|url-status=live}}<cite class="citation web cs1" data-ve-ignore="true">[https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e "DailyMed - SKYCLARYS- omaveloxolone capsule"]. \'\'dailymed.nlm.nih.gov\'\'. [https://web.archive.org/web/20230701174203/https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e Archived] from the original on 1 July 2023<span class="reference-accessdate">. Retrieved <span class="nowrap">24 May</span> 2023</span>.</cite></ref>'
     expected = '<ref name="PI2023">{{Cite web|title=DailyMed - SKYCLARYS- omaveloxolone capsule|url=https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|website=dailymed.nlm.nih.gov|access-date=24 May 2023|archive-date=1 July 2023|archive-url=https://web.archive.org/web/20230701174203/https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|url-status=live}}</ref> ଅତିକମରେ ୧୬ ବର୍ଷ ବୟସରେ ଏହା ବ୍ୟବହୃତ ହୁଏ ।<ref name="PI2023" /> ଏହା ପାଟିରେ ଦିଆଯାଏ ।<ref name="PI2023" />'
-    result = remove_duplicate_refs_with_attrs(input_text)
+    result = remove(input_text)
     assert result == expected
 
 
@@ -81,7 +81,7 @@ def test_remove_identical_refs_with_group_attribute():
     """Test removing identical refs with group attribute"""
     input_text = '<ref group="notes">Refs3</ref> <ref group="notes">Refs3</ref>'
     expected = '<ref group="notes">Refs3</ref> <ref group="notes" />'
-    result = remove_duplicate_refs_with_attrs(input_text)
+    result = remove(input_text)
     assert result == expected
 
 
@@ -91,7 +91,7 @@ def test_remove_identical_refs_with_many_attribute():
         """<ref group="notes" name='"hi"' any=00>Refs3</ref> <ref group="notes" name='"hi"' any=00>Refs3</ref>"""
     )
     expected = """<ref group="notes" name='"hi"' any=00>Refs3</ref> <ref group="notes" name='"hi"' any=00 />"""
-    result = remove_duplicate_refs_with_attrs(input_text)
+    result = remove(input_text)
     assert result == expected
 
 
@@ -106,7 +106,7 @@ def test_file_text_1():
         expected = f.read()
 
     # result = mv_es_refs(text_input)
-    result = remove_duplicate_refs_with_attrs(text_input)
+    result = remove(text_input)
 
     # write output for comparison
     output_file = tests_dir / "output.txt"

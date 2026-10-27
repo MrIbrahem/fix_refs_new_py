@@ -17,7 +17,7 @@ class DuplicateRefRemover:
     def __init__(self, citations_parser: CitationsParser | None = None) -> None:
         self.citations_parser = citations_parser or CitationsParser()
 
-    def remove_duplicate_refs_with_attrs(self, text: str) -> str:
+    def remove(self, text: str) -> str:
         """Remove duplicate references by converting them to self-closing tags
 
         First occurrence keeps full content, subsequent references become <ref name="..."/>
