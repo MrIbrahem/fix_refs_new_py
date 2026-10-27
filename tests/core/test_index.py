@@ -3,7 +3,7 @@
 Converted from tests/indexTest.php
 """
 
-from fix_refs.core.fix_page import fix_one_page
+from fix_refs.core.fix_page import LangSetting, PageFixer
 
 
 class TestIndex:
@@ -11,16 +11,22 @@ class TestIndex:
 
     def fix_page_wrap(self, text: str, lang: str, move_dots: bool, infobox: bool, add_en_lang: bool) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_one_page(
-            text=text,
-            title="title",
+        lang_setting = LangSetting(
             lang=lang,
             move_dots=move_dots,
             expend_infobox=infobox,
             add_en_lang=add_en_lang,
+            add_category=False,
+        )
+
+        fixer = PageFixer(
+            text=text,
+            title="title",
             source_title="SomeTitle",
             mdwiki_revid=0,
+            lang_setting=lang_setting,
         )
+        return fixer.run()
 
     def test_part_3(self):
         """Test simple Armenian text with references"""

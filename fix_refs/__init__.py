@@ -11,11 +11,9 @@ __version__ = "0.1.0"
 from .core.fix_page import (
     LangSetting,
     PageFixer,
-    fix_one_page,
 )
 
 __all__ = [
     "LangSetting",
     "PageFixer",
-    "fix_one_page",
 ]

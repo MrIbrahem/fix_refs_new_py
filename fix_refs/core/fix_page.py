@@ -1,5 +1,5 @@
 """
-Main PageFixer class and fix_one_page interface
+Main PageFixer class
 """
 
 from __future__ import annotations
@@ -114,7 +114,7 @@ class PageFixer:
     # ------------------------------------------------------------------
     def run(self) -> str:
         """Run all fixes and return the fixed page content."""
-        logger.info("start fix_one_page with mdwiki_revid:%s", self.mdwiki_revid)
+        logger.info("start fix one page with mdwiki_revid:%s", self.mdwiki_revid)
 
         if is_redirect(self.title, self.text):
             return self.text
@@ -138,47 +138,7 @@ class PageFixer:
         return self.text
 
 
-def fix_one_page(
-    *,
-    text: str,
-    title: str,
-    source_title: str = "",
-    mdwiki_revid: int | str = 0,
-    lang_setting: LangSetting | None = None,
-    lang: str,
-    move_dots: bool = True,
-    expend_infobox: bool = True,
-    add_en_lang: bool = False,
-    add_category: bool = False,
-) -> str:
-    """
-    Backward-compatible wrapper around PageFixer.
-
-    If ``lang_setting`` is given it takes precedence; otherwise one is built
-    from the individual keyword arguments (kept for backward compatibility).
-    """
-    if lang_setting is None:
-        lang_setting = LangSetting(
-            lang=lang,
-            move_dots=move_dots,
-            expend_infobox=expend_infobox,
-            add_en_lang=add_en_lang,
-            add_category=add_category,
-        )
-
-    fixer = PageFixer(
-        text=text,
-        title=title,
-        source_title=source_title,
-        mdwiki_revid=mdwiki_revid,
-        lang_setting=lang_setting,
-    )
-
-    return fixer.run()
-
-
 __all__ = [
     "LangSetting",
     "PageFixer",
-    "fix_one_page",
 ]

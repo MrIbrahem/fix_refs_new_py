@@ -93,7 +93,7 @@ These should use `echo_debug()` or be removed entirely.
 if lang == "pl":
     text = pl_fixes(text)
 
-if lang == "pt":     # <-- should be elif
+if lang == "pt":  # <-- should be elif
     text = pt_fixes(text)
 
 elif lang == "bg":

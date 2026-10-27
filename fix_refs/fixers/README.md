@@ -75,6 +75,7 @@ Mixed. Most functions have good docstrings, but some (like `expend_new` in infob
 def str_ends_with(string: str, end_string: str) -> bool:
     return string.endswith(end_string)
 
+
 def str_starts_with(text: str, start: str) -> bool:
     return text.startswith(start)
 ```

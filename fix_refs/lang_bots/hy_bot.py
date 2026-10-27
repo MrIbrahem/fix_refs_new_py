@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 import re
 
-from .remove_space import remove_spaces_between_last_word_and_beginning_of_ref
+from .remove_space import RemoveSpace
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ def hy_fixes(text: str) -> str:
     Returns:
         Fixed text
     """
-    text = remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
+    text = RemoveSpace().remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
     text = remove_spaces_between_ref_and_punctuation(text)
     return text
 

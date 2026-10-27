@@ -91,7 +91,7 @@ Very good. The data/logic separation makes it easy to update Spanish template ma
 
 ```python
 # es_bot.py
-from ...utils.debug import echo_test      # 3 levels up
+from ...utils.debug import echo_test  # 3 levels up
 
 # es_helpers.py
 from ...bots.months import make_date_new_val_es  # 3 levels up

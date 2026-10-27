@@ -12,14 +12,14 @@ Spanish, Portuguese, Bulgarian, Armenian, Polish, Swahili (with English as the s
 
 ### Key Capabilities
 
--   Expand short references (`<ref name="x"/>`) from MDWiki source text
--   Remove duplicate references
--   Move punctuation before/after reference tags (language-specific)
--   Translate citation templates (English -> Spanish/Portuguese)
--   Add `|language=en` parameter to English source citations
--   Expand and format infobox templates
--   Validate images against Wikimedia Commons
--   Add translation attribution categories
+- Expand short references (`<ref name="x"/>`) from MDWiki source text
+- Remove duplicate references
+- Move punctuation before/after reference tags (language-specific)
+- Translate citation templates (English -> Spanish/Portuguese)
+- Add `|language=en` parameter to English source citations
+- Expand and format infobox templates
+- Validate images against Wikimedia Commons
+- Add translation attribution categories
 
 ## Installation
 
@@ -42,24 +42,20 @@ from fix_refs import fix_one_page
 fixed_text = fix_one_page(
     text="Your wikitext here",
     title="Page Title",
-    lang="es",           # target language code
-    move_dots=True,      # move punctuation before refs
-    expend_infobox=True, # expand infobox templates
-    add_en_lang=False,   # add |language=en to citations
+    lang="es",  # target language code
+    move_dots=True,  # move punctuation before refs
+    expend_infobox=True,  # expand infobox templates
+    add_en_lang=False,  # add |language=en to citations
     add_category=False,  # add MDWiki translation category
-    source_title="",     # source page title
-    mdwiki_revid=0       # MDWiki revision ID
+    source_title="",  # source page title
+    mdwiki_revid=0,  # MDWiki revision ID
 )
 
 # With automatic settings
 from fix_refs import DoChangesToText1
 
 fixed_text = DoChangesToText1(
-    source_title="Source Article",
-    title="Translated Title",
-    text="wikitext content",
-    lang="es",
-    mdwiki_revid=12345
+    source_title="Source Article", title="Translated Title", text="wikitext content", lang="es", mdwiki_revid=12345
 )
 ```
 
@@ -139,16 +135,16 @@ ruff format fix_refs/
 
 ## Dependencies
 
--   **requests** >= 2.31.0 - HTTP client
--   **wikitextparser** >= 0.55.0 - MediaWiki wikitext parsing
--   **python-dotenv** - Environment variable loading
+- **requests** >= 2.31.0 - HTTP client
+- **wikitextparser** >= 0.55.0 - MediaWiki wikitext parsing
+- **python-dotenv** - Environment variable loading
 
 ### Dev Dependencies
 
--   pytest, pytest-cov - Testing
--   mypy - Type checking
--   pylint - Linting
--   ruff, black, isort - Formatting
+- pytest, pytest-cov - Testing
+- mypy - Type checking
+- pylint - Linting
+- ruff, black, isort - Formatting
 
 ## Configuration
 

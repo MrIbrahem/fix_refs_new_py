@@ -94,7 +94,7 @@ def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
 **Issue:** While `re.escape` is used, the pattern construction could be vulnerable if `name` contains special sequences.
 
 ```python
-pattern = r'\{\{\s*' + re.escape(name) + r'\s*(\|)'
+pattern = r"\{\{\s*" + re.escape(name) + r"\s*(\|)"
 ```
 
 **Status:** Actually safe due to `re.escape`, but worth noting for code review.
@@ -205,7 +205,7 @@ Example: `fix_refs/bots/mini_fixes.py:41-43`
 ```python
 def fix_sections_titles(text: str, lang: str) -> str:
     # Pattern compiled on every call
-    pattern = rf'(=+)\s*{k}\s*\1'
+    pattern = rf"(=+)\s*{k}\s*\1"
 ```
 
 **Recommendation:** Pre-compile patterns at module level or use `@lru_cache`.
@@ -473,8 +473,10 @@ TemplateName: TypeAlias = str
 ```python
 from typing import Protocol
 
+
 class TextProcessor(Protocol):
     def __call__(self, text: str, lang: str) -> str: ...
+
 
 class TemplateProcessor(Protocol):
     def __call__(self, template: wtp.Template) -> str: ...
