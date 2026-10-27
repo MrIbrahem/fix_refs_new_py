@@ -1,3 +1,7 @@
+"""
+Fix missing references by expanding from source text
+"""
+
 from __future__ import annotations
 
 import json
@@ -105,15 +109,6 @@ class ReferenceExpander:
         expanded_text: str = refs_expand(short_refs, text, full_text)
         return expanded_text
 
-
-# --- Legacy Compatibility Layer ---
-
-def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
-    """Legacy entry point for fixing missing references."""
-    return ReferenceExpander().fix_missing_refs(text, sourcetitle, mdwiki_revid)
-
-
 __all__ = [
     "ReferenceExpander",
-    "fix_missing_refs",
 ]

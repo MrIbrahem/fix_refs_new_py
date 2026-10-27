@@ -8,6 +8,7 @@ from .wtp_mapping import WtpTemplates, WtpRefs
 
 logger = logging.getLogger(__name__)
 
+
 class RefsMover:
     """Moves full refs from templates into the body and shortens them in templates."""
 
@@ -65,6 +66,3 @@ class RefsMover:
         logger.info("Applying %d edits", len(self.edits))
         return self._apply_edits()
 
-
-def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> str:
-    return RefsMover(text, prefer_body_version).run()

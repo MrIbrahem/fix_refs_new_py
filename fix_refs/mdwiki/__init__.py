@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from .category import add_translated_from_mdwiki
+from .category import MDWikiCategoryService
 
 __all__ = [
-    "add_translated_from_mdwiki",
+    "MDWikiCategoryService",
 ]

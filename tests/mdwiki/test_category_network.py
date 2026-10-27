@@ -11,10 +11,6 @@ import pytest
 from fix_refs.mdwiki.category import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
-    add_translated_from_mdwiki,
-    get_cats,
-    get_mdwiki_category,
-    load_from_local_file,
 )
 
 # Mock Wikidata sitelinks-style data: {"<lang>wiki": {"title": ...}}
@@ -92,9 +88,7 @@ class TestAddTranslatedFromMdwiki:
             skip_langs=["fr"],
         )
         assert svc.add_translated_from_mdwiki("text", "fr") == "text"
-        assert svc.add_translated_from_mdwiki("text", "de").endswith(
-            "[[Category:Translated from MDWiki (de)]]\n"
-        )
+        assert svc.add_translated_from_mdwiki("text", "de").endswith("[[Category:Translated from MDWiki (de)]]\n")
 
     def test_uses_get_mdwiki_category(self, service):
         """The service method must call its own get_mdwiki_category."""
@@ -146,9 +140,7 @@ class TestGetCats:
     def test_passes_wikidata_url_to_getter(self, config_manager, monkeypatch):
         monkeypatch.setenv("SERVER_NAME", "example.org")
         getter = MagicMock(return_value=json.dumps(MOCK_CATS))
-        svc = MDWikiCategoryService(
-            config_manager=config_manager, url_getter=getter, wikidata_url="https://x.test/api"
-        )
+        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=getter, wikidata_url="https://x.test/api")
         svc.get_cats()
         getter.assert_called_once_with("https://x.test/api")
 
@@ -158,18 +150,14 @@ class TestGetCats:
         (config_manager.resources_path / "mdwiki_categories.json").write_text(
             json.dumps({"fallback": True}), encoding="utf-8"
         )
-        svc = MDWikiCategoryService(
-            config_manager=config_manager, url_getter=lambda url: bad_response
-        )
+        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=lambda url: bad_response)
         assert svc.get_cats() == {"fallback": True}
 
 
 class TestLoadFromLocalFile:
     def test_loads_json(self, config_manager):
         data = {"frwiki": {"title": "Local"}}
-        (config_manager.resources_path / "mdwiki_categories.json").write_text(
-            json.dumps(data), encoding="utf-8"
-        )
+        (config_manager.resources_path / "mdwiki_categories.json").write_text(json.dumps(data), encoding="utf-8")
         svc = MDWikiCategoryService(config_manager=config_manager)
         assert svc.load_from_local_file() == data
 
@@ -178,36 +166,6 @@ class TestLoadFromLocalFile:
         assert svc.load_from_local_file() == {}
 
     def test_invalid_json_returns_empty(self, config_manager):
-        (config_manager.resources_path / "mdwiki_categories.json").write_text(
-            "{broken", encoding="utf-8"
-        )
+        (config_manager.resources_path / "mdwiki_categories.json").write_text("{broken", encoding="utf-8")
         svc = MDWikiCategoryService(config_manager=config_manager)
         assert svc.load_from_local_file() == {}
-
-
-class TestLegacyFunctions:
-    """Module-level functions should delegate to the default service."""
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_add_translated_from_mdwiki(self, mock_service):
-        mock_service.add_translated_from_mdwiki.return_value = "out"
-        assert add_translated_from_mdwiki("text", "fr") == "out"
-        mock_service.add_translated_from_mdwiki.assert_called_once_with("text", "fr")
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_get_mdwiki_category(self, mock_service):
-        mock_service.get_mdwiki_category.return_value = "Cat"
-        assert get_mdwiki_category("fr") == "Cat"
-        mock_service.get_mdwiki_category.assert_called_once_with("fr")
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_get_cats(self, mock_service):
-        mock_service.get_cats.return_value = {"a": 1}
-        assert get_cats() == {"a": 1}
-        mock_service.get_cats.assert_called_once_with()
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_load_from_local_file(self, mock_service):
-        mock_service.load_from_local_file.return_value = {"b": 2}
-        assert load_from_local_file() == {"b": 2}
-        mock_service.load_from_local_file.assert_called_once_with()

@@ -44,5 +44,4 @@ class ConfigManager:
 
 __all__ = [
     "ConfigManager",
-    "config",
 ]

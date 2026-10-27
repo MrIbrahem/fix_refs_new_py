@@ -9,16 +9,16 @@ from dataclasses import asdict, dataclass
 from typing import Any
 
 from ..fixers import (
+    ReferenceExpander,
     MiniFixes,
     add_lang_en_to_refs,
-    fix_missing_refs,
     is_redirect,
     move_dots_after_refs,
     remove_duplicate_refs_with_attrs,
 )
 from ..infobox import expand_infobox_in_text
 from ..lang_bots import apply_language_fixes
-from ..mdwiki import add_translated_from_mdwiki
+from ..mdwiki import MDWikiCategoryService
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class PageFixer:
 
     def _apply_basic_fixes(self) -> None:
         self.text = MiniFixes().mini_fixes(self.text, self.lang_setting.lang)
-        self.text = fix_missing_refs(self.text, self.source_title, self.mdwiki_revid)
+        self.text = ReferenceExpander().fix_missing_refs(self.text, self.source_title, self.mdwiki_revid)
         self.text = remove_duplicate_refs_with_attrs(self.text)
 
     def _move_dots(self) -> None:
@@ -107,7 +107,7 @@ class PageFixer:
 
     def _add_mdwiki_category(self) -> None:
         if self.lang_setting.add_category:
-            self.text = add_translated_from_mdwiki(self.text, self.lang_setting.lang)
+            self.text = MDWikiCategoryService().add_translated_from_mdwiki(self.text, self.lang_setting.lang)
 
     # ------------------------------------------------------------------
     # Public API
