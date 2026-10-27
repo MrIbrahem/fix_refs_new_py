@@ -3,7 +3,7 @@
 Converted from tests/indexTest.php
 """
 
-from fix_refs.core.fix_page import LangSetting, PageFixer
+from fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 class TestIndex:
@@ -19,7 +19,7 @@ class TestIndex:
             add_category=False,
         )
 
-        fixer = PageFixer(
+        fixer = PageUpdater(
             text=text,
             title="title",
             source_title="SomeTitle",
