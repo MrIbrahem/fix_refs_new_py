@@ -17,7 +17,7 @@ class ReferenceExpander:
 
     def __init__(self, config_manager: ConfigManager | None = None) -> None:
         """Initialize the reference expander with an optional config manager."""
-        self._config_manager = config_manager or ConfigManager.load()
+        self.config_manager = config_manager or ConfigManager.load()
         self._citations_parser = CitationsParser()
         self._ref_expander = RefExpander(self._citations_parser)
 
@@ -30,22 +30,11 @@ class ReferenceExpander:
         Returns:
             MDWiki revision ID or empty string.
         """
-        json_file = f"{self._config_manager.revisions_path}/json_data.json"
+        data = self.config_manager.load_revisions_path_json("json_data.json")
+        logger.info(f"count of data: {len(data)}")
 
-        if not Path(json_file).exists():
-            return ""
-
-        try:
-            with open(json_file, "r", encoding="utf-8") as f:
-                data: dict[str, Any] = json.load(f)  # type: ignore
-
-            logger.info(f"url{json_file}")
-            logger.info(f"count of data: {len(data)}")
-
-            result = data.get(sourcetitle, "")
-            return str(result) if isinstance(result, str) else ""
-        except (OSError, json.JSONDecodeError):
-            return ""
+        result = data.get(sourcetitle, "")
+        return str(result) if isinstance(result, str) else ""
 
     def get_full_text(self, sourcetitle: str, mdwiki_revid: int) -> str:
         """Get full text from MDWiki revision.
@@ -67,7 +56,7 @@ class ReferenceExpander:
             logger.info(f"empty mdwiki_revid, sourcetitle:({sourcetitle})")
             return ""
 
-        file_path = self._config_manager.get_revision_file_path(mdwiki_revid)
+        file_path = self.config_manager.get_revision_file_path(mdwiki_revid)
 
         if not Path(file_path).exists():
             logger.info(f"file not found: {file_path}")

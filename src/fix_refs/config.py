@@ -39,7 +39,17 @@ class ConfigManager:
         Returns:
             Dictionary of MDWiki categories or empty dict if file not found.
         """
-        local_file = self.resources_path / file_name
+        return self._load_json_file(self.resources_path / file_name)
+
+    def load_revisions_path_json(self, file_name: str) -> dict[str, Any]:
+        return self._load_json_file(self.revisions_path / file_name)
+
+    def _load_json_file(self, local_file: Path) -> dict[str, Any]:
+        """Load MDWiki categories from local JSON file.
+
+        Returns:
+            Dictionary of MDWiki categories or empty dict if file not found.
+        """
 
         if not local_file.exists():
             return {}
