@@ -8,10 +8,10 @@ import json
 import logging
 import os
 import re
-from typing import Any, Callable
+from typing import Any
 
 from ..config import ConfigManager
-from ..utils.http import get_url
+from ..utils.http import HttpClient
 
 logger = logging.getLogger(__name__)
 
@@ -25,12 +25,12 @@ class MDWikiCategoryService:
     def __init__(
         self,
         config_manager: ConfigManager | None = None,
-        url_getter: Callable[[str], str | None] | None = None,
         wikidata_url: str = "https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/Q107014860/sitelinks",
         skip_langs: list[str] | None = None,
+        http_client: HttpClient | None = None,
     ) -> None:
+        self.http_client = http_client or HttpClient()
         self.config_manager = config_manager or ConfigManager()
-        self.url_getter = url_getter or get_url
         self.wikidata_url = wikidata_url
         self.skip_langs = skip_langs or SKIP_LANGS_CATEGORY
 
@@ -62,7 +62,7 @@ class MDWikiCategoryService:
         if not server_name:
             return self.load_from_local_file()
 
-        data = self.url_getter(self.wikidata_url)
+        data = self.http_client.get_url(self.wikidata_url)
 
         if not data:
             return self.load_from_local_file()
@@ -113,34 +113,6 @@ class MDWikiCategoryService:
         return text
 
 
-# Default service instance for legacy functions
-_default_service = MDWikiCategoryService()
-
-
-def load_from_local_file() -> dict[str, Any]:
-    """Legacy entry point. Use MDWikiCategoryService.load_from_local_file instead."""
-    return _default_service.load_from_local_file()
-
-
-def get_cats() -> dict[str, Any]:
-    """Legacy entry point. Use MDWikiCategoryService.get_cats instead."""
-    return _default_service.get_cats()
-
-
-def get_mdwiki_category(lang: str) -> str:
-    """Legacy entry point. Use MDWikiCategoryService.get_mdwiki_category instead."""
-    return _default_service.get_mdwiki_category(lang)
-
-
-def add_translated_from_mdwiki(text: str, lang: str) -> str:
-    """Legacy entry point. Use MDWikiCategoryService.add_translated_from_mdwiki instead."""
-    return _default_service.add_translated_from_mdwiki(text, lang)
-
-
 __all__ = [
     "MDWikiCategoryService",
-    "load_from_local_file",
-    "get_cats",
-    "get_mdwiki_category",
-    "add_translated_from_mdwiki",
 ]

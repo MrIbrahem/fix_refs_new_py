@@ -1,43 +1,6 @@
 ```
 tests/
 │
-├── bots/
-│   │
-│   ├── add_lang_en_bot/
-│   │   └── test_bots_add_lang_en.py
-│   │
-│   ├── expend_refs/
-│   │   └── test_bots_expend_refs.py
-│   │
-│   ├── fix_images/
-│   │   └── test_fix_images.py
-│   │
-│   ├── fix_missing_refs/
-│   │   └── test_missing_refs.py
-│   │
-│   ├── mini_fixes/
-│   │   ├── test_bots_mini_fixes.py
-│   │   └── test_mini_fixes.py
-│   │
-│   ├── months/
-│   │   └── test_months.py
-│   │
-│   ├── move_dots/
-│   │   └── test_move_dots.py
-│   │
-│   ├── remove_duplicate_refs/
-│   │   │
-│   │   ├── texts/
-│   │   │   ├── expected.txt
-│   │   │   ├── input.txt
-│   │   │   └── output.txt
-│   │   │
-│   │   └── test_bots_remove_duplicate_refs.py
-│   │
-│   └── texts/
-│       ├── expend_input.txt
-│       └── expend_output.txt
-│
 ├── core/
 │   │
 │   ├── texts/
@@ -55,7 +18,45 @@ tests/
 │   ├── test_fix_page.py
 │   ├── test_fix_page_files.py
 │   ├── test_fix_refs.py
-│   └── test_index.py
+│   ├── test_index.py
+│   └── test_settings.py
+│
+├── fixers/
+│   │
+│   ├── add_lang_en_bot/
+│   │   └── test_bots_add_lang_en.py
+│   │
+│   ├── fix_images/
+│   │   └── test_fix_images.py
+│   │
+│   ├── mini_fixes/
+│   │   └── test_mini_fixes.py
+│   │
+│   ├── months/
+│   │   └── test_months.py
+│   │
+│   ├── move_dots/
+│   │   └── test_move_dots.py
+│   │
+│   ├── refs/
+│   │   │
+│   │   ├── remove_duplicate_refs/
+│   │   │   │
+│   │   │   ├── texts/
+│   │   │   │   ├── expected.txt
+│   │   │   │   ├── input.txt
+│   │   │   │   └── output.txt
+│   │   │   │
+│   │   │   └── test_bots_remove_duplicate_refs.py
+│   │   │
+│   │   ├── test_bots_expend_refs.py
+│   │   ├── test_fix_missing_refs.py
+│   │   ├── test_missing_refs.py
+│   │   └── test_refs_mover.py
+│   │
+│   └── texts/
+│       ├── expend_input.txt
+│       └── expend_output.txt
 │
 ├── infobox/
 │   │
@@ -140,6 +141,7 @@ tests/
 │   └── test_parsers_category.py
 │
 ├── utils/
+│   └── test_http.py
 │
 ├── __init__.py
 ├── conftest.py

@@ -10,19 +10,22 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def is_redirect(title: str, text: str) -> bool:
-    """Check if page is a redirect
+class RedirectDetector:
+    """Detector for MediaWiki redirect pages."""
 
-    Args:
-        title: Page title
-        text: Page content
+    def is_redirect(self, title: str, text: str) -> bool:
+        """Check if page is a redirect
 
-    Returns:
-        True if page is a redirect
-    """
-    return bool(re.match(r"^#(пренасочване|redirect)", text, re.IGNORECASE))
+        Args:
+            title: Page title
+            text: Page content
+
+        Returns:
+            True if page is a redirect
+        """
+        return bool(re.match(r"^#(пренасочване|redirect)", text, re.IGNORECASE))
 
 
 __all__ = [
-    "is_redirect",
+    "RedirectDetector",
 ]

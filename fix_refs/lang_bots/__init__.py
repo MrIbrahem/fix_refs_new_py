@@ -2,37 +2,59 @@
 
 from __future__ import annotations
 
-from .bg_bot import bg_fixes
-from .es import fix_es_all
-from .hy_bot import hy_fixes
-from .pl_bot import pl_fixes
-from .pt_bot import pt_fixes
-from .sw_bot import sw_fixes
+from .bg_bot import BulgarianBot
+from .es import SpanishBot
+from .hy_bot import ArmenianBot
+from .pl_bot import PolishBot
+from .pt_bot import PortugueseBot
+from .sw_bot import SwahiliBot
 
 
-def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
+class LanguageFixerPipeline:
+    """Pipeline orchestrator for applying language-specific bot transformations."""
 
-    if lang == "pl":
-        text = pl_fixes(text)
+    def __init__(self) -> None:
+        self.pl_bot = PolishBot()
+        self.pt_bot = PortugueseBot()
+        self.bg_bot = BulgarianBot()
+        self.es_bot = SpanishBot()
+        self.sw_bot = SwahiliBot()
+        self.hy_bot = ArmenianBot()
 
-    elif lang == "pt":
-        text = pt_fixes(text)
+    def apply_language_fixes(self, text: str, title: str, lang: str, source_title: str, mdwiki_revid: int) -> str:
+        """Apply language-specific transformations to text.
 
-    elif lang == "bg":
-        text = bg_fixes(text, source_title, mdwiki_revid)
+        Args:
+            text: WikiText content
+            title: Page title
+            lang: Language code
+            source_title: Source page title
+            mdwiki_revid: MDWiki revision ID
 
-    elif lang == "es":
-        text = fix_es_all(text, title, source_title, mdwiki_revid)
+        Returns:
+            Transformed text
+        """
+        if lang == "pl":
+            text = self.pl_bot.pl_fixes(text)
 
-    elif lang == "sw":
-        text = sw_fixes(text)
+        elif lang == "pt":
+            text = self.pt_bot.pt_fixes(text)
 
-    elif lang == "hy":
-        text = hy_fixes(text)
+        elif lang == "bg":
+            text = self.bg_bot.bg_fixes(text, source_title, mdwiki_revid)
 
-    return text
+        elif lang == "es":
+            text = self.es_bot.fix_es_all(text, title, source_title, mdwiki_revid)
+
+        elif lang == "sw":
+            text = self.sw_bot.sw_fixes(text)
+
+        elif lang == "hy":
+            text = self.hy_bot.hy_fixes(text)
+
+        return text
 
 
 __all__ = [
-    "apply_language_fixes",
+    "LanguageFixerPipeline",
 ]

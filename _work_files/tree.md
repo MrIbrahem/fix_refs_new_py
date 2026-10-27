@@ -1,25 +1,33 @@
 ```
 fix_refs/
 │
-├── bots/
+├── core/
+│   ├── __init__.py
+│   ├── fix_page.py
+│   ├── fix_page_wrapper.py
+│   ├── mapping.py
+│   ├── README.md
+│   └── settings.py
+│
+├── fixers/
+│   │
+│   ├── refs/
+│   │   ├── __init__.py
+│   │   ├── expend_refs.py
+│   │   ├── fix_missing_refs.py
+│   │   ├── refs_mover.py
+│   │   ├── remove_duplicate_refs.py
+│   │   └── wtp_mapping.py
+│   │
 │   ├── __init__.py
 │   ├── add_lang_en_bot.py
-│   ├── expend_refs.py
 │   ├── fix_images.py
-│   ├── fix_missing_refs.py
 │   ├── mini_fixes.py
 │   ├── months.py
 │   ├── move_dots.py
 │   ├── README.md
 │   ├── redirect.py
-│   ├── refs_utils.py
-│   └── remove_duplicate_refs.py
-│
-├── core/
-│   ├── __init__.py
-│   ├── fix_page.py
-│   ├── README.md
-│   └── settings.py
+│   └── refs_utils.py
 │
 ├── infobox/
 │   ├── __init__.py

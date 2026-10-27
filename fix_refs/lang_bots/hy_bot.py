@@ -12,45 +12,49 @@ from .remove_space import RemoveSpace
 logger = logging.getLogger(__name__)
 
 
-def remove_spaces_between_ref_and_punctuation(text: str) -> str:
-    """Remove spaces between ref tags and punctuation
+class ArmenianBot:
+    """Bot for Armenian Wikipedia language-specific fixes."""
 
-    Args:
-        text: WikiText content
+    def __init__(self, remove_space: RemoveSpace | None = None) -> None:
+        self.remove_space = remove_space or RemoveSpace()
 
-    Returns:
-        Text with spaces removed
-    """
-    # Use superset of punctuation across supported languages
-    dots = ".,。։।:"
-    escaped_punctuation = re.escape(dots)
+    def remove_spaces_between_ref_and_punctuation(self, text: str) -> str:
+        """Remove spaces between ref tags and punctuation
 
-    # Keep punctuation right after <ref ... /> with no space
-    # Pattern: <ref[^>]*/>\s*[punctuation]
-    text = re.sub(r"(<ref[^>]*\/>)\s*([" + escaped_punctuation + r"])", r"\1\2", text)
+        Args:
+            text: WikiText content
 
-    # Normalize endings: </ref> followed by any punctuation remains attached
-    # Pattern: </ref>\s*[punctuation]
-    text = re.sub(r"<\/ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
+        Returns:
+            Text with spaces removed
+        """
+        # Use superset of punctuation across supported languages
+        dots = ".,。։।:"
+        escaped_punctuation = re.escape(dots)
 
-    return text
+        # Keep punctuation right after <ref ... /> with no space
+        # Pattern: <ref[^>]*/>\s*[punctuation]
+        text = re.sub(r"(<ref[^>]*\/>)\s*([" + escaped_punctuation + r"])", r"\1\2", text)
 
+        # Normalize endings: </ref> followed by any punctuation remains attached
+        # Pattern: </ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
+        text = re.sub(r"<\/ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
 
-def hy_fixes(text: str) -> str:
-    """Apply Armenian-specific fixes to text
+        return text
 
-    Args:
-        text: WikiText content
+    def hy_fixes(self, text: str) -> str:
+        """Apply Armenian-specific fixes to text
 
-    Returns:
-        Fixed text
-    """
-    text = RemoveSpace().remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
-    text = remove_spaces_between_ref_and_punctuation(text)
-    return text
+        Args:
+            text: WikiText content
+
+        Returns:
+            Fixed text
+        """
+        text = self.remove_space.remove_spaces_between_last_word_and_beginning_of_ref(text, "hy")
+        text = self.remove_spaces_between_ref_and_punctuation(text)
+        return text
 
 
 __all__ = [
-    "remove_spaces_between_ref_and_punctuation",
-    "hy_fixes",
+    "ArmenianBot",
 ]

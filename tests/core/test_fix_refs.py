@@ -2,7 +2,7 @@
 Tests for core fix_page functionality
 """
 
-from fix_refs.core.fix_page import LangSetting, PageFixer
+from fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 def _fix_one(
@@ -19,7 +19,7 @@ def _fix_one(
     add_category: bool = False,
 ) -> str:
     """
-    Backward-compatible wrapper around PageFixer.
+    Backward-compatible wrapper around PageUpdater.
 
     If ``lang_setting`` is given it takes precedence; otherwise one is built
     from the individual keyword arguments (kept for backward compatibility).
@@ -33,15 +33,15 @@ def _fix_one(
             add_category=add_category,
         )
 
-    fixer = PageFixer(
+    fixer = PageUpdater()
+
+    return fixer.run(
         text=text,
         title=title,
         source_title=source_title,
         mdwiki_revid=mdwiki_revid,
         lang_setting=lang_setting,
     )
-
-    return fixer.run()
 
 
 class TestFixRefs:

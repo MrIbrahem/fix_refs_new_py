@@ -11,60 +11,61 @@ import wikitextparser as wtp
 logger = logging.getLogger(__name__)
 
 
-def add_missing_params_to_choroba_infobox(text: str) -> str:
-    """Add missing medical code parameters to Choroba infobox templates
+class PolishBot:
+    """Bot for Polish Wikipedia language-specific fixes."""
 
-    Args:
-        text: WikiText content
+    def add_missing_params_to_choroba_infobox(self, text: str) -> str:
+        """Add missing medical code parameters to Choroba infobox templates
 
-    Returns:
-        Text with missing parameters added
-    """
-    parsed = wtp.parse(text)
+        Args:
+            text: WikiText content
 
-    params_to_add = [
-        "nazwa naukowa",
-        "ICD11",
-        "ICD11 nazwa",
-        "ICD10",
-        "ICD10 nazwa",
-        "DSM-5",
-        "DSM-5 nazwa",
-        "DSM-IV",
-        "DSM-IV nazwa",
-        "ICDO",
-        "DiseasesDB",
-        "OMIM",
-        "MedlinePlus",
-        "MeshID",
-        "commons",
-    ]
+        Returns:
+            Text with missing parameters added
+        """
+        parsed = wtp.parse(text)
 
-    for template in parsed.templates:
-        template_name = template.name.strip()
-        if template_name.lower() == "choroba infobox":
-            existing_params = {arg.name.strip().lower() for arg in template.arguments}
-            for param_name in params_to_add:
-                if param_name.lower() not in existing_params:
-                    template.set_arg(param_name, "")
+        params_to_add = [
+            "nazwa naukowa",
+            "ICD11",
+            "ICD11 nazwa",
+            "ICD10",
+            "ICD10 nazwa",
+            "DSM-5",
+            "DSM-5 nazwa",
+            "DSM-IV",
+            "DSM-IV nazwa",
+            "ICDO",
+            "DiseasesDB",
+            "OMIM",
+            "MedlinePlus",
+            "MeshID",
+            "commons",
+        ]
 
-    return parsed.string
+        for template in parsed.templates:
+            template_name = template.name.strip()
+            if template_name.lower() == "choroba infobox":
+                existing_params = {arg.name.strip().lower() for arg in template.arguments}
+                for param_name in params_to_add:
+                    if param_name.lower() not in existing_params:
+                        template.set_arg(param_name, "")
 
+        return parsed.string
 
-def pl_fixes(text: str) -> str:
-    """Apply Polish-specific fixes to text
+    def pl_fixes(self, text: str) -> str:
+        """Apply Polish-specific fixes to text
 
-    Args:
-        text: WikiText content
+        Args:
+            text: WikiText content
 
-    Returns:
-        Fixed text
-    """
-    text = add_missing_params_to_choroba_infobox(text)
-    return text
+        Returns:
+            Fixed text
+        """
+        text = self.add_missing_params_to_choroba_infobox(text)
+        return text
 
 
 __all__ = [
-    "add_missing_params_to_choroba_infobox",
-    "pl_fixes",
+    "PolishBot",
 ]

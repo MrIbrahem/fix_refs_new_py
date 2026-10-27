@@ -1,144 +1,133 @@
 """
-Main PageFixer class
+Main PageUpdater class
 """
 
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass
 from typing import Any
 
 from ..fixers import (
+    DotsMover,
+    DuplicateRefRemover,
+    LanguageEnFixer,
     MiniFixes,
-    add_lang_en_to_refs,
-    fix_missing_refs,
-    is_redirect,
-    move_dots_after_refs,
-    remove_duplicate_refs_with_attrs,
+    RedirectDetector,
+    ReferenceExpander,
 )
-from ..infobox import expand_infobox_in_text
-from ..lang_bots import apply_language_fixes
-from ..mdwiki import add_translated_from_mdwiki
+from ..infobox import InfoboxExpander
+from ..lang_bots import LanguageFixerPipeline
+from ..mdwiki import MDWikiCategoryService
+from .mapping import LangSetting, PageContext
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class LangSetting:
-    """Per-language fixing options."""
-
-    lang: str
-    move_dots: bool = True
-    expend_infobox: bool = True
-    add_en_lang: bool = False
-    add_category: bool = False
-
-    def to_json(self) -> dict[str, Any]:
-        return asdict(self)
-
-    @classmethod
-    def from_any(cls, setting: LangSetting | dict[str, Any]) -> LangSetting:
-        """Create LangSetting from any input."""
-        if isinstance(setting, LangSetting):
-            return setting
-
-        return cls(**setting)
-
-
-class PageFixer:
-    """Fix Wikipedia page references and formatting.
-
-    Args:
-        text: Page content
-        title: Page title
-        lang_setting: Per-language options (LangSetting). Defaults to LangSetting().
-        source_title: Source page title
-        mdwiki_revid: MDWiki revision ID
-    """
+class PageUpdater:
+    """Stateless page fixer. Create once, call run() for each page."""
 
     def __init__(
         self,
-        *,
+        mdwiki_category_service: MDWikiCategoryService | None = None,
+    ) -> None:
+
+        # Injected collaborators
+        self.mini_fixes = MiniFixes()
+        self.ref_expander = ReferenceExpander()
+        self.duplicate_ref_remover = DuplicateRefRemover()
+        self.dots_mover = DotsMover()
+        self.lang_en_fixer = LanguageEnFixer()
+        self.language_pipeline = LanguageFixerPipeline()
+        self.infobox_expander = InfoboxExpander()
+        self.redirect_detector = RedirectDetector()
+        self.mdwiki_category_service = mdwiki_category_service or MDWikiCategoryService()
+
+    # ---------------- Steps (each one updates ctx.text) ----------------
+    def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
+        if ctx.lang_setting.expend_infobox or ctx.lang_setting.lang == "es":
+            ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title, "")
+
+    def _apply_basic_fixes(self, ctx: PageContext) -> None:
+        lang = ctx.lang_setting.lang
+        ctx.text = self.mini_fixes.mini_fixes(ctx.text, lang)
+        ctx.text = self.ref_expander.fix_missing_refs(ctx.text, ctx.source_title, ctx.mdwiki_revid)
+        ctx.text = self.duplicate_ref_remover.remove_duplicate_refs_with_attrs(ctx.text)
+
+    def _move_dots(self, ctx: PageContext) -> None:
+        logger.info("move_dots\n")
+        ctx.text = self.dots_mover.move_dots_after_refs(ctx.text, ctx.lang_setting.lang)
+
+    def _add_en_lang(self, ctx: PageContext) -> None:
+        logger.info("add_en_lang\n")
+        ctx.text = self.lang_en_fixer.add_lang_en_to_refs(ctx.text)
+
+    def _apply_language_fixes(self, ctx: PageContext) -> None:
+        fixed = self.language_pipeline.apply_language_fixes(
+            ctx.text,
+            ctx.title,
+            ctx.lang_setting.lang,
+            ctx.source_title,
+            ctx.mdwiki_revid,
+        )
+        if fixed:
+            ctx.text = fixed
+            # Re-expand infobox if language fixes made changes
+            self._expand_infobox_if_needed(ctx)
+
+    def _add_mdwiki_category(self, ctx: PageContext) -> None:
+        if ctx.lang_setting.add_category:
+            ctx.text = self.mdwiki_category_service.add_translated_from_mdwiki(ctx.text, ctx.lang_setting.lang)
+
+    # ---------------- Public API ----------------
+    def run(
+        self,
         text: str,
         title: str,
         lang_setting: LangSetting | dict[str, Any],
         source_title: str = "",
         mdwiki_revid: int | str = 0,
-    ) -> None:
-        self.text_org = text
-        self.text = text
-        self.title = title
-        self.lang_setting = LangSetting.from_any(lang_setting)
-        self.source_title = source_title
-        self.mdwiki_revid = int(mdwiki_revid)
+    ) -> str:
+        """
+        Run all fixes and return the fixed page content.
 
-    # ------------------------------------------------------------------
-    # Steps
-    # ------------------------------------------------------------------
-    def _expand_infobox_if_needed(self) -> None:
-        if self.lang_setting.expend_infobox or self.lang_setting.lang == "es":
-            self.text = expand_infobox_in_text(self.text, self.title, "")
-
-    def _apply_basic_fixes(self) -> None:
-        self.text = MiniFixes().mini_fixes(self.text, self.lang_setting.lang)
-        self.text = fix_missing_refs(self.text, self.source_title, self.mdwiki_revid)
-        self.text = remove_duplicate_refs_with_attrs(self.text)
-
-    def _move_dots(self) -> None:
-        logger.info("move_dots\n")
-        self.text = move_dots_after_refs(self.text, self.lang_setting.lang)
-
-    def _add_en_lang(self) -> None:
-        logger.info("add_en_lang\n")
-        self.text = add_lang_en_to_refs(self.text)
-
-    def _apply_language_fixes(self) -> None:
-        fixed = apply_language_fixes(
-            self.text,
-            self.title,
-            self.lang_setting.lang,
-            self.source_title,
-            self.mdwiki_revid,
+        Args:
+            text: Page content
+            title: Page title
+            lang_setting: Per-language options (LangSetting). Defaults to LangSetting().
+            source_title: Source page title
+            mdwiki_revid: MDWiki revision ID
+        """
+        ctx = PageContext(
+            text=text,
+            title=title,
+            lang_setting=LangSetting.from_any(lang_setting),
+            source_title=source_title,
+            mdwiki_revid=int(mdwiki_revid),
         )
-        if fixed:
-            self.text = fixed
-            # Re-expand infobox if language fixes made changes
-            self._expand_infobox_if_needed()
+        logger.info("start fix one page with mdwiki_revid:%s", ctx.mdwiki_revid)
 
-    def _add_mdwiki_category(self) -> None:
-        if self.lang_setting.add_category:
-            self.text = add_translated_from_mdwiki(self.text, self.lang_setting.lang)
+        if self.redirect_detector.is_redirect(ctx.title, ctx.text):
+            return ctx.text
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
-    def run(self) -> str:
-        """Run all fixes and return the fixed page content."""
-        logger.info("start fix one page with mdwiki_revid:%s", self.mdwiki_revid)
+        self._expand_infobox_if_needed(ctx)
+        self._apply_basic_fixes(ctx)
 
-        if is_redirect(self.title, self.text):
-            return self.text
+        if ctx.lang_setting.move_dots:
+            self._move_dots(ctx)
 
-        self._expand_infobox_if_needed()
-        self._apply_basic_fixes()
+        if ctx.lang_setting.add_en_lang:
+            self._add_en_lang(ctx)
 
-        if self.lang_setting.move_dots:
-            self._move_dots()
+        self._apply_language_fixes(ctx)
+        self._add_mdwiki_category(ctx)
+        ctx.text = self.mini_fixes.mini_fixes_after_fixing(ctx.text, ctx.lang_setting.lang)
 
-        if self.lang_setting.add_en_lang:
-            self._add_en_lang()
+        if not ctx.text.strip():
+            return ctx.text_org
 
-        self._apply_language_fixes()
-        self._add_mdwiki_category()
-        self.text = MiniFixes().mini_fixes_after_fixing(self.text, self.lang_setting.lang)
-
-        if not self.text.strip():
-            return self.text_org
-
-        return self.text
+        return ctx.text
 
 
 __all__ = [
-    "LangSetting",
-    "PageFixer",
+    "PageUpdater",
 ]

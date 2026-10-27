@@ -42,7 +42,7 @@ class ConfigManager:
         file = self.revisions_path / f"{str(mdwiki_revid)}/wikitext.txt"
         return file
 
+
 __all__ = [
     "ConfigManager",
-    "config",
 ]

@@ -2,7 +2,11 @@
 Tests for Polish bot
 """
 
-from fix_refs.lang_bots.pl_bot import pl_fixes
+from fix_refs.lang_bots.pl_bot import PolishBot
+
+
+def pl_fixes(text: str) -> str:
+    return PolishBot().pl_fixes(text)
 
 
 class TestPolishBot:

@@ -5,7 +5,15 @@ Converted from tests/pl_bots/pl_infoboxTest.php
 
 import re
 
-from fix_refs.lang_bots.pl_bot import add_missing_params_to_choroba_infobox, pl_fixes
+from fix_refs.lang_bots.pl_bot import PolishBot
+
+
+def add_missing_params_to_choroba_infobox(text: str) -> str:
+    return PolishBot().add_missing_params_to_choroba_infobox(text)
+
+
+def pl_fixes(text: str) -> str:
+    return PolishBot().pl_fixes(text)
 
 
 class TestPlInfobox:

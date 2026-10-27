@@ -2,31 +2,46 @@
 
 from __future__ import annotations
 
-from ...fixers.months import fix_months_in_refs
-from .es_bot import fix_es
-from .es_refs import mv_es_refs
-from .es_section_bot import es_section
+from ...fixers.months import MonthTranslator
+from .es_bot import SpanishTemplateFixer
+from .es_refs import SpanishRefMover
+from .es_section_bot import SpanishSectionFixer
 
 
-def fix_es_all(text: str, title: str, source_title: str, mdwiki_revid: int) -> str:
-    """Apply all Spanish-specific fixes to text
+class SpanishBot:
+    """Orchestrator bot for Spanish Wikipedia language-specific fixes."""
 
-    Args:
-        text: WikiText content
-        title: Page title
-        source_title: Source page title
-        mdwiki_revid: MDWiki revision ID
+    def __init__(
+        self,
+        template_fixer: SpanishTemplateFixer | None = None,
+        month_translator: MonthTranslator | None = None,
+        ref_mover: SpanishRefMover | None = None,
+        section_fixer: SpanishSectionFixer | None = None,
+    ) -> None:
+        self.template_fixer = template_fixer or SpanishTemplateFixer()
+        self.month_translator = month_translator or MonthTranslator()
+        self.ref_mover = ref_mover or SpanishRefMover()
+        self.section_fixer = section_fixer or SpanishSectionFixer()
 
-    Returns:
-        Fixed text
-    """
-    text = fix_es(text, title)
-    text = fix_months_in_refs(text, "es")
-    text = mv_es_refs(text)
-    text = es_section(source_title, text, str(mdwiki_revid))
-    return text
+    def fix_es_all(self, text: str, title: str, source_title: str, mdwiki_revid: int) -> str:
+        """Apply all Spanish-specific fixes to text
+
+        Args:
+            text: WikiText content
+            title: Page title
+            source_title: Source page title
+            mdwiki_revid: MDWiki revision ID
+
+        Returns:
+            Fixed text
+        """
+        text = self.template_fixer.fix_es(text, title)
+        text = self.month_translator.fix_months_in_refs(text, "es")
+        text = self.ref_mover.mv_es_refs(text)
+        text = self.section_fixer.es_section(source_title, text, str(mdwiki_revid))
+        return text
 
 
 __all__ = [
-    "fix_es_all",
+    "SpanishBot",
 ]
