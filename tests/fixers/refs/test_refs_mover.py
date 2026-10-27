@@ -75,7 +75,7 @@ class TestWtpRefs:
         assert "A" in refs.full_refs
 
     def test_helpers(self):
-        assert WtpRefs.make_full("A", "c") == '<ref name="A">c</ref>'
+        assert WtpRefs.make_full("c", name="A") == '<ref name="A">c</ref>'
         assert WtpRefs.make_short("A") == '<ref name="A" />'
 
 

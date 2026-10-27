@@ -9,7 +9,8 @@ from src.fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 
 
 def remove(text: str) -> str:
-    return DuplicateRefRemover().remove(text)
+    result2 = DuplicateRefRemover().wtp_remove(text)
+    return result2
 
 
 # Tests for remove

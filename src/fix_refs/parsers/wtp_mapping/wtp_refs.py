@@ -25,21 +25,33 @@ class WtpRefs:
         self.parsed = self.tpls.parsed
         self._collect()
 
-    # ---------- helpers ----------
+    # ---------- tag writer ----------
     @staticmethod
-    def get_name(r) -> str:
-        return (r.get_attr("name") or "").strip(" \"'")
-
-    @staticmethod
-    def make_full(name: str, content: str) -> str:
-        return f'<ref name="{name}">{content}</ref>'
+    def make_full(content: str, **kwargs) -> str:
+        tag = wtp.Tag(f"<ref>{content}</ref>")
+        for k, v in kwargs.items():
+            tag.set_attr(k, v)
+        return tag.string
 
     @staticmethod
     def make_short(name: str) -> str:
         return f'<ref name="{name}" />'
 
+    @staticmethod
+    def _short_from(r: wtp.Tag) -> str:
+        """Build a self-closing tag that keeps all original attributes."""
+        clone_r = wtp.Tag(r.string)
+        clone_r.contents = ""
+        result = clone_r.string
+        return result.replace("></ref>", " />")
+
+    # ---------- helpers ----------
+    @staticmethod
+    def get_name(r: wtp.Tag) -> str:
+        return r.get_attr("name") or ""
+
     @cached_property
-    def all_refs(self) -> list:
+    def all_refs(self) -> list[wtp.Tag]:
         return self.parsed.get_tags("ref")
 
     @cached_property
@@ -59,7 +71,7 @@ class WtpRefs:
                 logger.debug("Skipping unnamed ref at %s", r.span)
                 continue
             if content:
-                self.full_refs.setdefault(name, self.make_full(name, content))
+                self.full_refs.setdefault(name, self.make_full(content, name=name))
             else:
                 self.short_refs.setdefault(name, []).append(r.span)
         logger.info(
@@ -75,7 +87,7 @@ class WtpRefs:
         for r in self.tpl_refs:
             name, content = self.get_name(r), (r.contents or "").strip()
             if name and content:
-                out.setdefault(name, self.make_full(name, content))
+                out.setdefault(name, self.make_full(content, name=name))
         return out
 
     @cached_property
@@ -85,14 +97,45 @@ class WtpRefs:
         for r in self.body_refs:
             name, content = self.get_name(r), (r.contents or "").strip()
             if name and content:
-                out.setdefault(name, self.make_full(name, content))
+                out.setdefault(name, self.make_full(content, name=name))
         return out
 
     @cached_property
     def body_short_names(self) -> set[str]:
         return {self.get_name(r) for r in self.body_refs if self.get_name(r) and not (r.contents or "").strip()}
 
-    def remove_duplicate(self): ...
+    def remove_duplicate(self) -> str:
+        """Replace repeated full refs with self-closing refs.
+
+        The first occurrence of each (name, group) keeps its content;
+        every later one with content becomes <ref name="..." />.
+        Unnamed refs are left untouched.
+        Returns the new text (self.text is not modified).
+        """
+        text = self.parsed.string
+        seen: set[tuple[str, str]] = set()
+        edits: list[tuple[tuple[int, int], str]] = []
+
+        # Walk refs in document order so the first occurrence is the one kept
+        for r in sorted(self.all_refs, key=lambda x: x.span[0]):
+            name = self.get_name(r)
+            content = (r.contents or "").strip()
+            if not name or not content:
+                continue
+
+            key = (name, (r.get_attr("group") or ""))
+            if key not in seen:
+                seen.add(key)
+                continue
+
+            edits.append((r.span, self._short_from(r)))
+
+        # Apply from the end so earlier spans stay valid
+        for (start, end), short in reversed(edits):
+            text = text[:start] + short + text[end:]
+
+        logger.info("Replaced %d duplicate refs with short refs", len(edits))
+        return text
 
 
 __all__ = [

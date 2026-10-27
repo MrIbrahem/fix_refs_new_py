@@ -51,7 +51,7 @@ class PageUpdater:
         lang = ctx.lang_setting.lang
         ctx.text = self.mini_fixes.mini_fixes(ctx.text, lang)
         ctx.text = self.ref_expander.fix_missing_refs(ctx.text, ctx.source_title, ctx.mdwiki_revid)
-        ctx.text = self.duplicate_ref_remover.remove(ctx.text)
+        ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
 
     def _move_dots(self, ctx: PageContext) -> None:
         logger.info("move_dots\n")
