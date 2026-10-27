@@ -51,7 +51,7 @@ def write_revision(revisions_path: Path):
 @pytest.fixture
 def expander(revisions_path: Path) -> ReferenceExpander:
     """ReferenceExpander built from ConfigManager (reads REVISIONS_PATH)."""
-    return ReferenceExpander(ConfigManager())
+    return ReferenceExpander(ConfigManager.load())
 
 
 class TestReferenceExpander:

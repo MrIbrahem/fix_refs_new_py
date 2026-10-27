@@ -17,7 +17,7 @@ class ReferenceExpander:
 
     def __init__(self, config_manager: ConfigManager | None = None) -> None:
         """Initialize the reference expander with an optional config manager."""
-        self._config_manager = config_manager or ConfigManager()
+        self._config_manager = config_manager or ConfigManager.load()
         self._citations_parser = CitationsParser()
         self._ref_expander = RefExpander(self._citations_parser)
 

@@ -19,15 +19,11 @@ class SettingsLoader:
         http_client: HttpClient | None = None,
     ) -> None:
         self.http_client = http_client or HttpClient()
-        self.config_manager = config_manager or ConfigManager()
+        self.config_manager = config_manager or ConfigManager.load()
 
     def load_settings_from_file(self) -> dict:
         """Load language settings from local JSON file."""
-        file_path = self.config_manager.resources_path / "language_settings.json"
-        if file_path.exists():
-            with open(file_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        return {}
+        return self.config_manager.load_resources_path_json("language_settings.json")
 
     def load_settings_from_server(self, server_name: str) -> dict:
         """Load language settings from remote API server."""
