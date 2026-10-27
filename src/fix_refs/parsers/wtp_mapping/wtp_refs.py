@@ -92,6 +92,8 @@ class WtpRefs:
     def body_short_names(self) -> set[str]:
         return {self.get_name(r) for r in self.body_refs if self.get_name(r) and not (r.contents or "").strip()}
 
+    def remove_duplicate(self): ...
+
 
 __all__ = [
     "WtpRefs",

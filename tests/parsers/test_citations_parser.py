@@ -1,154 +1,288 @@
 """
-Tests for citation parser
+Unit tests for citations_parser module.
+
+Functions to test: .get_all_citations, .get_full_refs, .get_short_refs
 """
 
-from src.fix_refs.parsers.citations_parser import Citation, CitationsParser
+from pathlib import Path
 
-
-def get_all_citations(text: str) -> list[Citation]:
-    return CitationsParser().get_all_citations(text)
-
-
-def get_full_refs(text: str) -> dict[str, str]:
-    return CitationsParser().get_full_refs(text)
-
-
-def get_short_refs(text: str) -> list[Citation]:
-    return CitationsParser().get_short_refs(text)
+from src.fix_refs.parsers.citations_parser import CitationsParser
 
 
 class TestGetAllRefs:
-    """Test citation extraction"""
+    """Tests for CitationsParser().get_all_citations function"""
 
-    def test_simple_citation(self):
-        """Test extracting simple citation"""
-        text = '<ref name="test">Content</ref>'
-        citations = get_all_citations(text)
-        assert len(citations) == 1
-        assert citations[0].name == "test"
-        assert citations[0].contents == "Content"
+    def test_single_full_ref_no_name(self):
+        text = "Some text<ref>A basic citation</ref> more text"
+        result = CitationsParser().get_all_citations(text)
 
-    def test_no_citation(self):
-        """Test with no citations"""
-        text = "No citations here"
-        citations = get_all_citations(text)
-        assert len(citations) == 0
+        assert len(result) == 1
+        assert result[0].contents == "A basic citation"
+        assert result[0].tag == "<ref>A basic citation</ref>"
+        assert result[0].name == ""
 
-    def test_multiple_citations(self):
-        """Test extracting multiple citations"""
-        text = '<ref name="A">A</ref><ref name="B">B</ref>'
-        citations = get_all_citations(text)
-        assert len(citations) == 2
-        assert citations[0].name == "A"
-        assert citations[1].name == "B"
+    def test_single_full_ref_with_name(self):
+        text = '<ref name="smith2020">Smith, J. (2020)</ref>'
+        result = CitationsParser().get_all_citations(text)
 
-    def test_get_regex_citations_with_multiple_refs(self):
-        """Test extracting multiple citations from text"""
+        assert len(result) == 1
+        assert result[0].contents == "Smith, J. (2020)"
+        assert result[0].name == "smith2020"
+        assert result[0].attrs["name"] == "smith2020"
+        assert result[0].tag == text
+
+    def test_multiple_full_refs(self):
+        text = "Text<ref>First</ref> more<ref>Second</ref>"
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 2
+        assert result[0].contents == "First"
+        assert result[1].contents == "Second"
+
+    def test_multiple_named_refs_with_text_between(self):
         text = '<ref name="ref1">Content 1</ref> Text <ref name="ref2">Content 2</ref>'
-        citations = get_all_citations(text)
+        result = CitationsParser().get_all_citations(text)
 
-        assert len(citations) == 2
-        assert citations[0].name == "ref1"
-        assert citations[0].contents == "Content 1"
-        assert citations[0].tag == '<ref name="ref1">Content 1</ref>'
+        assert len(result) == 2
+        assert [c.name for c in result] == ["ref1", "ref2"]
+        assert [c.contents for c in result] == ["Content 1", "Content 2"]
+        assert result[0].tag == '<ref name="ref1">Content 1</ref>'
 
-    def test_get_regex_citations_with_no_refs(self):
-        """Test extracting citations from text with no references"""
-        text = "No references here"
-        citations = get_all_citations(text)
-        assert len(citations) == 0
+    def test_not_excludes_self_closing_refs(self):
+        text = 'Text<ref name="a">Full ref</ref> and<ref name="a" /> a short ref'
+        result = CitationsParser().get_all_citations(text)
 
-    def test_get_citations_with_no_name(self):
-        """Test citations without name attribute"""
-        text = "<ref>Content without name</ref>"
-        citations = get_all_citations(text)
+        assert len(result) == 2
+        assert result[0].contents == "Full ref"
+        assert result[0].name == "a"
 
-        assert len(citations) == 1
-        assert citations[0].name == ""
-        assert citations[0].contents == "Content without name"
+    def test_no_refs_returns_empty_list(self):
+        result = CitationsParser().get_all_citations("Just some plain text without any refs")
 
-    def test_get_citations_with_multiple_attributes(self):
-        """Test citations with multiple attributes"""
-        text = '<ref name="test" group="notes">Content</ref>'
-        citations = get_all_citations(text)
+        assert result == []
 
-        assert len(citations) == 1
-        assert citations[0].name == "test"
-        assert "group" in citations[0].attrs
+    def test_empty_text_returns_empty_list(self):
+        result = CitationsParser().get_all_citations("")
+
+        assert result == []
+
+    def test_ref_with_extra_attributes(self):
+        text = '<ref name="foo" group="note">Some content</ref>'
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 1
+        assert result[0].name == "foo"
+        assert result[0].attrs["name"] == "foo"
+        assert result[0].attrs["group"] == "note"
+
+    def test_ref_name_is_stripped(self):
+        text = '<ref name=" spaced ">Content</ref>'
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 1
+        assert result[0].name == "spaced"
+
+    def test_nested_markup_inside_ref(self):
+        text = "<ref>See [[Some Page|the page]] for {{cite web|url=example.com}} details</ref>"
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 1
+        assert "[[Some Page|the page]]" in result[0].contents
+        assert "{{cite web|url=example.com}}" in result[0].contents
+
+    def test_multiline_ref_content(self):
+        text = "<ref>Line one\nLine two\nLine three</ref>"
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 1
+        assert result[0].contents == "Line one\nLine two\nLine three"
+
+    def test_duplicate_names_both_returned(self):
+        text = '<ref name="dup">First</ref> text <ref name="dup">Second</ref>'
+        result = CitationsParser().get_all_citations(text)
+
+        assert len(result) == 2
+        assert [c.contents for c in result] == ["First", "Second"]
+        assert all(c.name == "dup" for c in result)
 
 
 class TestGetShortRefs:
-    """Test short citation extraction"""
+    """Tests for CitationsParser().get_short_refs function"""
 
-    def test_short_citation(self):
-        """Test extracting self-closing citation"""
-        text = '<ref name="test"/>'
-        citations = get_short_refs(text)
-        assert len(citations) == 1
-        assert citations[0].name == "test"
-        assert citations[0].contents == ""
+    def test_single_short_ref(self):
+        text = '<ref name="smith2020" />'
+        result = CitationsParser().get_short_refs(text)
 
-    def test_get_short_citations(self):
-        """Test getting short/self-closing citations"""
-        text = '<ref name="ref1"/> Text <ref name="ref2"/>'
-        short_refs = get_short_refs(text)
+        assert len(result) == 1
+        assert result[0].name == "smith2020"
+        assert result[0].contents == ""
+        assert result[0].tag == '<ref name="smith2020" />'
 
-        assert len(short_refs) == 2
-        assert short_refs[0].name == "ref1"
-        assert short_refs[0].tag == '<ref name="ref1"/>'
+    def test_multiple_short_refs(self):
+        # Mixes the "/>" and " />" self-closing styles
+        text = 'Text<ref name="a"/> more<ref name="b" />'
+        result = CitationsParser().get_short_refs(text)
 
-    def test_get_short_citations_with_spaces(self):
-        """Test short citations with extra spaces"""
-        text = '<ref name="test" /> <ref name="test2"/>'
-        short_refs = get_short_refs(text)
+        assert len(result) == 2
+        assert {c.name for c in result} == {"a", "b"}
+        assert all(c.contents == "" for c in result)
 
-        assert len(short_refs) == 2
-        assert short_refs[0].name == "test"
-        assert short_refs[1].name == "test2"
+    def test_excludes_full_refs(self):
+        text = '<ref name="full">Full content</ref><ref name="short" />'
+        result = CitationsParser().get_short_refs(text)
 
-    def test_get_short_citations_empty(self):
-        """Test short citations with empty text"""
-        short_refs = get_short_refs("")
-        assert len(short_refs) == 0
+        assert len(result) == 1
+        assert result[0].name == "short"
 
-    def test_get_short_citations_mixed_with_full(self):
-        """Test extracting short citations mixed with full citations"""
-        text = '<ref name="full">Full content</ref> <ref name="short"/>'
-        short_refs = get_short_refs(text)
+    def test_no_refs_returns_empty_list(self):
+        result = CitationsParser().get_short_refs("No refs in this text")
 
-        assert len(short_refs) == 1
-        assert short_refs[0].name == "short"
+        assert result == []
+
+    def test_empty_text_returns_empty_list(self):
+        result = CitationsParser().get_short_refs("")
+
+        assert result == []
+
+    def test_short_ref_without_name(self):
+        text = "<ref />"
+        result = CitationsParser().get_short_refs(text)
+
+        assert len(result) == 1
+        assert result[0].name == ""
+        assert result[0].contents == ""
+
+    def test_short_ref_name_is_stripped(self):
+        text = '<ref name=" spaced " />'
+        result = CitationsParser().get_short_refs(text)
+
+        assert len(result) == 1
+        assert result[0].name == "spaced"
+
+    def test_short_ref_with_extra_attributes(self):
+        text = '<ref name="foo" group="note" />'
+        result = CitationsParser().get_short_refs(text)
+
+        assert len(result) == 1
+        assert result[0].attrs["name"] == "foo"
+        assert result[0].attrs["group"] == "note"
+
+    def test_no_space_before_self_close(self):
+        text = '<ref name="tight"/>'
+        result = CitationsParser().get_short_refs(text)
+
+        assert len(result) == 1
+        assert result[0].name == "tight"
+        assert result[0].tag == '<ref name="tight"/>'
 
 
 class TestGetFullRefs:
-    """Test full references mapping"""
+    """Tests for CitationsParser().get_full_refs function"""
 
-    def test_full_refs_mapping(self):
-        """Test creating full refs mapping"""
-        text = '<ref name="test">Content</ref>'
-        refs = get_full_refs(text)
-        assert "test" in refs
-        assert "Content" in refs["test"]
+    def test_single_named_ref(self):
+        text = '<ref name="smith2020">Smith, J. (2020)</ref>'
+        result = CitationsParser().get_full_refs(text)
 
-    def test_get_full_refs(self):
-        """Test getting full reference mapping"""
+        assert result == {"smith2020": '<ref name="smith2020">Smith, J. (2020)</ref>'}
+
+    def test_multiple_named_refs(self):
+        text = '<ref name="a">First</ref> text <ref name="b">Second</ref>'
+        result = CitationsParser().get_full_refs(text)
+
+        assert set(result.keys()) == {"a", "b"}
+        assert result["a"] == '<ref name="a">First</ref>'
+        assert result["b"] == '<ref name="b">Second</ref>'
+
+    def test_unnamed_refs_excluded(self):
+        text = '<ref>No name here</ref><ref name="named">Has name</ref>'
+        result = CitationsParser().get_full_refs(text)
+
+        assert list(result.keys()) == ["named"]
+
+    def test_self_closing_refs_excluded(self):
+        text = '<ref name="full">Full ref</ref><ref name="short" />'
+        result = CitationsParser().get_full_refs(text)
+
+        assert list(result.keys()) == ["full"]
+
+    def test_short_ref_before_full_ref_with_same_name(self):
+        # A short ref appearing first must not shadow the full definition
         text = '<ref name="ref2"/><ref name="ref1">Content 1</ref> <ref name="ref2">Content 2</ref>'
-        full_refs = get_full_refs(text)
+        result = CitationsParser().get_full_refs(text)
 
-        assert len(full_refs) == 2
-        assert full_refs["ref1"] == '<ref name="ref1">Content 1</ref>'
-        assert full_refs["ref2"] == '<ref name="ref2">Content 2</ref>'
+        assert len(result) == 2
+        assert result["ref1"] == '<ref name="ref1">Content 1</ref>'
+        assert result["ref2"] == '<ref name="ref2">Content 2</ref>'
 
-    def test_get_full_refs_with_unnamed_refs(self):
-        """Test full refs with unnamed citations (should be excluded)"""
-        text = '<ref name="ref2"/><ref>Unnamed</ref> <ref name="test">Named</ref>'
-        full_refs = get_full_refs(text)
+    def test_only_short_refs_returns_empty_dict(self):
+        result = CitationsParser().get_full_refs('<ref name="ref2"/>')
 
-        assert len(full_refs) == 1
-        assert "test" in full_refs
-        assert full_refs["test"] == '<ref name="test">Named</ref>'
+        assert result == {}
 
-    def test_get_full_refs_empty_text(self):
-        """Test full refs with empty text"""
-        full_refs = get_full_refs('<ref name="ref2"/>')
-        assert len(full_refs) == 0
+    def test_no_refs_returns_empty_dict(self):
+        result = CitationsParser().get_full_refs("Plain text, no refs at all")
+
+        assert result == {}
+
+    def test_empty_text_returns_empty_dict(self):
+        result = CitationsParser().get_full_refs("")
+
+        assert result == {}
+
+    def test_duplicate_names_last_occurrence_wins(self):
+        text = '<ref name="dup">First</ref> text <ref name="dup">Second</ref>'
+        result = CitationsParser().get_full_refs(text)
+
+        assert result == {"dup": '<ref name="dup">Second</ref>'}
+
+
+class TestGetShortAndFullRefs:
+    def load_fixture(self, name: str) -> str:
+        path = Path(__file__).parent / "data" / name
+        assert path.exists(), f"Fixture file missing: {path}"
+
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert content is not None, f"Unable to read fixture file: {path}"
+        return content
+
+    def test_refs(self) -> None:
+        source = self.load_fixture("source-1.wiki")
+
+        full_refs = CitationsParser().get_full_refs(source)
+        short_refs = CitationsParser().get_short_refs(source)
+
+        assert len(full_refs) == 11
+        assert len(short_refs) == 22
+
+        assert len(set(full_refs.keys())) == 11
+
+        assert set(full_refs.keys()) == {
+            "AHFS2022",
+            "BNF81",
+            "EMA",
+            "EMC",
+            "EPAR2022",
+            "Lin",
+            "MSR",
+            "Minkovsky",
+            "PI2022",
+            "TGA",
+            "WHO22nd",
+        }
+
+        short_refs_by_name = {x.name: x for x in short_refs}
+
+        assert set(short_refs_by_name.keys()) == {
+            "AHFS2022",
+            "BNF81",
+            "EMA",
+            "EMC",
+            "EPAR2022",
+            "Lin",
+            "Minkovsky",
+            "PI2022",
+            "TGA",
+            "not_exists_ref_should_be_deleted",
+        }

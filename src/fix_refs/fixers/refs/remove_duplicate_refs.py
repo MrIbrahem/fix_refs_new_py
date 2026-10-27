@@ -51,7 +51,7 @@ class DuplicateRefRemover:
 
             logger.debug(f"\n cite_attrs: (({cite_attrs}))")
 
-            short_tag = citation.to_string_self_closing()
+            short_tag = citation.make_short()
 
             if cite_attrs in refs:
                 new_text = new_text.replace(cite_fulltext, short_tag)
