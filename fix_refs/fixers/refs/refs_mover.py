@@ -61,7 +61,3 @@ class RefsMover:
         self._plan_template_edits()
         logger.info("Applying %d edits", len(self.edits))
         return self._apply_edits()
-
-
-def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> str:
-    return RefsMover(text, prefer_body_version).run()
