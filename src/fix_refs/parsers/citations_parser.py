@@ -4,10 +4,11 @@ Citation parser for WikiText reference tags
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 
 import wikitextparser as wtp
+
 
 logger = logging.getLogger(__name__)
 
@@ -16,26 +17,32 @@ logger = logging.getLogger(__name__)
 class Citation:
     """Represents a citation reference"""
 
-    def __init__(self, ref: wtp._tag.Tag) -> None:
-        self.ref = ref
-        self.tag = self.ref.string
-        self.contents = self.ref.contents or ""
-        self.options = dict(self.ref.attrs)
+    tag: wtp.Tag
 
-        self.attrs = self.ref.attrs
+    @property
+    def attrs(self) -> dict[str, str]:
+        return self.tag.attrs
+
+    @property
+    def tag_str(self) -> str:
+        return self.tag.string
+
+    @property
+    def contents(self) -> str:
+        return self.tag.contents or ""
 
     @property
     def name(self) -> str:
         """Get citation name"""
-        return self.ref.attrs.get("name", "").strip()
+        return self.tag.attrs.get("name", "").strip()
 
     def set_contents(self, new_content: str) -> None:
         """Set citation content"""
-        self.ref.contents = new_content
+        self.tag.contents = new_content
 
     def get_str_attributes(self) -> str:
         """Get citation options/attributes as a string"""
-        tag_str = str(self.ref.string)
+        tag_str = str(self.tag.string)
         # Find the end of the opening tag: could be ">" or "/>"
         close_idx = tag_str.find(">")
         if close_idx == -1:
@@ -50,17 +57,17 @@ class Citation:
         attributes = self.get_str_attributes()
         if attributes:
             return f"<ref {attributes} />"
-        return self.ref.string
+        return self.tag.string
 
     def to_string(self) -> str:
         """Convert back to reference tag string"""
         if self.is_self_closing():
-            return self.ref.string.replace("></ref>", " />")
+            return self.tag.string.replace("></ref>", " />")
 
-        return self.ref.string
+        return self.tag.string
 
     def is_self_closing(self) -> bool:
-        return not self.contents or not self.contents.strip()
+        return not self.tag.contents or not self.tag.contents.strip()
 
     @classmethod
     def from_text(cls, ref_text: str) -> Citation:
@@ -72,8 +79,12 @@ class Citation:
         if ref_text.count("<ref") != 1:
             raise ValueError("Multiple reference tags")
 
-        tag = wtp._tag.Tag(ref_text)
-        return Citation(tag)
+        tag = wtp.Tag(ref_text)
+        return Citation.load(tag)
+
+    @classmethod
+    def load(cls, ref: wtp.Tag) -> Citation:
+        return cls(tag=ref)
 
 
 class CitationsParser:
@@ -94,7 +105,7 @@ class CitationsParser:
         for tag in parsed.get_tags():
             if tag.name == "ref":
                 # citations.append(Citation.from_text(tag.string))
-                citations.append(Citation(tag))
+                citations.append(Citation.load(tag))
 
         return citations
 
@@ -112,7 +123,7 @@ class CitationsParser:
 
         for cite in citations:
             if cite.contents and cite.name:
-                full[cite.name] = cite.tag
+                full[cite.name] = cite.tag_str
 
         return full
 
@@ -130,7 +141,7 @@ class CitationsParser:
         for tag in parsed.get_tags():
             if tag.name == "ref" and not tag.contents:
                 # citations.append(Citation.from_text(tag.string))
-                citations.append(Citation(tag))
+                citations.append(Citation.load(tag))
 
         return citations
 
@@ -153,7 +164,7 @@ class CitationsParser:
         numb = 0
 
         for citation in citations:
-            cite_fulltext = citation.tag
+            cite_fulltext = citation.tag_str
             cite_attrs = citation.get_str_attributes()
             content = citation.contents.strip()
 
@@ -163,7 +174,7 @@ class CitationsParser:
             if not cite_attrs or not citation.name:
                 numb += 1
                 name = f"autogen_{numb}"
-                citation.ref.attrs["name"] = name
+                citation.tag.attrs["name"] = name
                 cite_attrs = citation.get_str_attributes()
 
             logger.debug(f"\n cite_attrs: (({cite_attrs}))")

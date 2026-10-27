@@ -1,3 +1,7 @@
+""" """
+
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass, field
 from functools import cached_property
@@ -7,6 +11,54 @@ import wikitextparser as wtp
 from .wtp_temps import WtpTemplates
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class WtpRef:
+    """Represents a citation reference"""
+
+    tag: wtp.Tag
+
+    @property
+    def attrs(self) -> dict[str, str]:
+        return self.tag.attrs
+
+    @property
+    def tag_str(self) -> str:
+        return self.tag.string
+
+    @property
+    def contents(self) -> str:
+        return self.tag.contents or ""
+
+    @property
+    def name(self) -> str:
+        """Get citation name"""
+        return self.tag.attrs.get("name", "").strip()
+
+    def set_contents(self, new_content: str) -> None:
+        """Set citation content"""
+        self.tag.contents = new_content
+
+    def is_self_closing(self) -> bool:
+        return not self.tag.contents or not self.tag.contents.strip()
+
+    @classmethod
+    def from_text(cls, ref_text: str) -> WtpRef:
+        """Create a WtpRef from a reference tag string"""
+
+        if not ref_text.strip().startswith("<ref"):
+            raise ValueError("Not a reference tag")
+
+        if ref_text.count("<ref") != 1:
+            raise ValueError("Multiple reference tags")
+
+        tag = wtp.Tag(ref_text)
+        return WtpRef.load(tag)
+
+    @classmethod
+    def load(cls, ref: wtp.Tag) -> WtpRef:
+        return cls(tag=ref)
 
 
 @dataclass
@@ -45,10 +97,11 @@ class WtpRefs:
         result = clone_r.string
         return result.replace("></ref>", " />")
 
-    # ---------- helpers ----------
     @staticmethod
     def get_name(r: wtp.Tag) -> str:
         return r.get_attr("name") or ""
+
+    # ---------- helpers ----------
 
     @cached_property
     def all_refs(self) -> list[wtp.Tag]:

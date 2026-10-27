@@ -18,7 +18,7 @@ class TestGetAllRefs:
 
         assert len(result) == 1
         assert result[0].contents == "A basic citation"
-        assert result[0].tag == "<ref>A basic citation</ref>"
+        assert result[0].tag_str == "<ref>A basic citation</ref>"
         assert result[0].name == ""
 
     def test_single_full_ref_with_name(self):
@@ -29,7 +29,7 @@ class TestGetAllRefs:
         assert result[0].contents == "Smith, J. (2020)"
         assert result[0].name == "smith2020"
         assert result[0].attrs["name"] == "smith2020"
-        assert result[0].tag == text
+        assert result[0].tag_str == text
 
     def test_multiple_full_refs(self):
         text = "Text<ref>First</ref> more<ref>Second</ref>"
@@ -46,7 +46,7 @@ class TestGetAllRefs:
         assert len(result) == 2
         assert [c.name for c in result] == ["ref1", "ref2"]
         assert [c.contents for c in result] == ["Content 1", "Content 2"]
-        assert result[0].tag == '<ref name="ref1">Content 1</ref>'
+        assert result[0].tag_str == '<ref name="ref1">Content 1</ref>'
 
     def test_not_excludes_self_closing_refs(self):
         text = 'Text<ref name="a">Full ref</ref> and<ref name="a" /> a short ref'
@@ -116,7 +116,7 @@ class TestGetShortRefs:
         assert len(result) == 1
         assert result[0].name == "smith2020"
         assert result[0].contents == ""
-        assert result[0].tag == '<ref name="smith2020" />'
+        assert result[0].tag_str == '<ref name="smith2020" />'
 
     def test_multiple_short_refs(self):
         # Mixes the "/>" and " />" self-closing styles
@@ -173,7 +173,7 @@ class TestGetShortRefs:
 
         assert len(result) == 1
         assert result[0].name == "tight"
-        assert result[0].tag == '<ref name="tight"/>'
+        assert result[0].tag_str == '<ref name="tight"/>'
 
 
 class TestGetFullRefs:

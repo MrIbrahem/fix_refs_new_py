@@ -32,7 +32,7 @@ class RefExpander:
 
         for cite in short_refs:
             name = cite.name
-            refe = cite.tag
+            refe = cite.tag_str
 
             rr = refs.get(name, "")
 
