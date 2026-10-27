@@ -63,12 +63,6 @@ class LanguageFixerPipeline:
         return text
 
 
-def apply_language_fixes(text, title, lang, source_title, mdwiki_revid) -> str:
-    """Legacy wrapper for LanguageFixerPipeline.apply_language_fixes."""
-    return LanguageFixerPipeline().apply_language_fixes(text, title, lang, source_title, mdwiki_revid)
-
-
 __all__ = [
     "LanguageFixerPipeline",
-    "apply_language_fixes",
 ]

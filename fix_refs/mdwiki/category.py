@@ -114,34 +114,6 @@ class MDWikiCategoryService:
         return text
 
 
-# Default service instance for legacy functions
-_default_service = MDWikiCategoryService()
-
-
-def load_from_local_file() -> dict[str, Any]:
-    """Legacy entry point. Use MDWikiCategoryService.load_from_local_file instead."""
-    return _default_service.load_from_local_file()
-
-
-def get_cats() -> dict[str, Any]:
-    """Legacy entry point. Use MDWikiCategoryService.get_cats instead."""
-    return _default_service.get_cats()
-
-
-def get_mdwiki_category(lang: str) -> str:
-    """Legacy entry point. Use MDWikiCategoryService.get_mdwiki_category instead."""
-    return _default_service.get_mdwiki_category(lang)
-
-
-def add_translated_from_mdwiki(text: str, lang: str) -> str:
-    """Legacy entry point. Use MDWikiCategoryService.add_translated_from_mdwiki instead."""
-    return _default_service.add_translated_from_mdwiki(text, lang)
-
-
 __all__ = [
     "MDWikiCategoryService",
-    "load_from_local_file",
-    "get_cats",
-    "get_mdwiki_category",
-    "add_translated_from_mdwiki",
 ]

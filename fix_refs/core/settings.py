@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 import json
 import logging
 import os
@@ -63,25 +62,6 @@ class SettingsLoader:
         return new
 
 
-def load_settings_from_file() -> dict:
-    """Legacy function to load settings from file."""
-    return SettingsLoader().load_settings_from_file()
-
-
-def load_settings_from_server(server_name: str) -> dict:
-    """Legacy function to load settings from server."""
-    return SettingsLoader().load_settings_from_server(server_name)
-
-
-@functools.lru_cache(maxsize=1)
-def load_settings() -> dict:
-    """Legacy function to load settings with caching."""
-    return SettingsLoader().load_settings()
-
-
 __all__ = [
     "SettingsLoader",
-    "load_settings_from_file",
-    "load_settings_from_server",
-    "load_settings",
 ]

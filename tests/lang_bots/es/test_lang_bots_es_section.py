@@ -3,7 +3,11 @@
 Converted from tests/es_bots/esSectionTest.php
 """
 
-from fix_refs.lang_bots.es.es_section_bot import es_section
+from fix_refs.lang_bots.es.es_section_bot import SpanishSectionFixer
+
+
+def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
+    return SpanishSectionFixer().es_section(source_title, text, mdwiki_revid)
 
 
 class TestEsSection:

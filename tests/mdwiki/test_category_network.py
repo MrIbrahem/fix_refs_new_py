@@ -11,10 +11,6 @@ import pytest
 from fix_refs.mdwiki.category import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
-    add_translated_from_mdwiki,
-    get_cats,
-    get_mdwiki_category,
-    load_from_local_file,
 )
 
 # Mock Wikidata sitelinks-style data: {"<lang>wiki": {"title": ...}}
@@ -173,31 +169,3 @@ class TestLoadFromLocalFile:
         (config_manager.resources_path / "mdwiki_categories.json").write_text("{broken", encoding="utf-8")
         svc = MDWikiCategoryService(config_manager=config_manager)
         assert svc.load_from_local_file() == {}
-
-
-class TestLegacyFunctions:
-    """Module-level functions should delegate to the default service."""
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_add_translated_from_mdwiki(self, mock_service):
-        mock_service.add_translated_from_mdwiki.return_value = "out"
-        assert add_translated_from_mdwiki("text", "fr") == "out"
-        mock_service.add_translated_from_mdwiki.assert_called_once_with("text", "fr")
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_get_mdwiki_category(self, mock_service):
-        mock_service.get_mdwiki_category.return_value = "Cat"
-        assert get_mdwiki_category("fr") == "Cat"
-        mock_service.get_mdwiki_category.assert_called_once_with("fr")
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_get_cats(self, mock_service):
-        mock_service.get_cats.return_value = {"a": 1}
-        assert get_cats() == {"a": 1}
-        mock_service.get_cats.assert_called_once_with()
-
-    @patch("fix_refs.mdwiki.category._default_service")
-    def test_load_from_local_file(self, mock_service):
-        mock_service.load_from_local_file.return_value = {"b": 2}
-        assert load_from_local_file() == {"b": 2}
-        mock_service.load_from_local_file.assert_called_once_with()

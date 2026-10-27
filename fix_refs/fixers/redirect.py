@@ -26,12 +26,6 @@ class RedirectDetector:
         return bool(re.match(r"^#(пренасочване|redirect)", text, re.IGNORECASE))
 
 
-def is_redirect(title: str, text: str) -> bool:
-    """Legacy wrapper for RedirectDetector.is_redirect."""
-    return RedirectDetector().is_redirect(title, text)
-
-
 __all__ = [
     "RedirectDetector",
-    "is_redirect",
 ]

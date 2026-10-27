@@ -67,7 +67,9 @@ class ImageFixer:
 
         return True
 
-    def check_commons_image_exists_cached(self, filename: str) -> bool:
+    @staticmethod
+    @lru_cache(maxsize=1000)
+    def check_commons_image_exists_cached(filename: str) -> bool:
         """Cached version of check_commons_image_exists
 
         Uses LRU cache to avoid repeated API calls for the same filename.
@@ -78,11 +80,11 @@ class ImageFixer:
         Returns:
             True if image exists, False otherwise
         """
-        return check_commons_image_exists_cached(filename)
+        return ImageFixer().check_commons_image_exists(filename)
 
     def clear_image_cache(self) -> None:
         """Clear the image existence cache"""
-        check_commons_image_exists_cached.cache_clear()
+        self.check_commons_image_exists_cached.cache_clear()
 
     def _get_image_param_number(self, param_name: str) -> str | None:
         """Extract the number suffix from image/caption parameter
@@ -140,7 +142,7 @@ class ImageFixer:
             Text with missing image values cleared
         """
         parsed = wtp.parse(text)
-        check_fn = check_commons_image_exists_cached if use_cache else check_commons_image_exists
+        check_fn = self.check_commons_image_exists_cached if use_cache else self.check_commons_image_exists
 
         for template in parsed.templates:
             # Process each argument looking for image parameters
@@ -201,7 +203,7 @@ class ImageFixer:
             Text with missing file links removed
         """
         parsed = wtp.parse(text)
-        check_fn = check_commons_image_exists_cached if use_cache else check_commons_image_exists
+        check_fn = self.check_commons_image_exists_cached if use_cache else self.check_commons_image_exists
 
         # Process wikilinks in reverse order to maintain string positions
         for wikilink in reversed(parsed.wikilinks):
@@ -251,67 +253,6 @@ class ImageFixer:
         return text
 
 
-def check_commons_image_exists(filename: str, timeout: int = 10) -> bool:
-    """Legacy wrapper for ImageFixer.check_commons_image_exists."""
-    return ImageFixer().check_commons_image_exists(filename, timeout=timeout)
-
-
-@lru_cache(maxsize=1000)
-def check_commons_image_exists_cached(filename: str) -> bool:
-    """Legacy wrapper for ImageFixer.check_commons_image_exists_cached."""
-    return check_commons_image_exists(filename)
-
-
-def clear_image_cache() -> None:
-    """Legacy wrapper for ImageFixer.clear_image_cache."""
-    check_commons_image_exists_cached.cache_clear()
-
-
-def remove_missing_infobox_images(text: str, use_cache: bool = False) -> str:
-    """Legacy wrapper for ImageFixer.remove_missing_infobox_images."""
-    return ImageFixer().remove_missing_infobox_images(text, use_cache=use_cache)
-
-
-def remove_missing_inline_images(text: str, use_cache: bool = False) -> str:
-    """Legacy wrapper for ImageFixer.remove_missing_inline_images."""
-    return ImageFixer().remove_missing_inline_images(text, use_cache=use_cache)
-
-
-def remove_missing_images(text: str) -> str:
-    """Legacy wrapper for ImageFixer.remove_missing_images."""
-    return ImageFixer().remove_missing_images(text)
-
-
-def remove_missing_images_cached(text: str) -> str:
-    """Legacy wrapper for ImageFixer.remove_missing_images_cached."""
-    return ImageFixer().remove_missing_images_cached(text)
-
-
-def _get_image_param_number(param_name: str) -> str | None:
-    """Legacy wrapper for ImageFixer._get_image_param_number."""
-    return ImageFixer()._get_image_param_number(param_name)
-
-
-def _find_caption_arg(template: wtp.Template, number: str) -> wtp.Argument | None:
-    """Legacy wrapper for ImageFixer._find_caption_arg."""
-    return ImageFixer()._find_caption_arg(template, number)
-
-
-def _extract_filename_from_wikilink(wikilink: wtp.WikiLink) -> str | None:
-    """Legacy wrapper for ImageFixer._extract_filename_from_wikilink."""
-    return ImageFixer()._extract_filename_from_wikilink(wikilink)
-
-
 __all__ = [
     "ImageFixer",
-    "check_commons_image_exists",
-    "check_commons_image_exists_cached",
-    "clear_image_cache",
-    "remove_missing_infobox_images",
-    "remove_missing_inline_images",
-    "remove_missing_images",
-    "remove_missing_images_cached",
-    "_get_image_param_number",
-    "_find_caption_arg",
-    "_extract_filename_from_wikilink",
 ]

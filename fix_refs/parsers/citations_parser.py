@@ -70,24 +70,6 @@ class CitationsParser:
         return citations
 
 
-def get_all_citations(text: str) -> list[Citation]:
-    """Legacy wrapper for CitationsParser.get_all_citations."""
-    return CitationsParser().get_all_citations(text)
-
-
-def get_full_refs(text: str) -> dict[str, str]:
-    """Legacy wrapper for CitationsParser.get_full_refs."""
-    return CitationsParser().get_full_refs(text)
-
-
-def get_short_refs(text: str) -> list[Citation]:
-    """Legacy wrapper for CitationsParser.get_short_refs."""
-    return CitationsParser().get_short_refs(text)
-
-
 __all__ = [
     "CitationsParser",
-    "get_all_citations",
-    "get_full_refs",
-    "get_short_refs",
 ]

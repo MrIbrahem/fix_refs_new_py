@@ -137,36 +137,6 @@ class InfoboxExpander:
         return newtext
 
 
-def do_comments(text: str) -> str:
-    """Legacy wrapper for InfoboxExpander.do_comments."""
-    return InfoboxExpander().do_comments(text)
-
-
-def expend_new(main_temp: str) -> str:
-    """Legacy wrapper for InfoboxExpander.expend_new."""
-    return InfoboxExpander().expend_new(main_temp)
-
-
-def extract_templates_and_params(text: str) -> list[dict]:
-    """Legacy wrapper for InfoboxExpander.extract_templates_and_params."""
-    return InfoboxExpander().extract_templates_and_params(text)
-
-
-def expand_infobox_in_text(text: str, title: str, section_0: str) -> str:
-    """Legacy wrapper for InfoboxExpander.expand_infobox_in_text."""
-    return InfoboxExpander().expand_infobox_in_text(text, title, section_0)
-
-
-def make_section_0(title: str, newtext: str) -> str:
-    """Legacy wrapper for InfoboxExpander.make_section_0."""
-    return InfoboxExpander().make_section_0(title, newtext)
-
-
 __all__ = [
     "InfoboxExpander",
-    "do_comments",
-    "expend_new",
-    "extract_templates_and_params",
-    "expand_infobox_in_text",
-    "make_section_0",
 ]

@@ -63,18 +63,6 @@ class RefExpander:
         return self.refs_expand(short_refs, first, alltext)
 
 
-def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
-    """Legacy wrapper for RefExpander.refs_expand."""
-    return RefExpander().refs_expand(short_refs, text, alltext)
-
-
-def refs_expand_work(first: str, alltext: str = "") -> str:
-    """Legacy wrapper for RefExpander.refs_expand_work."""
-    return RefExpander().refs_expand_work(first, alltext)
-
-
 __all__ = [
     "RefExpander",
-    "refs_expand",
-    "refs_expand_work",
 ]

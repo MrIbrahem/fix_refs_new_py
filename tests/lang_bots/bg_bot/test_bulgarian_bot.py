@@ -2,7 +2,11 @@
 Tests for Bulgarian bot
 """
 
-from fix_refs.lang_bots.bg_bot import bg_fixes
+from fix_refs.lang_bots.bg_bot import BulgarianBot
+
+
+def bg_fixes(text: str, source_title: str, mdwiki_revid: int) -> str:
+    return BulgarianBot().bg_fixes(text, source_title, mdwiki_revid)
 
 
 class TestBulgarianBot:

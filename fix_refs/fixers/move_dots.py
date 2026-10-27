@@ -39,12 +39,6 @@ class DotsMover:
         return text
 
 
-def move_dots_after_refs(text: str, lang: str) -> str:
-    """Legacy wrapper for DotsMover.move_dots_after_refs."""
-    return DotsMover().move_dots_after_refs(text, lang)
-
-
 __all__ = [
     "DotsMover",
-    "move_dots_after_refs",
 ]

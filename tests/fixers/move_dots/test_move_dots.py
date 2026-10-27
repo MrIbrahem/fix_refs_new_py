@@ -3,7 +3,11 @@
 Converted from tests/mv_dots_afterTest.php and tests/mv_dots_beforeTest.php
 """
 
-from fix_refs.fixers.move_dots import move_dots_after_refs
+from fix_refs.fixers.move_dots import DotsMover
+
+
+def move_dots_after_refs(text: str, lang: str) -> str:
+    return DotsMover().move_dots_after_refs(text, lang)
 
 
 def test_move_dots_after_single_dot():

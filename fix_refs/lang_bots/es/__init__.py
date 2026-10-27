@@ -42,12 +42,6 @@ class SpanishBot:
         return text
 
 
-def fix_es_all(text: str, title: str, source_title: str, mdwiki_revid: int) -> str:
-    """Legacy wrapper for SpanishBot.fix_es_all."""
-    return SpanishBot().fix_es_all(text, title, source_title, mdwiki_revid)
-
-
 __all__ = [
     "SpanishBot",
-    "fix_es_all",
 ]

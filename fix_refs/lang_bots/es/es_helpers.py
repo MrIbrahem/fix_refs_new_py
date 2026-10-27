@@ -71,18 +71,6 @@ class SpanishHelpers:
         return new_text
 
 
-def remove_short_refs(text: str) -> str:
-    """Legacy wrapper for SpanishHelpers.remove_short_refs."""
-    return SpanishHelpers().remove_short_refs(text)
-
-
-def add_line_to_temp(line: str, text: str) -> str:
-    """Legacy wrapper for SpanishHelpers.add_line_to_temp."""
-    return SpanishHelpers().add_line_to_temp(line, text)
-
-
 __all__ = [
     "SpanishHelpers",
-    "remove_short_refs",
-    "add_line_to_temp",
 ]
