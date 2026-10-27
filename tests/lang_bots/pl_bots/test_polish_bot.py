@@ -2,7 +2,7 @@
 Tests for Polish bot
 """
 
-from fix_refs.lang_bots.pl_bot import PolishBot
+from src.fix_refs.lang_bots.pl_bot import PolishBot
 
 
 def pl_fixes(text: str) -> str:

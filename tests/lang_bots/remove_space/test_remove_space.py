@@ -3,7 +3,7 @@
 Converted from tests/remove_spaceTest.php
 """
 
-from fix_refs.lang_bots.remove_space import RemoveSpace
+from src.fix_refs.lang_bots.remove_space import RemoveSpace
 
 
 class TestRemoveSpace:

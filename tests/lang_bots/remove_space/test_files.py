@@ -5,7 +5,7 @@ Converted from tests/remove_spaceTest.php
 
 from pathlib import Path
 
-from fix_refs.lang_bots.remove_space import RemoveSpace
+from src.fix_refs.lang_bots.remove_space import RemoveSpace
 
 
 def test_file_text_1():

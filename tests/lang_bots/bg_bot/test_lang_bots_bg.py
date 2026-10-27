@@ -3,7 +3,7 @@
 Converted from tests/bg_bots/fix_bgTest.php
 """
 
-from fix_refs.lang_bots.bg_bot import BulgarianBot
+from src.fix_refs.lang_bots.bg_bot import BulgarianBot
 
 
 def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:

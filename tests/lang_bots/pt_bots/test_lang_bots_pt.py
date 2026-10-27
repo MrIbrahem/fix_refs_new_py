@@ -3,8 +3,8 @@
 Converted from tests/pt_bots/pt_monthsTest.php
 """
 
-from fix_refs.fixers.months import MonthTranslator
-from fix_refs.lang_bots.pt_bot import PortugueseBot
+from src.fix_refs.fixers.months import MonthTranslator
+from src.fix_refs.lang_bots.pt_bot import PortugueseBot
 
 
 def fix_pt_months_in_refs(text: str) -> str:

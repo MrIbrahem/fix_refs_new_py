@@ -1,8 +1,8 @@
 # test_refs_mover.py
 import logging
 
-from fix_refs.fixers.refs.refs_mover import RefsMover
-from fix_refs.fixers.refs.wtp_mapping import (
+from src.fix_refs.fixers.refs.refs_mover import RefsMover
+from src.fix_refs.fixers.refs.wtp_mapping import (
     WtpRefs,
     WtpTemplates,
 )

@@ -1,6 +1,6 @@
 """ """
 
-from fix_refs.infobox.expend_infobox import InfoboxExpander
+from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
 def do_comments(text: str) -> str:

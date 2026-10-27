@@ -7,12 +7,12 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-
-from fix_refs.mdwiki.category import (
+from src.fix_refs.config import ConfigManager
+from src.fix_refs.mdwiki.category import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
 )
-from fix_refs.utils.http import HttpClient
+from src.fix_refs.utils.http import HttpClient
 
 # Mock Wikidata sitelinks-style data: {"<lang>wiki": {"title": ...}}
 MOCK_CATS = {
@@ -37,9 +37,10 @@ def mock_http_client():
 
 @pytest.fixture
 def config_manager(tmp_path):
-    """ConfigManager stub whose resources_path points to a temp dir."""
-    cm = MagicMock()
+    real = ConfigManager(resources_path=tmp_path, revisions_path=tmp_path / "revisions")
+    cm = MagicMock(spec=ConfigManager)
     cm.resources_path = tmp_path
+    cm.load_resources_path_json.side_effect = real.load_resources_path_json
     return cm
 
 

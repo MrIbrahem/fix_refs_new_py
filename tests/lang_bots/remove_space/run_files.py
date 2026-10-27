@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from fix_refs.lang_bots.remove_space import RemoveSpace
+from src.fix_refs.lang_bots.remove_space import RemoveSpace
 
 base_path = Path(__file__).parent / "remove_space_texts"
 

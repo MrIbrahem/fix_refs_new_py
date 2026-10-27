@@ -1,6 +1,6 @@
 """Tests for SettingsLoader in fix_refs/core/settings.py"""
 
-from fix_refs.core.settings import SettingsLoader
+from src.fix_refs.core.settings import SettingsLoader
 
 
 class TestSettingsLoader:

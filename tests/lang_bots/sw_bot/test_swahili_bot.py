@@ -2,7 +2,7 @@
 Tests for Swahili bot
 """
 
-from fix_refs.lang_bots.sw_bot import SwahiliBot
+from src.fix_refs.lang_bots.sw_bot import SwahiliBot
 
 
 def sw_fixes(text: str) -> str:

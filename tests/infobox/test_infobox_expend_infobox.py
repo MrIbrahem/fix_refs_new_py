@@ -3,7 +3,7 @@
 Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.php
 """
 
-from fix_refs.infobox.expend_infobox import InfoboxExpander
+from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
 def expend_new(main_temp: str) -> str:

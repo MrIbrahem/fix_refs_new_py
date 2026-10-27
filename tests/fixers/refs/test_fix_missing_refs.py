@@ -4,9 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
-
-from fix_refs.config import ConfigManager
-from fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander
+from src.fix_refs.config import ConfigManager
+from src.fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander
 
 REVID = 1501810
 TITLE = "Entecavir"
@@ -52,7 +51,7 @@ def write_revision(revisions_path: Path):
 @pytest.fixture
 def expander(revisions_path: Path) -> ReferenceExpander:
     """ReferenceExpander built from ConfigManager (reads REVISIONS_PATH)."""
-    return ReferenceExpander(ConfigManager())
+    return ReferenceExpander(ConfigManager.load())
 
 
 class TestReferenceExpander:

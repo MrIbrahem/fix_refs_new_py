@@ -30,7 +30,7 @@ class MDWikiCategoryService:
         http_client: HttpClient | None = None,
     ) -> None:
         self.http_client = http_client or HttpClient()
-        self.config_manager = config_manager or ConfigManager()
+        self.config_manager = config_manager or ConfigManager.load()
         self.wikidata_url = wikidata_url
         self.skip_langs = skip_langs or SKIP_LANGS_CATEGORY
 
@@ -40,17 +40,7 @@ class MDWikiCategoryService:
         Returns:
             Dictionary of MDWiki categories or empty dict if file not found.
         """
-        local_file = self.config_manager.resources_path / "mdwiki_categories.json"
-
-        if not local_file.exists():
-            return {}
-
-        try:
-            with open(local_file, "r", encoding="utf-8") as f:
-                result: dict[str, Any] = json.load(f)  # type: ignore
-                return result
-        except (OSError, json.JSONDecodeError):
-            return {}
+        return self.config_manager.load_resources_path_json("mdwiki_categories.json")
 
     def get_cats(self) -> dict[str, Any]:
         """Fetch MDWiki categories from Wikidata API with fallback to local file.

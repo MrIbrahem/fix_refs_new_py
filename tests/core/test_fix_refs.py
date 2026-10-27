@@ -2,7 +2,7 @@
 Tests for core fix_page functionality
 """
 
-from fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 def _fix_one(
