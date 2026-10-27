@@ -13,6 +13,7 @@ from fix_refs.mdwiki.category import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
 )
+from fix_refs.utils.http import HttpClient
 
 # Mock Wikidata sitelinks-style data: {"<lang>wiki": {"title": ...}}
 MOCK_CATS = {
@@ -24,19 +25,15 @@ MOCK_CATS = {
 
 DEFAULT_CAT = "Category:Translated from MDWiki"
 
+# ---------------------------------------------------------------------------
+# Fixtures
+# ---------------------------------------------------------------------------
 
-class FakseHttpClient:
-    def __init__(
-        self,
-        user_agent: str | None = None,
-        session: None = None,
-        get_url_return: Any | None = None,
-    ) -> None:
-        self.user_agent = user_agent or "default_user_agent"
-        self.get_url_return = get_url_return
 
-    def get_url(self, url: str, timeout: int = 5) -> None | str:
-        return self.get_url_return
+@pytest.fixture
+def mock_http_client():
+    """A mock HttpClient that is injected into ImageFixer."""
+    return MagicMock(spec=HttpClient)
 
 
 @pytest.fixture
@@ -48,13 +45,13 @@ def config_manager(tmp_path):
 
 
 @pytest.fixture
-def service(config_manager, monkeypatch):
+def service(config_manager, monkeypatch, mock_http_client):
     """Service wired to a fake URL getter returning MOCK_CATS (no network)."""
     monkeypatch.setenv("SERVER_NAME", "example.org")
-    http_client = FakseHttpClient(get_url_return=json.dumps(MOCK_CATS))
+    mock_http_client.get_url.return_value = json.dumps(MOCK_CATS)
     return MDWikiCategoryService(
         config_manager=config_manager,
-        http_client=http_client,  # pyright: ignore[reportArgumentType]
+        http_client=mock_http_client,  # pyright: ignore[reportArgumentType]
     )
 
 
@@ -96,11 +93,12 @@ class TestAddTranslatedFromMdwiki:
         text = "This is a sample text"
         assert service.add_translated_from_mdwiki(text, lang) == text
 
-    def test_custom_skip_langs(self, config_manager, monkeypatch):
+    def test_custom_skip_langs(self, config_manager, monkeypatch, mock_http_client):
         monkeypatch.setenv("SERVER_NAME", "example.org")
+        mock_http_client.get_url.return_value = json.dumps(MOCK_CATS)
         svc = MDWikiCategoryService(
             config_manager=config_manager,
-            url_getter=lambda url: json.dumps(MOCK_CATS),
+            http_client=mock_http_client,
             skip_langs=["fr"],
         )
         assert svc.add_translated_from_mdwiki("text", "fr") == "text"
@@ -129,50 +127,55 @@ class TestGetMdwikiCategory:
     def test_empty_for_skipped_langs(self, service, lang):
         assert service.get_mdwiki_category(lang) == ""
 
-    def test_default_when_title_not_string(self, config_manager, monkeypatch):
+    def test_default_when_title_not_string(self, config_manager, monkeypatch, mock_http_client):
         monkeypatch.setenv("SERVER_NAME", "example.org")
+        mock_http_client.get_url.return_value = json.dumps({"frwiki": {"title": 123}})
         svc = MDWikiCategoryService(
             config_manager=config_manager,
-            url_getter=lambda url: json.dumps({"frwiki": {"title": 123}}),
+            http_client=mock_http_client,
         )
         assert svc.get_mdwiki_category("fr") == DEFAULT_CAT
 
 
 class TestGetCats:
-    def test_local_file_when_no_server_name(self, config_manager, monkeypatch):
+    def test_local_file_when_no_server_name(self, config_manager, monkeypatch, mock_http_client):
         monkeypatch.delenv("SERVER_NAME", raising=False)
         (config_manager.resources_path / "mdwiki_categories.json").write_text(
             json.dumps({"frwiki": {"title": "Local"}}), encoding="utf-8"
         )
-        getter = MagicMock()
-        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=getter)
+        mock_http_client.get_url = MagicMock()
+        svc = MDWikiCategoryService(
+            config_manager=config_manager,
+            http_client=mock_http_client,
+        )
 
         assert svc.get_cats() == {"frwiki": {"title": "Local"}}
-        getter.assert_not_called()
+        mock_http_client.get_url.assert_not_called()
 
     def test_fetches_from_wikidata(self, service):
         assert service.get_cats() == MOCK_CATS
 
-    def test_passes_wikidata_url_to_getter(self, config_manager, monkeypatch):
+    def test_passes_wikidata_url_to_getter(self, config_manager, monkeypatch, mock_http_client):
         monkeypatch.setenv("SERVER_NAME", "example.org")
-        getter = MagicMock(return_value=json.dumps(MOCK_CATS))
+        mock_http_client.get_url.return_value = json.dumps(MOCK_CATS)
         svc = MDWikiCategoryService(
             config_manager=config_manager,
-            url_getter=getter,
+            http_client=mock_http_client,
             wikidata_url="https://x.test/api",
         )
         svc.get_cats()
-        getter.assert_called_once_with("https://x.test/api")
+        mock_http_client.get_url.assert_called_once_with("https://x.test/api")
 
     @pytest.mark.parametrize("bad_response", [None, "", "not json", "[1, 2, 3]"])
-    def test_falls_back_to_local_on_bad_response(self, config_manager, monkeypatch, bad_response):
+    def test_falls_back_to_local_on_bad_response(self, config_manager, monkeypatch, mock_http_client, bad_response):
         monkeypatch.setenv("SERVER_NAME", "example.org")
         (config_manager.resources_path / "mdwiki_categories.json").write_text(
             json.dumps({"fallback": True}), encoding="utf-8"
         )
+        mock_http_client.get_url.return_value = bad_response
         svc = MDWikiCategoryService(
             config_manager=config_manager,
-            url_getter=lambda url: bad_response,
+            http_client=mock_http_client,
         )
         assert svc.get_cats() == {"fallback": True}
 
