@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from src.fix_refs.config import ConfigManager
 from src.fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander
 

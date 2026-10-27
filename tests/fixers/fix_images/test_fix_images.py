@@ -11,7 +11,6 @@ from unittest.mock import MagicMock
 
 import pytest
 import wikitextparser as wtp
-
 from src.fix_refs.fixers.fix_images import ImageFixer
 from src.fix_refs.utils.http import HttpClient
 
