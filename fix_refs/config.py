@@ -26,7 +26,8 @@ class ConfigManager:
 
         # If revisions_path was not explicitly provided or is default, initialize it relative to resources_path
         if not self.revisions_path or self.revisions_path == Path("."):
-            self.revisions_path = Path(os.getenv("REVISIONS_PATH", self.resources_path / "revisions")).expanduser()
+            env_value = os.getenv("REVISIONS_PATH") or os.getenv("REVISIONS_DIR") or None
+            self.revisions_path = Path(env_value or self.resources_path / "revisions").expanduser()
 
     def _load_environment(self) -> None:
         """Load environment variables from .env file, with fallback to home directory."""

@@ -14,8 +14,8 @@ The `resources/` directory contains static data files and cached revision data u
 
 ### Technologies
 
--   **JSON** - Configuration data format
--   **Plain text** - Cached wikitext files
+- **JSON** - Configuration data format
+- **Plain text** - Cached wikitext files
 
 ---
 
@@ -27,8 +27,8 @@ The resources directory serves as a local cache and fallback data source. When t
 
 ### File Organization
 
--   `language_settings.json` - Loaded by `core/settings.py`
--   `revisions/{id}/wikitext.txt` - Loaded by `bots/fix_missing_refs.py` for reference expansion
+- `language_settings.json` - Loaded by `core/settings.py`
+- `revisions/{id}/wikitext.txt` - Loaded by `bots/fix_missing_refs.py` for reference expansion
 
 ---
 
@@ -55,9 +55,9 @@ The resources directory serves as a local cache and fallback data source. When t
 
 ## Areas That Need Attention
 
--   Add `.gitignore` for `revisions/` directory or move to external storage
--   Document the JSON schema for `language_settings.json`
--   Add a script to update/download revision data
+- Add `.gitignore` for `revisions/` directory or move to external storage
+- Document the JSON schema for `language_settings.json`
+- Add a script to update/download revision data
 
 ---
 
