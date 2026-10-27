@@ -42,24 +42,20 @@ from fix_refs import fix_one_page
 fixed_text = fix_one_page(
     text="Your wikitext here",
     title="Page Title",
-    lang="es",           # target language code
-    move_dots=True,      # move punctuation before refs
-    expend_infobox=True, # expand infobox templates
-    add_en_lang=False,   # add |language=en to citations
+    lang="es",  # target language code
+    move_dots=True,  # move punctuation before refs
+    expend_infobox=True,  # expand infobox templates
+    add_en_lang=False,  # add |language=en to citations
     add_category=False,  # add MDWiki translation category
-    source_title="",     # source page title
-    mdwiki_revid=0       # MDWiki revision ID
+    source_title="",  # source page title
+    mdwiki_revid=0,  # MDWiki revision ID
 )
 
 # With automatic settings
 from fix_refs import DoChangesToText1
 
 fixed_text = DoChangesToText1(
-    source_title="Source Article",
-    title="Translated Title",
-    text="wikitext content",
-    lang="es",
-    mdwiki_revid=12345
+    source_title="Source Article", title="Translated Title", text="wikitext content", lang="es", mdwiki_revid=12345
 )
 ```
 

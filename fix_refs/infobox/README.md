@@ -65,7 +65,7 @@ Mixed. Variable names like `tempse_by_u`, `PP`, `u`, `y1`, `u1`, `y2`, `u2` are 
 3. **Cryptic variable names**:
     ```python
     tempse_by_u = {}  # templates indexed by number
-    tempse = {}       # template sizes
+    tempse = {}  # template sizes
     PP = [[y1, u1] for u1, y1 in tempse.items()]  # sorted template sizes
     ```
 

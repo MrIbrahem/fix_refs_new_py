@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class MiniFixes:
-
     def fix_sections_titles(self, text: str, lang: str) -> str:
         """Fix section titles for different languages
 

@@ -85,7 +85,7 @@ fixed_text = fix_one_page(
     add_en_lang=False,
     add_category=False,
     source_title="",
-    mdwiki_revid=0
+    mdwiki_revid=0,
 )
 ```
 
