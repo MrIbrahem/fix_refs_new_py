@@ -105,4 +105,56 @@ class TestGetFullText:
         full_text = expander.get_full_text(TITLE, 0)
 
         assert full_text == REVISION_CONTENT
-        
+
+
+# Common ways editors write the same named reference
+SHORT_REF_VARIANTS = [
+    pytest.param('<ref name="AHFS2016" />', id="short-double-space"),
+    pytest.param('<ref name="AHFS2016"/>', id="short-double-nospace"),
+    pytest.param("<ref name='AHFS2016' />", id="short-single-space"),
+    pytest.param("<ref name='AHFS2016'/>", id="short-single-nospace"),
+    pytest.param("<ref name=AHFS2016 />", id="short-noquote-space"),
+    pytest.param("<ref name=AHFS2016/>", id="short-noquote-nospace"),
+]
+
+FULL_REF_VARIANTS = [
+    pytest.param('<ref name="AHFS2016">full ref</ref>', id="full-double"),
+    pytest.param("<ref name='AHFS2016'>full ref</ref>", id="full-single"),
+    pytest.param("<ref name=AHFS2016>full ref</ref>", id="full-noquote"),
+]
+
+
+class TestQuoteVariants:
+    """Quote styles (" / ' / none) and self-closing spacing, in both the short and the full ref."""
+
+    @pytest.mark.parametrize("full_ref", FULL_REF_VARIANTS)
+    @pytest.mark.parametrize("short_ref", SHORT_REF_VARIANTS)
+    def test_short_ref_is_expanded(
+        self,
+        expander: ReferenceExpander,
+        write_revision,
+        short_ref: str,
+        full_ref: str,
+    ) -> None:
+        write_revision(f"something {full_ref}")
+        text = f"This ref should be expanded {short_ref}"
+
+        result = expander.fix_missing_refs(text, TITLE, REVID)
+
+        assert "full ref</ref>" in result
+        assert short_ref not in result
+
+    @pytest.mark.parametrize("short_ref", SHORT_REF_VARIANTS)
+    def test_short_ref_not_found_stays_unchanged(
+        self,
+        expander: ReferenceExpander,
+        write_revision,
+        short_ref: str,
+    ) -> None:
+        """If the revision has no such named ref, the short ref must be left as-is."""
+        write_revision("something without refs")
+        text = f"text {short_ref}"
+
+        result = expander.fix_missing_refs(text, TITLE, REVID)
+
+        assert result == text
