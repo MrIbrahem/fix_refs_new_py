@@ -109,6 +109,7 @@ class ReferenceExpander:
         expanded_text: str = refs_expand(short_refs, text, full_text)
         return expanded_text
 
+
 __all__ = [
     "ReferenceExpander",
 ]

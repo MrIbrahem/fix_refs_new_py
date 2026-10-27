@@ -1,10 +1,6 @@
 import logging
-from dataclasses import dataclass, field
-from functools import cached_property
 
-import wikitextparser as wtp
-
-from .wtp_mapping import WtpTemplates, WtpRefs
+from .wtp_mapping import WtpRefs
 
 logger = logging.getLogger(__name__)
 
@@ -65,4 +61,3 @@ class RefsMover:
         self._plan_template_edits()
         logger.info("Applying %d edits", len(self.edits))
         return self._apply_edits()
-
