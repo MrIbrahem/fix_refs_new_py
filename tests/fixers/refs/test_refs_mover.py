@@ -3,7 +3,7 @@ import logging
 
 import pytest
 
-from src.fix_refs.fixers.refs.refs_mover import (
+from fix_refs.fixers.refs.refs_mover import (
     RefsMover,
     WtpRefs,
     WtpTemplates,
