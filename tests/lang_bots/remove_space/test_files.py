@@ -5,7 +5,7 @@ Converted from tests/remove_spaceTest.php
 
 from pathlib import Path
 
-from fix_refs.lang_bots.remove_space import remove_spaces_between_last_word_and_beginning_of_ref
+from fix_refs.lang_bots.remove_space import RemoveSpace
 
 
 def test_file_text_1():
@@ -19,7 +19,7 @@ def test_file_text_1():
         expected = f.read()
 
     # result = mv_es_refs(text_input)
-    result = remove_spaces_between_last_word_and_beginning_of_ref(text_input, "hy")
+    result = RemoveSpace().remove_spaces_between_last_word_and_beginning_of_ref(text_input, "hy")
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
@@ -41,7 +41,7 @@ def test_file_text_2():
         expected = f.read()
 
     # result = mv_es_refs(text_input)
-    result = remove_spaces_between_last_word_and_beginning_of_ref(text_input, "hy")
+    result = RemoveSpace().remove_spaces_between_last_word_and_beginning_of_ref(text_input, "hy")
 
     # write output for comparison
     output_file = tests_dir / "output.txt"

@@ -3,24 +3,30 @@
 Converted from tests/FixpageTest.php
 """
 
-from fix_refs.core.fix_page import fix_one_page
+from fix_refs.core.fix_page import LangSetting, PageFixer
 
 
 class TestFixPage:
-    """Test cases for fix_one_page function"""
+    """Test cases for PageFixer.run function"""
 
     def fix_page_wrap(self, text: str, lang: str) -> str:
         """Wrapper function matching PHP test signature"""
-        return fix_one_page(
-            text=text,
-            title="",
+        lang_setting = LangSetting(
             lang=lang,
             move_dots=True,
             expend_infobox=True,
             add_en_lang=False,
+            add_category=False,
+        )
+
+        fixer = PageFixer(
+            text=text,
+            title="title",
             source_title="",
             mdwiki_revid=0,
+            lang_setting=lang_setting,
         )
+        return fixer.run()
 
     def test_part_1(self):
         """Test Armenian text with references and punctuation"""

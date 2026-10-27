@@ -5,7 +5,7 @@ Converted from tests/FixpageTest.php
 
 from pathlib import Path
 
-from fix_refs.core.fix_page import fix_one_page
+from fix_refs.core.fix_page import LangSetting, PageFixer
 
 
 def test_file_ja():
@@ -17,17 +17,22 @@ def test_file_ja():
     with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
         expected = f.read()
 
-    result = fix_one_page(
-        text=text_input,
-        title="title",
+    lang_setting = LangSetting(
         lang="ja",
         move_dots=True,
         expend_infobox=True,
         add_en_lang=False,
         add_category=False,
+    )
+
+    fixer = PageFixer(
+        text=text_input,
+        title="title",
         source_title="",
         mdwiki_revid=0,
+        lang_setting=lang_setting,
     )
+    result = fixer.run()
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
@@ -47,16 +52,22 @@ def test_file_pl():
     with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
         expected = f.read()
 
-    result = fix_one_page(
-        text=text_input,
-        title="title",
+    lang_setting = LangSetting(
         lang="pl",
         move_dots=False,
         expend_infobox=True,
         add_en_lang=False,
+        add_category=False,
+    )
+
+    fixer = PageFixer(
+        text=text_input,
+        title="title",
         source_title="",
         mdwiki_revid=0,
+        lang_setting=lang_setting,
     )
+    result = fixer.run()
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
