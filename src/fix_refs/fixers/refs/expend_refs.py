@@ -42,26 +42,6 @@ class RefExpander:
 
         return text
 
-    def refs_expand_work(self, first: str, alltext: str = "") -> str:
-        """Expand short citations with full reference content
-
-        Similar to refs_expand but takes text directly instead of list of citations.
-        This matches the PHP API for compatibility.
-
-        Args:
-            first: Text to process (may contain short citations)
-            alltext: Source text containing full references (if empty, uses first)
-
-        Returns:
-            Text with short citations expanded to full references
-        """
-        if not alltext:
-            alltext = first
-
-        short_refs = self.citations_parser.get_short_refs(first)
-
-        return self.refs_expand(short_refs, first, alltext)
-
 
 __all__ = [
     "RefExpander",

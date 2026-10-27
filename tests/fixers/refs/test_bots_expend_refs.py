@@ -3,11 +3,17 @@
 Converted from tests/fixers/refs/expend_refsTest.php
 """
 
-from src.fix_refs.fixers.refs.expend_refs import RefExpander
+from fix_refs.fixers.refs.expend_refs import RefExpander
 
 
 def refs_expand_work(first: str, alltext: str = "") -> str:
-    return RefExpander().refs_expand_work(first, alltext)
+    if not alltext:
+        alltext = first
+
+    expander = RefExpander()
+    short_refs = expander.citations_parser.get_short_refs(first)
+
+    return expander.refs_expand(short_refs, first, alltext)
 
 
 class TestExpendRefs:

@@ -4,7 +4,7 @@ Tests for citation parser
 
 import wikitextparser as wtp
 
-from src.fix_refs.parsers.citation import Citation
+from src.fix_refs.parsers.citations_parser import Citation
 
 
 class TestCitation:

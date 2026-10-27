@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import logging
 
-from ...parsers.citations_parser import Citation, CitationsParser
+from ...parsers.citations_parser import CitationsParser
 
 logger = logging.getLogger(__name__)
 
@@ -28,44 +28,7 @@ class DuplicateRefRemover:
         Returns:
             Text with duplicate references converted to self-closing tags
         """
-        new_text = text
-        refs_to_check: dict[str, str] = {}
-        refs: dict[str, str] = {}
-        citations: list[Citation] = self.citations_parser.get_all_citations(text)
-
-        numb = 0
-
-        for citation in citations:
-            cite_fulltext = citation.tag
-            cite_attrs = citation.get_attributes()
-            content = citation.contents.strip()
-
-            if not content:
-                continue
-
-            if not cite_attrs or not citation.name:
-                numb += 1
-                name = f"autogen_{numb}"
-                citation.ref.attrs["name"] = name
-                cite_attrs = citation.get_attributes()
-
-            logger.debug(f"\n cite_attrs: (({cite_attrs}))")
-
-            short_tag = citation.make_short()
-
-            if cite_attrs in refs:
-                new_text = new_text.replace(cite_fulltext, short_tag)
-            else:
-                refs_to_check[short_tag] = cite_fulltext
-                refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
-
-        for key, value in refs_to_check.items():
-            if value not in new_text:
-                # pattern = re.escape(key)
-                # new_text = re.sub(pattern, value, new_text, count=1)
-                new_text = new_text.replace(key, value, 1)
-
-        return new_text
+        return self.citations_parser.remove_duplicate(text)
 
 
 __all__ = [
