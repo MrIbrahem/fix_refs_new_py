@@ -42,10 +42,6 @@ class ConfigManager:
         file = self.revisions_path / f"{str(mdwiki_revid)}/wikitext.txt"
         return file
 
-
-# Create an instance of the dataclass
-config = ConfigManager()
-
 __all__ = [
     "ConfigManager",
     "config",
