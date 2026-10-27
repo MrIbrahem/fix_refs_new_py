@@ -10,32 +10,41 @@ import re
 logger = logging.getLogger(__name__)
 
 
+class DotsMover:
+    """Fixer for moving punctuation marks after reference tags."""
+
+    def move_dots_after_refs(self, text: str, lang: str) -> str:
+        """Move punctuation marks after reference tags
+
+        Args:
+            text: Text containing references and punctuation
+            lang: Language code
+
+        Returns:
+            Text with punctuation moved after references
+        """
+        dots = r".,。।"
+
+        if lang == "hy":
+            dots = r".,。։।:"
+
+        regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
+
+        escaped = re.escape(dots)
+        pattern = rf"([{escaped}]+)\s*{regline}"
+        replacement = r"\2\1"
+
+        text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
+
+        return text
+
+
 def move_dots_after_refs(text: str, lang: str) -> str:
-    """Move punctuation marks after reference tags
-
-    Args:
-        text: Text containing references and punctuation
-        lang: Language code
-
-    Returns:
-        Text with punctuation moved after references
-    """
-    dots = r".,。।"
-
-    if lang == "hy":
-        dots = r".,。։।:"
-    # ([\.,。։।:]+)\s*((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)
-    regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
-
-    escaped = re.escape(dots)
-    pattern = rf"([{escaped}]+)\s*{regline}"
-    replacement = r"\2\1"
-
-    text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
-
-    return text
+    """Legacy wrapper for DotsMover.move_dots_after_refs."""
+    return DotsMover().move_dots_after_refs(text, lang)
 
 
 __all__ = [
+    "DotsMover",
     "move_dots_after_refs",
 ]

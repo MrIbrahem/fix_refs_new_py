@@ -14,110 +14,129 @@ from .es_data import ARGS_TO, REFS_TEMPS
 logger = logging.getLogger(__name__)
 
 
+class SpanishTemplateFixer:
+    """Fixer for Spanish citation template names and parameters."""
+
+    def _work_one_temp(self, temp_text: str, name: str) -> str:
+        """Transform a single template with Spanish name and parameters
+
+        Args:
+            temp_text: Original template text
+            name: Template name
+
+        Returns:
+            Transformed template text
+        """
+        # Get Spanish template name
+        temp_name2 = REFS_TEMPS.get(name.lower(), name)
+
+        # Transform template name
+        new_temp = temp_text
+        if temp_name2.lower() != name.lower():
+            # Replace template name in {{TemplateName|...}}
+            pattern = r"\{\{\s*" + re.escape(name) + r"\s*(\|)"
+            replacement = r"{{" + temp_name2 + r"\1"
+            new_temp = re.sub(pattern, replacement, new_temp, flags=re.IGNORECASE)
+
+        # Transform parameters
+        for old_param, new_param in ARGS_TO.items():
+            # Replace parameter names: |old_param=value -> |new_param=value
+            pattern = r"\|\s*" + re.escape(old_param) + r"\s*="
+            replacement = "|" + new_param + "="
+            new_temp = re.sub(pattern, replacement, new_temp, flags=re.IGNORECASE)
+
+        # Remove url-status parameter - match until next | or }}
+        pattern = r"\|\s*url-status\s*=\s*[^|}]*"
+        new_temp = re.sub(pattern, "", new_temp, flags=re.IGNORECASE)
+
+        # Clean up double pipes
+        new_temp = re.sub(r"\|\s*\|", "|", new_temp)
+
+        # Strip trailing spaces from parameter values (value followed by |)
+        new_temp = re.sub(r"\s+\|", "|", new_temp)
+
+        # Strip trailing spaces before closing braces
+        new_temp = re.sub(r"\s+\}\}", "}}", new_temp)
+
+        return new_temp
+
+    def _fix_temps(self, text: str) -> str:
+        """Transform templates to Spanish equivalents
+
+        Args:
+            text: Text containing templates
+
+        Returns:
+            Text with transformed templates
+        """
+        parsed = wtp.parse(text)
+
+        refs_temps_keys_lower = {k.lower() for k in REFS_TEMPS.keys()}
+        refs_temps_values_lower = {k.lower() for k in REFS_TEMPS.values()}
+
+        new_text = text
+
+        for template in parsed.templates:
+            name = template.name.strip()
+            name_lower = name.lower()
+
+            # Skip if not in refs_temps
+            if name_lower not in refs_temps_keys_lower and name_lower not in refs_temps_values_lower:
+                continue
+
+            old_text_template = str(template)
+            new_text_str = self._work_one_temp(old_text_template, name)
+            new_text = new_text.replace(old_text_template, new_text_str)
+
+        return new_text
+
+    def fix_es(self, text: str, title: str = "") -> str:
+        """Apply Spanish-specific fixes to text
+
+        Args:
+            text: WikiText content
+            title: Page title
+
+        Returns:
+            Fixed text
+        """
+        # Check for "#REDIRECCIÓN"
+        if "#REDIRECCIÓN" in text.upper() and title != "test!":
+            return text
+
+        # Check if text has fewer than 10 lines (skip in test mode)
+        line_count = text.count("\n")
+        if line_count < 10 and title != "test!":
+            logger.info("less than 10 lines\n")
+
+        # Replace <references /> with {{listaref}}
+        if "<references />" in text:
+            text = text.replace("<references />", "{{listaref}}")
+
+        # Apply transformations
+        newtext = text
+        newtext = self._fix_temps(newtext)
+        return newtext
+
+
 def _work_one_temp(temp_text: str, name: str) -> str:
-    """Transform a single template with Spanish name and parameters
-
-    Args:
-        temp_text: Original template text
-        name: Template name
-
-    Returns:
-        Transformed template text
-    """
-    # Get Spanish template name
-    temp_name2 = REFS_TEMPS.get(name.lower(), name)
-
-    # Transform template name
-    new_temp = temp_text
-    if temp_name2.lower() != name.lower():
-        # Replace template name in {{TemplateName|...}}
-        pattern = r"\{\{\s*" + re.escape(name) + r"\s*(\|)"
-        replacement = r"{{" + temp_name2 + r"\1"
-        new_temp = re.sub(pattern, replacement, new_temp, flags=re.IGNORECASE)
-
-    # Transform parameters
-    for old_param, new_param in ARGS_TO.items():
-        # Replace parameter names: |old_param=value -> |new_param=value
-        pattern = r"\|\s*" + re.escape(old_param) + r"\s*="
-        replacement = "|" + new_param + "="
-        new_temp = re.sub(pattern, replacement, new_temp, flags=re.IGNORECASE)
-
-    # Remove url-status parameter - match until next | or }}
-    pattern = r"\|\s*url-status\s*=\s*[^|}]*"
-    new_temp = re.sub(pattern, "", new_temp, flags=re.IGNORECASE)
-
-    # Clean up double pipes
-    new_temp = re.sub(r"\|\s*\|", "|", new_temp)
-
-    # Strip trailing spaces from parameter values (value followed by |)
-    new_temp = re.sub(r"\s+\|", "|", new_temp)
-
-    # Strip trailing spaces before closing braces
-    new_temp = re.sub(r"\s+\}\}", "}}", new_temp)
-
-    return new_temp
+    """Legacy wrapper for SpanishTemplateFixer._work_one_temp."""
+    return SpanishTemplateFixer()._work_one_temp(temp_text, name)
 
 
 def _fix_temps(text: str) -> str:
-    """Transform templates to Spanish equivalents
-
-    Args:
-        text: Text containing templates
-
-    Returns:
-        Text with transformed templates
-    """
-    parsed = wtp.parse(text)
-
-    refs_temps_keys_lower = {k.lower() for k in REFS_TEMPS.keys()}
-    refs_temps_values_lower = {k.lower() for k in REFS_TEMPS.values()}
-
-    new_text = text
-
-    for template in parsed.templates:
-        name = template.name.strip()
-        name_lower = name.lower()
-
-        # Skip if not in refs_temps
-        if name_lower not in refs_temps_keys_lower and name_lower not in refs_temps_values_lower:
-            continue
-
-        old_text_template = str(template)
-        new_text_str = _work_one_temp(old_text_template, name)
-        new_text = new_text.replace(old_text_template, new_text_str)
-
-    return new_text
+    """Legacy wrapper for SpanishTemplateFixer._fix_temps."""
+    return SpanishTemplateFixer()._fix_temps(text)
 
 
 def fix_es(text: str, title: str = "") -> str:
-    """Apply Spanish-specific fixes to text
-
-    Args:
-        text: WikiText content
-        title: Page title
-
-    Returns:
-        Fixed text
-    """
-    # Check for "#REDIRECCIÓN"
-    if "#REDIRECCIÓN" in text.upper() and title != "test!":
-        return text
-
-    # Check if text has fewer than 10 lines (skip in test mode)
-    line_count = text.count("\n")
-    if line_count < 10 and title != "test!":
-        logger.info("less than 10 lines\n")
-
-    # Replace <references /> with {{listaref}}
-    if "<references />" in text:
-        text = text.replace("<references />", "{{listaref}}")
-
-    # Apply transformations
-    newtext = text
-    newtext = _fix_temps(newtext)
-    return newtext
+    """Legacy wrapper for SpanishTemplateFixer.fix_es."""
+    return SpanishTemplateFixer().fix_es(text, title)
 
 
 __all__ = [
+    "SpanishTemplateFixer",
+    "_work_one_temp",
+    "_fix_temps",
     "fix_es",
 ]

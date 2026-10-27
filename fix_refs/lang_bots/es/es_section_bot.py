@@ -11,37 +11,46 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
-def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
-    """Add Traducido ref template to Spanish text
+class SpanishSectionFixer:
+    """Fixer for adding Spanish translation templates and section headers."""
 
-    Args:
-        source_title: Source page title
-        text: WikiText content
-        mdwiki_revid: MDWiki revision ID
+    def es_section(self, source_title: str, text: str, mdwiki_revid: str) -> str:
+        """Add Traducido ref template to Spanish text
 
-    Returns:
-        Text with Traducido ref template added
-    """
-    # If template already exists (any variant), return as-is
-    if re.search(r"\{\{\s*Traducido\s*ref(?:\s*MDWiki)?\s*\|", text, re.IGNORECASE):
+        Args:
+            source_title: Source page title
+            text: WikiText content
+            mdwiki_revid: MDWiki revision ID
+
+        Returns:
+            Text with Traducido ref template added
+        """
+        # If template already exists (any variant), return as-is
+        if re.search(r"\{\{\s*Traducido\s*ref(?:\s*MDWiki)?\s*\|", text, re.IGNORECASE):
+            return text
+
+        # Get current date
+        date = datetime.now().strftime("%d de %B de %Y")
+
+        # Create translation template
+        # Use {{{{ and }}}} for literal {{ and }} in f-strings
+        temp = f"{{{{Traducido ref MDWiki|en|{source_title}|oldid={mdwiki_revid}|trad=|fecha={date}}}}}"
+
+        # Insert after "== Enlaces externos ==" if it exists, otherwise append
+        if re.search(r"==\s*Enlaces\s*externos\s*==", text, re.IGNORECASE):
+            text = re.sub(r"(==\s*Enlaces\s*externos\s*==)", r"\1\n" + temp + "\n", text, flags=re.IGNORECASE, count=1)
+        else:
+            text += f"\n== Enlaces externos ==\n{temp}\n"
+
         return text
 
-    # Get current date
-    date = datetime.now().strftime("%d de %B de %Y")
 
-    # Create translation template
-    # Use {{{{ and }}}} for literal {{ and }} in f-strings
-    temp = f"{{{{Traducido ref MDWiki|en|{source_title}|oldid={mdwiki_revid}|trad=|fecha={date}}}}}"
-
-    # Insert after "== Enlaces externos ==" if it exists, otherwise append
-    if re.search(r"==\s*Enlaces\s*externos\s*==", text, re.IGNORECASE):
-        text = re.sub(r"(==\s*Enlaces\s*externos\s*==)", r"\1\n" + temp + "\n", text, flags=re.IGNORECASE, count=1)
-    else:
-        text += f"\n== Enlaces externos ==\n{temp}\n"
-
-    return text
+def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
+    """Legacy wrapper for SpanishSectionFixer.es_section."""
+    return SpanishSectionFixer().es_section(source_title, text, mdwiki_revid)
 
 
 __all__ = [
+    "SpanishSectionFixer",
     "es_section",
 ]

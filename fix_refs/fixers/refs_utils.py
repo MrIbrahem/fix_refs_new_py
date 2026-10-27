@@ -9,69 +9,82 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class RefUtils:
+    """Utilities for string quote normalization and trimming."""
+
+    def rm_str_from_start_and_end(self, text: str, find: str) -> str:
+        """Remove string from both start and end if present
+
+        Args:
+            text: Text to modify
+            find: String to remove from start and end
+
+        Returns:
+            Modified text
+        """
+        if not find:
+            return text
+
+        text = text.strip()
+
+        if text.startswith(find) and text.endswith(find):
+            text = text[len(find) : -len(find)]
+
+        return text.strip()
+
+    def remove_start_end_quotes(self, text: str) -> str:
+        """Normalize quotes around text
+
+        Removes quotes from start and end, then wraps in double quotes
+
+        Args:
+            text: Text to normalize
+
+        Returns:
+            Text wrapped in double quotes
+        """
+        text = text.strip()
+        text = self.rm_str_from_start_and_end(text, '"')
+        text = self.rm_str_from_start_and_end(text, "'")
+
+        # Check if text already has partial quotes (start or end)
+        starts_with_double = text.startswith('"')
+        starts_with_single = text.startswith("'")
+        ends_with_double = text.endswith('"')
+        ends_with_single = text.endswith("'")
+
+        # If text has a quote at only one end (partial quote)
+        # Rule: Always add " at start, and also add ' at start if already has " at start
+        if starts_with_double and not ends_with_double:
+            # Has " at start but no " at end - add ' after the " at start
+            return "'" + text
+        if ends_with_double and not starts_with_double:
+            # Has " at end but no " at start - add " at start
+            return '"' + text
+        if starts_with_single and not ends_with_single:
+            # Has ' at start but no ' at end - add ' at end (after adding " at start)
+            return '"' + text + '"'
+        if ends_with_single and not starts_with_single:
+            # Has ' at end but no ' at start - add ' at start (before existing text)
+            return '"' + "'" + text
+
+        # Otherwise, wrap in appropriate quote type
+        quote = '"' if '"' not in text else "'"
+        return f"{quote}{text}{quote}"
+
+
 def rm_str_from_start_and_end(text: str, find: str) -> str:
-    """Remove string from both start and end if present
-
-    Args:
-        text: Text to modify
-        find: String to remove from start and end
-
-    Returns:
-        Modified text
-    """
-    if not find:
-        return text
-
-    text = text.strip()
-
-    if text.startswith(find) and text.endswith(find):
-        text = text[len(find) : -len(find)]
-
-    return text.strip()
+    """Legacy wrapper for RefUtils.rm_str_from_start_and_end."""
+    return RefUtils().rm_str_from_start_and_end(text, find)
 
 
 def remove_start_end_quotes(text: str) -> str:
-    """Normalize quotes around text
-
-    Removes quotes from start and end, then wraps in double quotes
-
-    Args:
-        text: Text to normalize
-
-    Returns:
-        Text wrapped in double quotes
-    """
-    text = text.strip()
-    text = rm_str_from_start_and_end(text, '"')
-    text = rm_str_from_start_and_end(text, "'")
-
-    # Check if text already has partial quotes (start or end)
-    starts_with_double = text.startswith('"')
-    starts_with_single = text.startswith("'")
-    ends_with_double = text.endswith('"')
-    ends_with_single = text.endswith("'")
-
-    # If text has a quote at only one end (partial quote)
-    # Rule: Always add " at start, and also add ' at start if already has " at start
-    if starts_with_double and not ends_with_double:
-        # Has " at start but no " at end - add ' after the " at start
-        return "'" + text
-    if ends_with_double and not starts_with_double:
-        # Has " at end but no " at start - add " at start
-        return '"' + text
-    if starts_with_single and not ends_with_single:
-        # Has ' at start but no ' at end - add ' at end (after adding " at start)
-        return '"' + text + '"'
-    if ends_with_single and not starts_with_single:
-        # Has ' at end but no ' at start - add ' at start (before existing text)
-        return '"' + "'" + text
-
-    # Otherwise, wrap in appropriate quote type
-    quote = '"' if '"' not in text else "'"
-    return f"{quote}{text}{quote}"
+    """Legacy wrapper for RefUtils.remove_start_end_quotes."""
+    return RefUtils().remove_start_end_quotes(text)
 
 
 __all__ = [
+    "RefUtils",
     "rm_str_from_start_and_end",
     "remove_start_end_quotes",
 ]
