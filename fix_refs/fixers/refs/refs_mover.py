@@ -8,10 +8,6 @@ from .wtp_mapping import WtpTemplates, WtpRefs
 
 logger = logging.getLogger(__name__)
 
-
-def _inside(span, outer):
-    return outer[0] <= span[0] and span[1] <= outer[1]
-
 class RefsMover:
     """Moves full refs from templates into the body and shortens them in templates."""
 
