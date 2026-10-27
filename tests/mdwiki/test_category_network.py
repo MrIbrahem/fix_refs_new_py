@@ -4,7 +4,6 @@ Converted from tests/md_catTest.php and updated for MDWikiCategoryService.
 """
 
 import json
-from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest

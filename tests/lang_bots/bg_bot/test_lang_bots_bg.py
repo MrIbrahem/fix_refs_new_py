@@ -3,7 +3,15 @@
 Converted from tests/bg_bots/fix_bgTest.php
 """
 
-from fix_refs.lang_bots.bg_bot import bg_fixes, bg_section
+from fix_refs.lang_bots.bg_bot import BulgarianBot
+
+
+def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:
+    return BulgarianBot().bg_section(text, sourcetitle, mdwiki_revid)
+
+
+def bg_fixes(text: str, source_title: str, mdwiki_revid: int) -> str:
+    return BulgarianBot().bg_fixes(text, source_title, mdwiki_revid)
 
 
 class TestBgSection:

@@ -15,7 +15,6 @@ import wikitextparser as wtp
 from fix_refs.fixers.fix_images import ImageFixer
 from fix_refs.utils.http import HttpClient
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

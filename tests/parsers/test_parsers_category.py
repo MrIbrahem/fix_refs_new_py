@@ -3,7 +3,11 @@
 Converted from tests/Parse/CategoryTest.php
 """
 
-from fix_refs.parsers.category import get_categories
+from fix_refs.parsers.category import CategoryParser
+
+
+def get_categories(text: str) -> dict[str, str]:
+    return CategoryParser().get_categories(text)
 
 
 class TestCategory:

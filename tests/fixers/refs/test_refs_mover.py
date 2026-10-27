@@ -1,8 +1,8 @@
 # test_refs_mover.py
 import logging
 
-from fix_refs.fixers.refs.refs_mover import (
-    RefsMover,
+from fix_refs.fixers.refs.refs_mover import RefsMover
+from fix_refs.fixers.refs.wtp_mapping import (
     WtpRefs,
     WtpTemplates,
 )
@@ -16,13 +16,13 @@ BASIC = (
 )
 
 
-def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> str:
-    return RefsMover(text, prefer_body_version).run()
-
-
 def split_head_body(text: str):
     head, _, body = text.partition("BODY")
     return head, body
+
+
+def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> str:
+    return RefsMover(text, prefer_body_version).run()
 
 
 # ---------------- WtpTemplates ----------------
