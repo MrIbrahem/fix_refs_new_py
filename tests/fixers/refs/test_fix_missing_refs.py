@@ -2,94 +2,107 @@
 
 import json
 from pathlib import Path
+
 import pytest
 
 from fix_refs.config import ConfigManager
 from fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander, fix_missing_refs
 
+REVID = 1501810
+TITLE = "Entecavir"
+REVISION_CONTENT = 'something <ref name="AHFS2016">full ref</ref>'
+INPUT_TEXT = (
+    "This Ref tag should be full ref after fix missing references "
+    'from 1501810/wikitext.txt <ref name="AHFS2016" />'
+)
+EXPANDED_REF = '<ref name="AHFS2016">full ref</ref>'
+SHORT_REF = '<ref name="AHFS2016" />'
 
-def test_reference_expander_end_to_end(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test the complete real flow of expanding a missing named reference from an MDWiki revision file.
+
+@pytest.fixture
+def revisions_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Point REVISIONS_PATH to an empty temp directory."""
+    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
+    return tmp_path
+
+
+@pytest.fixture
+def revision_file(revisions_path: Path) -> Path:
+    """Create <REVISIONS_PATH>/1501810/wikitext.txt with the full reference."""
+    rev_dir = revisions_path / str(REVID)
+    rev_dir.mkdir(parents=True, exist_ok=True)
+    rev_file = rev_dir / "wikitext.txt"
+    rev_file.write_text(REVISION_CONTENT, encoding="utf-8")
+    return rev_file
+
+
+@pytest.fixture
+def write_revision(revisions_path: Path):
+    """Factory: write custom wikitext into <REVISIONS_PATH>/1501810/wikitext.txt."""
+
+    def _factory(content: str) -> Path:
+        rev_dir = revisions_path / str(REVID)
+        rev_dir.mkdir(parents=True, exist_ok=True)
+        rev_file = rev_dir / "wikitext.txt"
+        rev_file.write_text(content, encoding="utf-8")
+        return rev_file
+
+    return _factory
+
+
+@pytest.fixture
+def expander(revisions_path: Path) -> ReferenceExpander:
+    """ReferenceExpander built from ConfigManager (reads REVISIONS_PATH)."""
+    return ReferenceExpander(ConfigManager())
+
+
+class TestReferenceExpander:
+    """ReferenceExpander.fix_missing_refs() full flow.
 
     Flow: REVISIONS_PATH -> ConfigManager -> ReferenceExpander -> get_revision_file_path(1501810)
           -> 1501810/wikitext.txt -> get_full_text() -> refs_expand() -> expanded reference.
     """
-    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
 
-    rev_dir = tmp_path / "1501810"
-    rev_dir.mkdir(parents=True, exist_ok=True)
-    rev_file = rev_dir / "wikitext.txt"
-    rev_file.write_text("something <ref name=\"AHFS2016\">full ref</ref>", encoding="utf-8")
+    @pytest.mark.usefixtures("revision_file")
+    def test_expands_missing_named_ref(self, expander: ReferenceExpander) -> None:
+        result = expander.fix_missing_refs(INPUT_TEXT, TITLE, REVID)
 
-    config_manager = ConfigManager()
-    expander = ReferenceExpander(config_manager)
-
-    input_text = "This Ref tag should be full ref after fix missing references from 1501810/wikitext.txt <ref name=\"AHFS2016\" />"
-    result = expander.fix_missing_refs(input_text, "Entecavir", 1501810)
-
-    assert "<ref name=\"AHFS2016\">full ref</ref>" in result
-    assert "<ref name=\"AHFS2016\" />" not in result
+        assert EXPANDED_REF in result
+        assert SHORT_REF not in result
 
 
-def test_legacy_fix_missing_refs_wrapper(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test legacy fix_missing_refs wrapper function using REVISIONS_PATH environment variable."""
-    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
+class TestLegacyFixMissingRefsWrapper:
+    """Legacy fix_missing_refs() wrapper function."""
 
-    rev_dir = tmp_path / "1501810"
-    rev_dir.mkdir(parents=True, exist_ok=True)
-    rev_file = rev_dir / "wikitext.txt"
-    rev_file.write_text("something <ref name=\"AHFS2016\">full ref</ref>", encoding="utf-8")
+    @pytest.mark.usefixtures("revision_file")
+    def test_expands_missing_named_ref(self) -> None:
+        result = fix_missing_refs(INPUT_TEXT, TITLE, REVID)
 
-    input_text = "This Ref tag should be full ref after fix missing references from 1501810/wikitext.txt <ref name=\"AHFS2016\" />"
-    result = fix_missing_refs(input_text, "Entecavir", 1501810)
-
-    assert "<ref name=\"AHFS2016\">full ref</ref>" in result
-    assert "<ref name=\"AHFS2016\" />" not in result
+        assert EXPANDED_REF in result
+        assert SHORT_REF not in result
 
 
-def test_get_full_text_existing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test get_full_text() returns the contents of 1501810/wikitext.txt."""
-    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
+class TestGetFullText:
+    """ReferenceExpander.get_full_text()."""
 
-    rev_dir = tmp_path / "1501810"
-    rev_dir.mkdir(parents=True, exist_ok=True)
-    rev_file = rev_dir / "wikitext.txt"
-    expected_content = "something <ref name=\"AHFS2016\">full ref</ref>"
-    rev_file.write_text(expected_content, encoding="utf-8")
+    @pytest.mark.usefixtures("revision_file")
+    def test_existing_revision_file(self, expander: ReferenceExpander) -> None:
+        full_text = expander.get_full_text(TITLE, REVID)
 
-    config_manager = ConfigManager()
-    expander = ReferenceExpander(config_manager)
+        assert full_text == REVISION_CONTENT
 
-    full_text = expander.get_full_text("Entecavir", 1501810)
-    assert full_text == expected_content
+    def test_nonexistent_revision_file(self, expander: ReferenceExpander) -> None:
+        full_text = expander.get_full_text(TITLE, 9999999)
 
+        assert full_text == ""
 
-def test_get_full_text_nonexistent(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test get_full_text() returns empty string when revision file does not exist."""
-    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
+    @pytest.mark.usefixtures("revision_file")
+    def test_revid_zero_uses_json_lookup(self, revisions_path: Path, expander: ReferenceExpander) -> None:
+        """mdwiki_revid=0 -> find_mdwiki_revid() reads json_data.json to discover the revision."""
+        json_file = revisions_path / "json_data.json"
+        json_file.write_text(json.dumps({TITLE: str(REVID)}), encoding="utf-8")
 
-    config_manager = ConfigManager()
-    expander = ReferenceExpander(config_manager)
+        full_text = expander.get_full_text(TITLE, 0)
 
-    full_text = expander.get_full_text("Entecavir", 9999999)
-    assert full_text == ""
-
-
-def test_get_full_text_revid_zero_json_lookup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test get_full_text() with mdwiki_revid=0 uses find_mdwiki_revid() and json_data.json to discover revision."""
-    monkeypatch.setenv("REVISIONS_PATH", str(tmp_path))
-
-    json_file = tmp_path / "json_data.json"
-    json_file.write_text(json.dumps({"Entecavir": "1501810"}), encoding="utf-8")
-
-    rev_dir = tmp_path / "1501810"
-    rev_dir.mkdir(parents=True, exist_ok=True)
-    rev_file = rev_dir / "wikitext.txt"
-    expected_content = "something <ref name=\"AHFS2016\">full ref</ref>"
-    rev_file.write_text(expected_content, encoding="utf-8")
-
-    config_manager = ConfigManager()
-    expander = ReferenceExpander(config_manager)
-
-    full_text = expander.get_full_text("Entecavir", 0)
-    assert full_text == expected_content
+        assert full_text == REVISION_CONTENT
+        
