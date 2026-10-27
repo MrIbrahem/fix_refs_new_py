@@ -14,6 +14,7 @@ from .refs import (
     RefExpander,
     RefsMover,
 )
+
 __all__ = [
     "LanguageEnFixer",
     "ImageFixer",
