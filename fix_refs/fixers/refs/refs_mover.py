@@ -1,6 +1,5 @@
 import logging
 
-
 from .wtp_mapping import WtpRefs
 
 logger = logging.getLogger(__name__)

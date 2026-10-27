@@ -1,7 +1,6 @@
 # test_refs_mover.py
 import logging
 
-
 from fix_refs.fixers.refs.refs_mover import (
     RefsMover,
     WtpRefs,

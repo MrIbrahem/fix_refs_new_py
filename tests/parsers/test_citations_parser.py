@@ -2,7 +2,7 @@
 Tests for citation parser
 """
 
-from fix_refs.parsers.citations_parser import CitationsParser, Citation
+from fix_refs.parsers.citations_parser import Citation, CitationsParser
 
 
 def get_all_citations(text: str) -> list[Citation]:

@@ -11,6 +11,7 @@ from fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 def remove_duplicate_refs_with_attrs(text: str) -> str:
     return DuplicateRefRemover().remove_duplicate_refs_with_attrs(text)
 
+
 # Tests for remove_duplicate_refs_with_attrs
 
 
