@@ -66,18 +66,6 @@ class PolishBot:
         return text
 
 
-def add_missing_params_to_choroba_infobox(text: str) -> str:
-    """Legacy wrapper for PolishBot.add_missing_params_to_choroba_infobox."""
-    return PolishBot().add_missing_params_to_choroba_infobox(text)
-
-
-def pl_fixes(text: str) -> str:
-    """Legacy wrapper for PolishBot.pl_fixes."""
-    return PolishBot().pl_fixes(text)
-
-
 __all__ = [
     "PolishBot",
-    "add_missing_params_to_choroba_infobox",
-    "pl_fixes",
 ]

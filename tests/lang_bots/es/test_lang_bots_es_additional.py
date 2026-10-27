@@ -5,8 +5,8 @@ Converted from tests/es_bots/esTest.php and tests/es_bots/es_months_new_valueTes
 
 import re
 
-from fix_refs.fixers.months import fix_months_in_refs, new_date
-from fix_refs.lang_bots.es.es_bot import _fix_temps
+from fix_refs.fixers.months import MonthTranslator
+from fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
 
 
 def make_date_new_val_es(val: str) -> str:
@@ -18,13 +18,13 @@ def make_date_new_val_es(val: str) -> str:
     Returns:
         Date string with Spanish month
     """
-    return new_date(val, "es")
+    return MonthTranslator().new_date(val, "es")
 
 
 def fix_temps_wrap(text: str) -> str:
     """Wrapper function that combines _fix_temps and fix_months_in_refs(result, "es")"""
-    result = _fix_temps(text)
-    result = fix_months_in_refs(result, "es")
+    result = SpanishTemplateFixer()._fix_temps(text)
+    result = MonthTranslator().fix_months_in_refs(result, "es")
     result = re.sub(r"\s*=\s*", "=", result)
     return result
 

@@ -2,7 +2,11 @@
 Tests for Armenian bot
 """
 
-from fix_refs.lang_bots.hy_bot import hy_fixes
+from fix_refs.lang_bots.hy_bot import ArmenianBot
+
+
+def hy_fixes(text: str) -> str:
+    return ArmenianBot().hy_fixes(text)
 
 
 class TestArmenianBot:

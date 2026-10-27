@@ -3,7 +3,11 @@
 Converted from tests/helps_bots/missing_refsTest.php
 """
 
-from fix_refs.fixers.refs.fix_missing_refs import fix_missing_refs
+from fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander
+
+
+def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
+    return ReferenceExpander().fix_missing_refs(text, sourcetitle, mdwiki_revid)
 
 
 class TestMissingRefs:

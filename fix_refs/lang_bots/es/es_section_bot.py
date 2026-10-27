@@ -45,12 +45,6 @@ class SpanishSectionFixer:
         return text
 
 
-def es_section(source_title: str, text: str, mdwiki_revid: str) -> str:
-    """Legacy wrapper for SpanishSectionFixer.es_section."""
-    return SpanishSectionFixer().es_section(source_title, text, mdwiki_revid)
-
-
 __all__ = [
     "SpanishSectionFixer",
-    "es_section",
 ]

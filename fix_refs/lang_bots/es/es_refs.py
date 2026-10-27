@@ -6,7 +6,7 @@ import logging
 
 import wikitextparser as wtp
 
-from .es_helpers import SpanishHelpers, remove_short_refs
+from .es_helpers import SpanishHelpers
 
 logger = logging.getLogger(__name__)
 
@@ -127,31 +127,6 @@ class SpanishRefMover:
         return new_text
 
 
-def make_line(refs) -> str:
-    """Legacy wrapper for SpanishRefMover.make_line."""
-    return SpanishRefMover().make_line(refs)
-
-
-def get_refs(text):
-    """Legacy wrapper for SpanishRefMover.get_refs."""
-    return SpanishRefMover().get_refs(text)
-
-
-def add_line_to_temp(line, new_text):
-    """Legacy wrapper for SpanishRefMover.add_line_to_temp."""
-    return SpanishRefMover().add_line_to_temp(line, new_text)
-
-
-def mv_es_refs(text):
-    """Legacy wrapper for SpanishRefMover.mv_es_refs."""
-    return SpanishRefMover().mv_es_refs(text)
-
-
 __all__ = [
     "SpanishRefMover",
-    "make_line",
-    "get_refs",
-    "remove_short_refs",
-    "add_line_to_temp",
-    "mv_es_refs",
 ]

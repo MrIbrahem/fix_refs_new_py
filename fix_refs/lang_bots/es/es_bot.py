@@ -119,24 +119,6 @@ class SpanishTemplateFixer:
         return newtext
 
 
-def _work_one_temp(temp_text: str, name: str) -> str:
-    """Legacy wrapper for SpanishTemplateFixer._work_one_temp."""
-    return SpanishTemplateFixer()._work_one_temp(temp_text, name)
-
-
-def _fix_temps(text: str) -> str:
-    """Legacy wrapper for SpanishTemplateFixer._fix_temps."""
-    return SpanishTemplateFixer()._fix_temps(text)
-
-
-def fix_es(text: str, title: str = "") -> str:
-    """Legacy wrapper for SpanishTemplateFixer.fix_es."""
-    return SpanishTemplateFixer().fix_es(text, title)
-
-
 __all__ = [
     "SpanishTemplateFixer",
-    "_work_one_temp",
-    "_fix_temps",
-    "fix_es",
 ]

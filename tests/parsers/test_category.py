@@ -2,7 +2,19 @@
 Tests for category parser
 """
 
-from fix_refs.parsers.category import get_categories, get_category_list, has_category
+from fix_refs.parsers.category import CategoryParser
+
+
+def get_categories(text: str) -> dict[str, str]:
+    return CategoryParser().get_categories(text)
+
+
+def get_category_list(text: str) -> list[str]:
+    return CategoryParser().get_category_list(text)
+
+
+def has_category(text: str, category_name: str) -> bool:
+    return CategoryParser().has_category(text, category_name)
 
 
 class TestGetCategories:

@@ -3,7 +3,11 @@
 Converted from tests/md_catTest.php
 """
 
-from fix_refs.mdwiki.category import add_translated_from_mdwiki
+from fix_refs.mdwiki.category import MDWikiCategoryService
+
+
+def add_translated_from_mdwiki(text: str, lang: str) -> str:
+    return MDWikiCategoryService().add_translated_from_mdwiki(text, lang)
 
 
 class TestMdCategory:

@@ -133,30 +133,6 @@ class MonthTranslator:
         return parsed.string
 
 
-def new_date(val: str, lang: str = "pt") -> str:
-    """Legacy wrapper for MonthTranslator.new_date."""
-    return MonthTranslator().new_date(val, lang)
-
-
-def fix_months_in_texts(temp_text: str, lang: str) -> str:
-    """Legacy wrapper for MonthTranslator.fix_months_in_texts."""
-    return MonthTranslator().fix_months_in_texts(temp_text, lang)
-
-
-def start_end(cite_temp: str) -> bool:
-    """Legacy wrapper for MonthTranslator.start_end."""
-    return MonthTranslator().start_end(cite_temp)
-
-
-def fix_months_in_refs(text: str, lang: str) -> str:
-    """Legacy wrapper for MonthTranslator.fix_months_in_refs."""
-    return MonthTranslator().fix_months_in_refs(text, lang)
-
-
 __all__ = [
     "MonthTranslator",
-    "new_date",
-    "fix_months_in_texts",
-    "start_end",
-    "fix_months_in_refs",
 ]

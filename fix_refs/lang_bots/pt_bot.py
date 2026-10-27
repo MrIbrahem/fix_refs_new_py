@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 import re
 
-from ..fixers.months import MonthTranslator, fix_months_in_refs
+from ..fixers.months import MonthTranslator
 
 logger = logging.getLogger(__name__)
 
@@ -50,18 +50,6 @@ class PortugueseBot:
         return text
 
 
-def rm_ref_spaces(newtext: str) -> str:
-    """Legacy wrapper for PortugueseBot.rm_ref_spaces."""
-    return PortugueseBot().rm_ref_spaces(newtext)
-
-
-def pt_fixes(text: str) -> str:
-    """Legacy wrapper for PortugueseBot.pt_fixes."""
-    return PortugueseBot().pt_fixes(text)
-
-
 __all__ = [
     "PortugueseBot",
-    "rm_ref_spaces",
-    "pt_fixes",
 ]

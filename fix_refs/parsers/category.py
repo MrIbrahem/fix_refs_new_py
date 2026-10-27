@@ -73,24 +73,6 @@ class CategoryParser:
         return category_name in categories
 
 
-def get_categories(text: str) -> dict[str, str]:
-    """Legacy wrapper for CategoryParser.get_categories."""
-    return CategoryParser().get_categories(text)
-
-
-def get_category_list(text: str) -> list[str]:
-    """Legacy wrapper for CategoryParser.get_category_list."""
-    return CategoryParser().get_category_list(text)
-
-
-def has_category(text: str, category_name: str) -> bool:
-    """Legacy wrapper for CategoryParser.has_category."""
-    return CategoryParser().has_category(text, category_name)
-
-
 __all__ = [
     "CategoryParser",
-    "get_categories",
-    "get_category_list",
-    "has_category",
 ]

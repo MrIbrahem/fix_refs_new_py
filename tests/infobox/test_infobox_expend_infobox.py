@@ -3,7 +3,19 @@
 Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.php
 """
 
-from fix_refs.infobox.expend_infobox import expand_infobox_in_text, expend_new, make_section_0
+from fix_refs.infobox.expend_infobox import InfoboxExpander
+
+
+def expend_new(main_temp: str) -> str:
+    return InfoboxExpander().expend_new(main_temp)
+
+
+def expand_infobox_in_text(text: str, title: str, section_0: str) -> str:
+    return InfoboxExpander().expand_infobox_in_text(text, title, section_0)
+
+
+def make_section_0(title: str, newtext: str) -> str:
+    return InfoboxExpander().make_section_0(title, newtext)
 
 
 class TestInfobox:

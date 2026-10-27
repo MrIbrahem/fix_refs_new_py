@@ -66,12 +66,6 @@ class SwahiliBot:
         return "\n".join(result_lines)
 
 
-def sw_fixes(text: str) -> str:
-    """Legacy wrapper for SwahiliBot.sw_fixes."""
-    return SwahiliBot().sw_fixes(text)
-
-
 __all__ = [
     "SwahiliBot",
-    "sw_fixes",
 ]

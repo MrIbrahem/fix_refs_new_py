@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from ...fixers.months import MonthTranslator, fix_months_in_refs
-from .es_bot import SpanishTemplateFixer, fix_es
-from .es_refs import SpanishRefMover, mv_es_refs
-from .es_section_bot import SpanishSectionFixer, es_section
+from ...fixers.months import MonthTranslator
+from .es_bot import SpanishTemplateFixer
+from .es_refs import SpanishRefMover
+from .es_section_bot import SpanishSectionFixer
 
 
 class SpanishBot:
@@ -42,12 +42,6 @@ class SpanishBot:
         return text
 
 
-def fix_es_all(text: str, title: str, source_title: str, mdwiki_revid: int) -> str:
-    """Legacy wrapper for SpanishBot.fix_es_all."""
-    return SpanishBot().fix_es_all(text, title, source_title, mdwiki_revid)
-
-
 __all__ = [
     "SpanishBot",
-    "fix_es_all",
 ]

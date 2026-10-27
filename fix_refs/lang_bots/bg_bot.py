@@ -69,18 +69,6 @@ class BulgarianBot:
         return text
 
 
-def bg_section(text: str, sourcetitle: str, mdwiki_revid: int) -> str:
-    """Legacy wrapper for BulgarianBot.bg_section."""
-    return BulgarianBot().bg_section(text, sourcetitle, mdwiki_revid)
-
-
-def bg_fixes(text: str, source_title: str, mdwiki_revid: int) -> str:
-    """Legacy wrapper for BulgarianBot.bg_fixes."""
-    return BulgarianBot().bg_fixes(text, source_title, mdwiki_revid)
-
-
 __all__ = [
     "BulgarianBot",
-    "bg_section",
-    "bg_fixes",
 ]

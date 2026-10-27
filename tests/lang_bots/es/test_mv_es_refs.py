@@ -5,9 +5,21 @@ Converted from tests/es_bots/es_refsTest.php
 
 from pathlib import Path
 
-from fix_refs.fixers.months import fix_months_in_refs
-from fix_refs.lang_bots.es.es_bot import fix_es
-from fix_refs.lang_bots.es.es_refs import mv_es_refs
+from fix_refs.fixers.months import MonthTranslator
+from fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
+from fix_refs.lang_bots.es.es_refs import SpanishRefMover
+
+
+def fix_es(text: str, title: str = "") -> str:
+    return SpanishTemplateFixer().fix_es(text, title)
+
+
+def fix_months_in_refs(text: str, lang: str) -> str:
+    return MonthTranslator().fix_months_in_refs(text, lang)
+
+
+def mv_es_refs(text: str) -> str:
+    return SpanishRefMover().mv_es_refs(text)
 
 
 class TestEsRefs:

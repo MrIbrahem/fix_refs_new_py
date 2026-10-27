@@ -36,7 +36,7 @@ class ArmenianBot:
         text = re.sub(r"(<ref[^>]*\/>)\s*([" + escaped_punctuation + r"])", r"\1\2", text)
 
         # Normalize endings: </ref> followed by any punctuation remains attached
-        # Pattern: </ref>\s*[punctuation]
+        # Pattern: </ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
         text = re.sub(r"<\/ref>\s*([" + escaped_punctuation + r"])", r"</ref>\1", text)
 
         return text
@@ -55,18 +55,6 @@ class ArmenianBot:
         return text
 
 
-def remove_spaces_between_ref_and_punctuation(text: str) -> str:
-    """Legacy wrapper for ArmenianBot.remove_spaces_between_ref_and_punctuation."""
-    return ArmenianBot().remove_spaces_between_ref_and_punctuation(text)
-
-
-def hy_fixes(text: str) -> str:
-    """Legacy wrapper for ArmenianBot.hy_fixes."""
-    return ArmenianBot().hy_fixes(text)
-
-
 __all__ = [
     "ArmenianBot",
-    "remove_spaces_between_ref_and_punctuation",
-    "hy_fixes",
 ]

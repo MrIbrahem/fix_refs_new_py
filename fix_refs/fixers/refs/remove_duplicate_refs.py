@@ -68,12 +68,6 @@ class DuplicateRefRemover:
         return new_text
 
 
-def remove_duplicate_refs_with_attrs(text: str) -> str:
-    """Legacy wrapper for DuplicateRefRemover.remove_duplicate_refs_with_attrs."""
-    return DuplicateRefRemover().remove_duplicate_refs_with_attrs(text)
-
-
 __all__ = [
     "DuplicateRefRemover",
-    "remove_duplicate_refs_with_attrs",
 ]

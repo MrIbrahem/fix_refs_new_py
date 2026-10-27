@@ -2,11 +2,19 @@
 Tests for citation parser
 """
 
-from fix_refs.parsers.citations_parser import (
-    get_all_citations,
-    get_full_refs,
-    get_short_refs,
-)
+from fix_refs.parsers.citations_parser import CitationsParser, Citation
+
+
+def get_all_citations(text: str) -> list[Citation]:
+    return CitationsParser().get_all_citations(text)
+
+
+def get_full_refs(text: str) -> dict[str, str]:
+    return CitationsParser().get_full_refs(text)
+
+
+def get_short_refs(text: str) -> list[Citation]:
+    return CitationsParser().get_short_refs(text)
 
 
 class TestGetAllRefs:

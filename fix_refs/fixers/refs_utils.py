@@ -73,18 +73,6 @@ class RefUtils:
         return f"{quote}{text}{quote}"
 
 
-def rm_str_from_start_and_end(text: str, find: str) -> str:
-    """Legacy wrapper for RefUtils.rm_str_from_start_and_end."""
-    return RefUtils().rm_str_from_start_and_end(text, find)
-
-
-def remove_start_end_quotes(text: str) -> str:
-    """Legacy wrapper for RefUtils.remove_start_end_quotes."""
-    return RefUtils().remove_start_end_quotes(text)
-
-
 __all__ = [
     "RefUtils",
-    "rm_str_from_start_and_end",
-    "remove_start_end_quotes",
 ]

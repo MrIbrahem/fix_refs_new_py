@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from fix_refs.config import ConfigManager
-from fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander, fix_missing_refs
+from fix_refs.fixers.refs.fix_missing_refs import ReferenceExpander
 
 REVID = 1501810
 TITLE = "Entecavir"
@@ -66,17 +66,6 @@ class TestReferenceExpander:
     @pytest.mark.usefixtures("revision_file")
     def test_expands_missing_named_ref(self, expander: ReferenceExpander) -> None:
         result = expander.fix_missing_refs(INPUT_TEXT, TITLE, REVID)
-
-        assert EXPANDED_REF in result
-        assert SHORT_REF not in result
-
-
-class TestLegacyFixMissingRefsWrapper:
-    """Legacy fix_missing_refs() wrapper function."""
-
-    @pytest.mark.usefixtures("revision_file")
-    def test_expands_missing_named_ref(self) -> None:
-        result = fix_missing_refs(INPUT_TEXT, TITLE, REVID)
 
         assert EXPANDED_REF in result
         assert SHORT_REF not in result

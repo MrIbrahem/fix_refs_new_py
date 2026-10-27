@@ -67,18 +67,6 @@ class LanguageEnFixer:
         return parsed.string
 
 
-def add_lang_en_new(temp_text: str) -> str:
-    """Legacy wrapper for LanguageEnFixer.add_lang_en_new."""
-    return LanguageEnFixer().add_lang_en_new(temp_text)
-
-
-def add_lang_en_to_refs(text: str) -> str:
-    """Legacy wrapper for LanguageEnFixer.add_lang_en_to_refs."""
-    return LanguageEnFixer().add_lang_en_to_refs(text)
-
-
 __all__ = [
     "LanguageEnFixer",
-    "add_lang_en_new",
-    "add_lang_en_to_refs",
 ]
