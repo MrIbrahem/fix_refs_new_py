@@ -8,3 +8,5 @@ _work_files/*
 !_work_files/test_tree.md
 !_work_files/tree.md
 
+fix_refs/resources/revisions/json_data.json
+fix_refs/resources/revisions/json_data_all.json
