@@ -61,3 +61,8 @@ class RefsMover:
         self._plan_template_edits()
         logger.info("Applying %d edits", len(self.edits))
         return self._apply_edits()
+
+
+__all__ = [
+    "RefsMover",
+]
