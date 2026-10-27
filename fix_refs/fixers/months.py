@@ -77,7 +77,9 @@ class MonthTranslator:
 
                 if translated_month:
                     if lang == "es":
-                        return f"{day} de {translated_month} de {year}".strip() if day else f"{translated_month} de {year}"
+                        return (
+                            f"{day} de {translated_month} de {year}".strip() if day else f"{translated_month} de {year}"
+                        )
                     else:
                         return f"{day} de {translated_month} {year}".strip() if day else f"{translated_month} {year}"
 

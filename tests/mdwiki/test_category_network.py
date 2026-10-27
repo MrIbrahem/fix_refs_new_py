@@ -88,9 +88,7 @@ class TestAddTranslatedFromMdwiki:
             skip_langs=["fr"],
         )
         assert svc.add_translated_from_mdwiki("text", "fr") == "text"
-        assert svc.add_translated_from_mdwiki("text", "de").endswith(
-            "[[Category:Translated from MDWiki (de)]]\n"
-        )
+        assert svc.add_translated_from_mdwiki("text", "de").endswith("[[Category:Translated from MDWiki (de)]]\n")
 
     def test_uses_get_mdwiki_category(self, service):
         """The service method must call its own get_mdwiki_category."""
@@ -142,9 +140,7 @@ class TestGetCats:
     def test_passes_wikidata_url_to_getter(self, config_manager, monkeypatch):
         monkeypatch.setenv("SERVER_NAME", "example.org")
         getter = MagicMock(return_value=json.dumps(MOCK_CATS))
-        svc = MDWikiCategoryService(
-            config_manager=config_manager, url_getter=getter, wikidata_url="https://x.test/api"
-        )
+        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=getter, wikidata_url="https://x.test/api")
         svc.get_cats()
         getter.assert_called_once_with("https://x.test/api")
 
@@ -154,18 +150,14 @@ class TestGetCats:
         (config_manager.resources_path / "mdwiki_categories.json").write_text(
             json.dumps({"fallback": True}), encoding="utf-8"
         )
-        svc = MDWikiCategoryService(
-            config_manager=config_manager, url_getter=lambda url: bad_response
-        )
+        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=lambda url: bad_response)
         assert svc.get_cats() == {"fallback": True}
 
 
 class TestLoadFromLocalFile:
     def test_loads_json(self, config_manager):
         data = {"frwiki": {"title": "Local"}}
-        (config_manager.resources_path / "mdwiki_categories.json").write_text(
-            json.dumps(data), encoding="utf-8"
-        )
+        (config_manager.resources_path / "mdwiki_categories.json").write_text(json.dumps(data), encoding="utf-8")
         svc = MDWikiCategoryService(config_manager=config_manager)
         assert svc.load_from_local_file() == data
 
@@ -174,8 +166,6 @@ class TestLoadFromLocalFile:
         assert svc.load_from_local_file() == {}
 
     def test_invalid_json_returns_empty(self, config_manager):
-        (config_manager.resources_path / "mdwiki_categories.json").write_text(
-            "{broken", encoding="utf-8"
-        )
+        (config_manager.resources_path / "mdwiki_categories.json").write_text("{broken", encoding="utf-8")
         svc = MDWikiCategoryService(config_manager=config_manager)
         assert svc.load_from_local_file() == {}

@@ -31,7 +31,8 @@ class WtpTemplates:
     def top_tpls(self) -> list[tuple[int, int]]:
         """Top-level templates: not inside another template or a ref tag."""
         spans = [
-            s for s in self.all_spans
+            s
+            for s in self.all_spans
             if not any(o != s and _inside(s, o) for o in self.all_spans)
             and not any(_inside(s, rs) for rs in self.ref_spans)
         ]
@@ -98,7 +99,8 @@ class WtpRefs:
                 self.short_refs.setdefault(name, []).append(r.span)
         logger.info(
             "Collected %d full refs and %d short ref names",
-            len(self.full_refs), len(self.short_refs),
+            len(self.full_refs),
+            len(self.short_refs),
         )
 
     @cached_property
@@ -123,7 +125,4 @@ class WtpRefs:
 
     @cached_property
     def body_short_names(self) -> set[str]:
-        return {
-            self.get_name(r) for r in self.body_refs
-            if self.get_name(r) and not (r.contents or "").strip()
-        }
+        return {self.get_name(r) for r in self.body_refs if self.get_name(r) and not (r.contents or "").strip()}

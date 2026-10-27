@@ -10,8 +10,8 @@ from .move_dots import DotsMover
 from .redirect import RedirectDetector
 from .refs import (
     DuplicateRefRemover,
-    RefExpander,
     ReferenceExpander,
+    RefExpander,
     RefsMover,
 )
 from .refs_utils import RefUtils

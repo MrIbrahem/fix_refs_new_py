@@ -22,6 +22,7 @@ class InfoboxExpander:
 
     def do_comments(self, text: str) -> str:
         """Format comments in text."""
+
         def repl(match: re.Match[str]) -> str:
             return f"\n\n{match.group(1).strip()}\n"
 

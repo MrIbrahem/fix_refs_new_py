@@ -1,11 +1,10 @@
 """
-Main PageFixer class
+Main PageUpdater class
 """
 
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass
 from typing import Any
 
 from ..fixers import (
@@ -19,33 +18,12 @@ from ..fixers import (
 from ..infobox import InfoboxExpander
 from ..lang_bots import LanguageFixerPipeline
 from ..mdwiki import MDWikiCategoryService
+from .mapping import LangSetting
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class LangSetting:
-    """Per-language fixing options."""
-
-    lang: str
-    move_dots: bool = True
-    expend_infobox: bool = True
-    add_en_lang: bool = False
-    add_category: bool = False
-
-    def to_json(self) -> dict[str, Any]:
-        return asdict(self)
-
-    @classmethod
-    def from_any(cls, setting: LangSetting | dict[str, Any]) -> LangSetting:
-        """Create LangSetting from any input."""
-        if isinstance(setting, LangSetting):
-            return setting
-
-        return cls(**setting)
-
-
-class PageFixer:
+class PageUpdater:
     """Fix Wikipedia page references and formatting.
 
     Args:
@@ -159,6 +137,5 @@ class PageFixer:
 
 
 __all__ = [
-    "LangSetting",
-    "PageFixer",
+    "PageUpdater",
 ]
