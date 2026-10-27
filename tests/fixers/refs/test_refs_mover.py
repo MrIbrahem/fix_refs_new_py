@@ -2,7 +2,7 @@
 import logging
 
 from src.fix_refs.fixers.refs.refs_mover import RefsMover
-from src.fix_refs.fixers.refs.wtp_mapping import (
+from src.fix_refs.parsers.wtp_mapping import (
     WtpRefs,
     WtpTemplates,
 )
