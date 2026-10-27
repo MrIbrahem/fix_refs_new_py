@@ -11,3 +11,4 @@ _work_files/*
 state/**
 **/resources/**/json_data_all.json
 **/resources/**/json_data.json
+docs/docs.7z

@@ -14,8 +14,6 @@ from .refs import (
     RefExpander,
     RefsMover,
 )
-from .refs_utils import RefUtils
-
 __all__ = [
     "LanguageEnFixer",
     "ImageFixer",
@@ -27,5 +25,4 @@ __all__ = [
     "RefExpander",
     "ReferenceExpander",
     "RefsMover",
-    "RefUtils",
 ]
