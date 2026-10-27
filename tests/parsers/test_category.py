@@ -2,7 +2,7 @@
 Tests for category parser
 """
 
-from fix_refs.parsers.category import CategoryParser
+from src.fix_refs.parsers.category import CategoryParser
 
 
 def get_categories(text: str) -> dict[str, str]:

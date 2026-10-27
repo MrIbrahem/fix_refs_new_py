@@ -5,7 +5,7 @@ Converted from tests/fixers/refs/remove_duplicate_refsTest.php
 
 from pathlib import Path
 
-from fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
+from src.fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 
 
 def remove_duplicate_refs_with_attrs(text: str) -> str:

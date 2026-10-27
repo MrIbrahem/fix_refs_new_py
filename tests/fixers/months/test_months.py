@@ -2,7 +2,7 @@
 Tests for month handling
 """
 
-from fix_refs.fixers.months import MonthTranslator
+from src.fix_refs.fixers.months import MonthTranslator
 
 
 def new_date(val: str, lang: str = "pt") -> str:

@@ -7,7 +7,7 @@ Note: This test requires the infobox2 Python module which may need to be impleme
 
 from pathlib import Path
 
-from fix_refs.infobox.expend_infobox import InfoboxExpander
+from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
 def expend_new(main_temp: str) -> str:

@@ -5,9 +5,9 @@ Converted from tests/es_bots/es_refsTest.php
 
 from pathlib import Path
 
-from fix_refs.fixers.months import MonthTranslator
-from fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
-from fix_refs.lang_bots.es.es_refs import SpanishRefMover
+from src.fix_refs.fixers.months import MonthTranslator
+from src.fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
+from src.fix_refs.lang_bots.es.es_refs import SpanishRefMover
 
 
 def fix_es(text: str, title: str = "") -> str:

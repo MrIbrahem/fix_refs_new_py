@@ -3,7 +3,7 @@
 Converted from tests/indexTest.php
 """
 
-from fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 class TestIndex:

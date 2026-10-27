@@ -5,8 +5,8 @@ Converted from tests/es_bots/esTest.php and tests/es_bots/es_months_new_valueTes
 
 import re
 
-from fix_refs.fixers.months import MonthTranslator
-from fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
+from src.fix_refs.fixers.months import MonthTranslator
+from src.fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
 
 
 def make_date_new_val_es(val: str) -> str:

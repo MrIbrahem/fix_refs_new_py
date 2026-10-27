@@ -3,7 +3,7 @@
 Converted from tests/pt_bots/pt_months_new_valueTest.php
 """
 
-from fix_refs.fixers.months import MonthTranslator
+from src.fix_refs.fixers.months import MonthTranslator
 
 
 def make_date_new_val_pt(val: str) -> str:

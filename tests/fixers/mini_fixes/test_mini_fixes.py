@@ -2,7 +2,7 @@
 Tests for mini fixes
 """
 
-from fix_refs.fixers.mini_fixes import (
+from src.fix_refs.fixers.mini_fixes import (
     MiniFixes,
 )
 

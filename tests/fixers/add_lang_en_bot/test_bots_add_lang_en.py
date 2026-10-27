@@ -3,7 +3,7 @@
 Converted from tests/en_lang_paramTest.php
 """
 
-from fix_refs.fixers.add_lang_en_bot import LanguageEnFixer
+from src.fix_refs.fixers.add_lang_en_bot import LanguageEnFixer
 
 
 def add_lang_en_to_refs(text: str) -> str:

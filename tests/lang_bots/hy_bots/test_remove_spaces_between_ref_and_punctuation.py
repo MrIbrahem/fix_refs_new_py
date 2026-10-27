@@ -3,7 +3,7 @@
 Converted from tests/remove_space2Test.php
 """
 
-from fix_refs.lang_bots.hy_bot import ArmenianBot
+from src.fix_refs.lang_bots.hy_bot import ArmenianBot
 
 
 def remove_spaces_between_ref_and_punctuation(text: str) -> str:

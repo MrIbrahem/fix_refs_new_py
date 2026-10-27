@@ -1,6 +1,6 @@
 """Tests for HttpClient class in fix_refs/utils/http.py"""
 
-from fix_refs.utils.http import HttpClient
+from src.fix_refs.utils.http import HttpClient
 
 
 class TestHttpClient:

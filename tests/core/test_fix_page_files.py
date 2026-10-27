@@ -5,7 +5,7 @@ Converted from tests/FixpageTest.php
 
 from pathlib import Path
 
-from fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 def test_file_ja():

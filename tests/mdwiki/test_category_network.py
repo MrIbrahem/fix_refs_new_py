@@ -8,11 +8,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from fix_refs.mdwiki.category import (
+from src.fix_refs.mdwiki.category import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
 )
-from fix_refs.utils.http import HttpClient
+from src.fix_refs.utils.http import HttpClient
 
 # Mock Wikidata sitelinks-style data: {"<lang>wiki": {"title": ...}}
 MOCK_CATS = {

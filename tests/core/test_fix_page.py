@@ -3,8 +3,8 @@
 Converted from tests/FixpageTest.php
 """
 
-from fix_refs.core.fix_page import PageUpdater
-from fix_refs.core.mapping import LangSetting, PageContext
+from src.fix_refs.core.fix_page import PageUpdater
+from src.fix_refs.core.mapping import LangSetting, PageContext
 
 
 class TestFixPage:

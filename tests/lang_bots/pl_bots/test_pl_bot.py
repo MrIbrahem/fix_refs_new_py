@@ -5,7 +5,7 @@ Converted from tests/pl_bots/pl_infoboxTest.php
 
 import re
 
-from fix_refs.lang_bots.pl_bot import PolishBot
+from src.fix_refs.lang_bots.pl_bot import PolishBot
 
 
 def add_missing_params_to_choroba_infobox(text: str) -> str:
