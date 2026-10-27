@@ -12,8 +12,7 @@ REVID = 1501810
 TITLE = "Entecavir"
 REVISION_CONTENT = 'something <ref name="AHFS2016">full ref</ref>'
 INPUT_TEXT = (
-    "This Ref tag should be full ref after fix missing references "
-    'from 1501810/wikitext.txt <ref name="AHFS2016" />'
+    'This Ref tag should be full ref after fix missing references from 1501810/wikitext.txt <ref name="AHFS2016" />'
 )
 EXPANDED_REF = '<ref name="AHFS2016">full ref</ref>'
 SHORT_REF = '<ref name="AHFS2016" />'

@@ -1,7 +1,5 @@
 """Tests for HttpClient class in fix_refs/utils/http.py"""
 
-import pytest
-
 from fix_refs.utils.http import HttpClient
 
 

@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from .bg_bot import BulgarianBot, bg_fixes
-from .es import SpanishBot, fix_es_all
-from .hy_bot import ArmenianBot, hy_fixes
-from .pl_bot import PolishBot, pl_fixes
-from .pt_bot import PortugueseBot, pt_fixes
-from .sw_bot import SwahiliBot, sw_fixes
+from .bg_bot import BulgarianBot
+from .es import SpanishBot
+from .hy_bot import ArmenianBot
+from .pl_bot import PolishBot
+from .pt_bot import PortugueseBot
+from .sw_bot import SwahiliBot
 
 
 class LanguageFixerPipeline:

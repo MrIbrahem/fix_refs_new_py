@@ -1,12 +1,10 @@
 import logging
-from dataclasses import dataclass, field
-from functools import cached_property
 
-import wikitextparser as wtp
 
-from .wtp_mapping import WtpTemplates, WtpRefs
+from .wtp_mapping import WtpRefs
 
 logger = logging.getLogger(__name__)
+
 
 class RefsMover:
     """Moves full refs from templates into the body and shortens them in templates."""

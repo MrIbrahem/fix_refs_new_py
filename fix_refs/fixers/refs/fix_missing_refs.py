@@ -108,6 +108,7 @@ class ReferenceExpander:
 
 # --- Legacy Compatibility Layer ---
 
+
 def fix_missing_refs(text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
     """Legacy entry point for fixing missing references."""
     return ReferenceExpander().fix_missing_refs(text, sourcetitle, mdwiki_revid)

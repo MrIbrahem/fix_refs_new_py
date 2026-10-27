@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 import re
 
-from ..fixers.months import MonthTranslator, fix_months_in_refs
+from ..fixers.months import MonthTranslator
 
 logger = logging.getLogger(__name__)
 

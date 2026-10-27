@@ -1,7 +1,5 @@
 """Tests for SettingsLoader in fix_refs/core/settings.py"""
 
-import pytest
-
 from fix_refs.core.settings import SettingsLoader
 
 
