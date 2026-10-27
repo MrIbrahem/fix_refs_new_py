@@ -13,21 +13,13 @@ from .sw_bot import SwahiliBot
 class LanguageFixerPipeline:
     """Pipeline orchestrator for applying language-specific bot transformations."""
 
-    def __init__(
-        self,
-        pl_bot: PolishBot | None = None,
-        pt_bot: PortugueseBot | None = None,
-        bg_bot: BulgarianBot | None = None,
-        es_bot: SpanishBot | None = None,
-        sw_bot: SwahiliBot | None = None,
-        hy_bot: ArmenianBot | None = None,
-    ) -> None:
-        self.pl_bot = pl_bot or PolishBot()
-        self.pt_bot = pt_bot or PortugueseBot()
-        self.bg_bot = bg_bot or BulgarianBot()
-        self.es_bot = es_bot or SpanishBot()
-        self.sw_bot = sw_bot or SwahiliBot()
-        self.hy_bot = hy_bot or ArmenianBot()
+    def __init__(self) -> None:
+        self.pl_bot = PolishBot()
+        self.pt_bot = PortugueseBot()
+        self.bg_bot = BulgarianBot()
+        self.es_bot = SpanishBot()
+        self.sw_bot = SwahiliBot()
+        self.hy_bot = ArmenianBot()
 
     def apply_language_fixes(self, text: str, title: str, lang: str, source_title: str, mdwiki_revid: int) -> str:
         """Apply language-specific transformations to text.

@@ -11,3 +11,4 @@ _work_files/*
 fix_refs/resources/revisions/json_data.json
 fix_refs/resources/revisions/json_data_all.json
 **/__pycache__/**
+state/*/**.lock

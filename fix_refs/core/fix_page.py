@@ -28,26 +28,18 @@ class PageUpdater:
 
     def __init__(
         self,
-        mini_fixes: MiniFixes | None = None,
-        ref_expander: ReferenceExpander | None = None,
-        duplicate_ref_remover: DuplicateRefRemover | None = None,
-        dots_mover: DotsMover | None = None,
-        lang_en_fixer: LanguageEnFixer | None = None,
-        language_pipeline: LanguageFixerPipeline | None = None,
-        infobox_expander: InfoboxExpander | None = None,
-        redirect_detector: RedirectDetector | None = None,
         mdwiki_category_service: MDWikiCategoryService | None = None,
     ) -> None:
 
         # Injected collaborators
-        self.mini_fixes = mini_fixes or MiniFixes()
-        self.ref_expander = ref_expander or ReferenceExpander()
-        self.duplicate_ref_remover = duplicate_ref_remover or DuplicateRefRemover()
-        self.dots_mover = dots_mover or DotsMover()
-        self.lang_en_fixer = lang_en_fixer or LanguageEnFixer()
-        self.language_pipeline = language_pipeline or LanguageFixerPipeline()
-        self.infobox_expander = infobox_expander or InfoboxExpander()
-        self.redirect_detector = redirect_detector or RedirectDetector()
+        self.mini_fixes = MiniFixes()
+        self.ref_expander = ReferenceExpander()
+        self.duplicate_ref_remover = DuplicateRefRemover()
+        self.dots_mover = DotsMover()
+        self.lang_en_fixer = LanguageEnFixer()
+        self.language_pipeline = LanguageFixerPipeline()
+        self.infobox_expander = InfoboxExpander()
+        self.redirect_detector = RedirectDetector()
         self.mdwiki_category_service = mdwiki_category_service or MDWikiCategoryService()
 
     # ---------------- Steps (each one updates ctx.text) ----------------
