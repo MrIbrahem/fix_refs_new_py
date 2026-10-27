@@ -19,14 +19,14 @@ class TestFixPage:
             add_category=False,
         )
 
-        fixer = PageUpdater(
+        fixer = PageUpdater()
+        return fixer.run(
             text=text,
             title="title",
             source_title="",
             mdwiki_revid=0,
             lang_setting=lang_setting,
         )
-        return fixer.run()
 
     def test_part_1(self):
         """Test Armenian text with references and punctuation"""

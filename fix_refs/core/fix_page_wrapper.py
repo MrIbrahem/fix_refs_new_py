@@ -45,13 +45,13 @@ class PageFixer:
     # ------------------------------------------------------------------
     def run(self) -> str:
         """Run all fixes and return the fixed page content."""
-        return PageUpdater(
+        return PageUpdater().run(
             text=self.text,
             title=self.title,
             lang_setting=self.lang_setting,
             source_title=self.source_title,
             mdwiki_revid=self.mdwiki_revid,
-        ).run()
+        )
 
 
 __all__ = [

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -31,6 +31,23 @@ class LangSetting:
         return cls(**setting)
 
 
+@dataclass
+class PageContext:
+    """Per-page data and the working text shared by all steps."""
+
+    text: str
+    title: str
+    lang_setting: LangSetting
+    source_title: str = ""
+    mdwiki_revid: int = 0
+    text_org: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        # Keep the untouched original so we can fall back to it
+        self.text_org = self.text
+
+
 __all__ = [
     "LangSetting",
+    "PageContext",
 ]

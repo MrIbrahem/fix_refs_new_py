@@ -33,15 +33,15 @@ def _fix_one(
             add_category=add_category,
         )
 
-    fixer = PageUpdater(
+    fixer = PageUpdater()
+
+    return fixer.run(
         text=text,
         title=title,
         source_title=source_title,
         mdwiki_revid=mdwiki_revid,
         lang_setting=lang_setting,
     )
-
-    return fixer.run()
 
 
 class TestFixRefs:

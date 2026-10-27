@@ -25,14 +25,14 @@ def test_file_ja():
         add_category=False,
     )
 
-    fixer = PageUpdater(
+    fixer = PageUpdater()
+    result = fixer.run(
         text=text_input,
         title="title",
         source_title="",
         mdwiki_revid=0,
         lang_setting=lang_setting,
     )
-    result = fixer.run()
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
@@ -60,14 +60,14 @@ def test_file_pl():
         add_category=False,
     )
 
-    fixer = PageUpdater(
+    fixer = PageUpdater()
+    result = fixer.run(
         text=text_input,
         title="title",
         source_title="",
         mdwiki_revid=0,
         lang_setting=lang_setting,
     )
-    result = fixer.run()
 
     # write output for comparison
     output_file = tests_dir / "output.txt"
