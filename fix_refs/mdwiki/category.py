@@ -12,7 +12,7 @@ from collections.abc import Callable
 from typing import Any
 
 from ..config import ConfigManager
-from ..utils.http import get_url
+from ..utils.http import HttpClient
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +26,12 @@ class MDWikiCategoryService:
     def __init__(
         self,
         config_manager: ConfigManager | None = None,
-        url_getter: Callable[[str], str | None] | None = None,
         wikidata_url: str = "https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/Q107014860/sitelinks",
         skip_langs: list[str] | None = None,
+        http_client: HttpClient | None = None,
     ) -> None:
+        self.http_client = http_client or HttpClient()
         self.config_manager = config_manager or ConfigManager()
-        self.url_getter = url_getter or get_url
         self.wikidata_url = wikidata_url
         self.skip_langs = skip_langs or SKIP_LANGS_CATEGORY
 
@@ -63,7 +63,7 @@ class MDWikiCategoryService:
         if not server_name:
             return self.load_from_local_file()
 
-        data = self.url_getter(self.wikidata_url)
+        data = self.http_client.get_url(self.wikidata_url)
 
         if not data:
             return self.load_from_local_file()

@@ -10,59 +10,62 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def sw_fixes(text: str) -> str:
-    """Apply Swahili-specific fixes to text
+class SwahiliBot:
+    """Bot for Swahili Wikipedia language-specific fixes."""
 
-    Fixes section title: == Marejeleo == to == Marejeo ==
-    Works case-insensitively but only on standalone section headers.
-    If there are multiple occurrences on the same line separated by text,
-    only the later ones are changed.
+    def sw_fixes(self, text: str) -> str:
+        """Apply Swahili-specific fixes to text
 
-    Args:
-        text: WikiText content
+        Fixes section title: == Marejeleo == to == Marejeo ==
+        Works case-insensitively but only on standalone section headers.
+        If there are multiple occurrences on the same line separated by text,
+        only the later ones are changed.
 
-    Returns:
-        Fixed text
-    """
-    # Pattern for Marejeleo section headers (case insensitive)
-    pattern = r"(=+)[\s]*[Mm][Aa][Rr][Ee][Jj][Ee][Ll][Ee][Oo][\s]*(\1)"
+        Args:
+            text: WikiText content
 
-    # First, handle multiline cases where = signs have newlines between them
-    # These are single headers split across lines - always replace
-    # Only match patterns that span multiple lines (contain \n)
-    def multiline_replacer(match):
-        if "\n" in match.group(0):
-            return match.group(1) + " Marejeo " + match.group(2)
-        return match.group(0)  # Don't change single-line matches here
+        Returns:
+            Fixed text
+        """
+        # Pattern for Marejeleo section headers (case insensitive)
+        pattern = r"(=+)[\s]*[Mm][Aa][Rr][Ee][Jj][Ee][Ll][Ee][Oo][\s]*(\1)"
 
-    text = re.sub(pattern, multiline_replacer, text, flags=re.DOTALL)
+        # First, handle multiline cases where = signs have newlines between them
+        # These are single headers split across lines - always replace
+        # Only match patterns that span multiple lines (contain \n)
+        def multiline_replacer(match):
+            if "\n" in match.group(0):
+                return match.group(1) + " Marejeo " + match.group(2)
+            return match.group(0)  # Don't change single-line matches here
 
-    # Now process line by line for the edge case of multiple headers per line
-    lines = text.split("\n")
-    result_lines = []
+        text = re.sub(pattern, multiline_replacer, text, flags=re.DOTALL)
 
-    for line in lines:
-        matches = list(re.finditer(pattern, line))
+        # Now process line by line for the edge case of multiple headers per line
+        lines = text.split("\n")
+        result_lines = []
 
-        if len(matches) == 0:
-            result_lines.append(line)
-        elif len(matches) == 1:
-            # Single occurrence - always replace
-            line = re.sub(pattern, r"\1 Marejeo \2", line)
-            result_lines.append(line)
-        else:
-            # Multiple occurrences on same line - keep first, fix rest
-            first_match = matches[0]
-            first_end = first_match.end()
-            first_part = line[:first_end]
-            rest_part = line[first_end:]
+        for line in lines:
+            matches = list(re.finditer(pattern, line))
 
-            rest_part = re.sub(pattern, r"\1 Marejeo \2", rest_part)
-            result_lines.append(first_part + rest_part)
+            if len(matches) == 0:
+                result_lines.append(line)
+            elif len(matches) == 1:
+                # Single occurrence - always replace
+                line = re.sub(pattern, r"\1 Marejeo \2", line)
+                result_lines.append(line)
+            else:
+                # Multiple occurrences on same line - keep first, fix rest
+                first_match = matches[0]
+                first_end = first_match.end()
+                first_part = line[:first_end]
+                rest_part = line[first_end:]
 
-    return "\n".join(result_lines)
+                rest_part = re.sub(pattern, r"\1 Marejeo \2", rest_part)
+                result_lines.append(first_part + rest_part)
+
+        return "\n".join(result_lines)
 
 
 __all__ = [
-    "sw_fixes",
+    "SwahiliBot",
 ]

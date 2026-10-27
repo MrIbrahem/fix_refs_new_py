@@ -4,6 +4,7 @@ Converted from tests/md_catTest.php and updated for MDWikiCategoryService.
 """
 
 import json
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -24,6 +25,20 @@ MOCK_CATS = {
 DEFAULT_CAT = "Category:Translated from MDWiki"
 
 
+class FakseHttpClient:
+    def __init__(
+        self,
+        user_agent: str | None = None,
+        session: None = None,
+        get_url_return: Any | None = None,
+    ) -> None:
+        self.user_agent = user_agent or "default_user_agent"
+        self.get_url_return = get_url_return
+
+    def get_url(self, url: str, timeout: int = 5) -> None | str:
+        return self.get_url_return
+
+
 @pytest.fixture
 def config_manager(tmp_path):
     """ConfigManager stub whose resources_path points to a temp dir."""
@@ -36,9 +51,10 @@ def config_manager(tmp_path):
 def service(config_manager, monkeypatch):
     """Service wired to a fake URL getter returning MOCK_CATS (no network)."""
     monkeypatch.setenv("SERVER_NAME", "example.org")
+    http_client = FakseHttpClient(get_url_return=json.dumps(MOCK_CATS))
     return MDWikiCategoryService(
         config_manager=config_manager,
-        url_getter=lambda url: json.dumps(MOCK_CATS),
+        http_client=http_client,  # pyright: ignore[reportArgumentType]
     )
 
 
@@ -140,7 +156,11 @@ class TestGetCats:
     def test_passes_wikidata_url_to_getter(self, config_manager, monkeypatch):
         monkeypatch.setenv("SERVER_NAME", "example.org")
         getter = MagicMock(return_value=json.dumps(MOCK_CATS))
-        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=getter, wikidata_url="https://x.test/api")
+        svc = MDWikiCategoryService(
+            config_manager=config_manager,
+            url_getter=getter,
+            wikidata_url="https://x.test/api",
+        )
         svc.get_cats()
         getter.assert_called_once_with("https://x.test/api")
 
@@ -150,7 +170,10 @@ class TestGetCats:
         (config_manager.resources_path / "mdwiki_categories.json").write_text(
             json.dumps({"fallback": True}), encoding="utf-8"
         )
-        svc = MDWikiCategoryService(config_manager=config_manager, url_getter=lambda url: bad_response)
+        svc = MDWikiCategoryService(
+            config_manager=config_manager,
+            url_getter=lambda url: bad_response,
+        )
         assert svc.get_cats() == {"fallback": True}
 
 

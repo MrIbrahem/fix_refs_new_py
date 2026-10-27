@@ -3,11 +3,11 @@
 Converted from tests/FixpageTest.php
 """
 
-from fix_refs.core.fix_page import LangSetting, PageFixer
+from fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
 class TestFixPage:
-    """Test cases for PageFixer.run function"""
+    """Test cases for PageUpdater.run function"""
 
     def fix_page_wrap(self, text: str, lang: str) -> str:
         """Wrapper function matching PHP test signature"""
@@ -19,7 +19,7 @@ class TestFixPage:
             add_category=False,
         )
 
-        fixer = PageFixer(
+        fixer = PageUpdater(
             text=text,
             title="title",
             source_title="",

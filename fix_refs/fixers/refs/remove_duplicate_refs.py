@@ -6,62 +6,68 @@ from __future__ import annotations
 
 import logging
 
-from ...parsers.citations_parser import Citation, get_all_citations
+from ...parsers.citations_parser import Citation, CitationsParser
 
 logger = logging.getLogger(__name__)
 
 
-def remove_duplicate_refs_with_attrs(text: str) -> str:
-    """Remove duplicate references by converting them to self-closing tags
+class DuplicateRefRemover:
+    """Remover for duplicate references by converting subsequent occurrences into self-closing tags."""
 
-    First occurrence keeps full content, subsequent references become <ref name="..."/>
+    def __init__(self, citations_parser: CitationsParser | None = None) -> None:
+        self.citations_parser = citations_parser or CitationsParser()
 
-    Args:
-        text: Text containing citations
+    def remove_duplicate_refs_with_attrs(self, text: str) -> str:
+        """Remove duplicate references by converting them to self-closing tags
 
-    Returns:
-        Text with duplicate references converted to self-closing tags
-    """
-    new_text = text
-    refs_to_check: dict[str, str] = {}
-    refs: dict[str, str] = {}
-    citations: list[Citation] = get_all_citations(text)
+        First occurrence keeps full content, subsequent references become <ref name="..."/>
 
-    numb = 0
+        Args:
+            text: Text containing citations
 
-    for citation in citations:
-        cite_fulltext = citation.tag
-        cite_attrs = citation.get_attributes()
-        content = citation.contents.strip()
+        Returns:
+            Text with duplicate references converted to self-closing tags
+        """
+        new_text = text
+        refs_to_check: dict[str, str] = {}
+        refs: dict[str, str] = {}
+        citations: list[Citation] = self.citations_parser.get_all_citations(text)
 
-        if not content:
-            continue
+        numb = 0
 
-        if not cite_attrs or not citation.name:
-            numb += 1
-            name = f"autogen_{numb}"
-            citation.ref.attrs["name"] = name
+        for citation in citations:
+            cite_fulltext = citation.tag
             cite_attrs = citation.get_attributes()
+            content = citation.contents.strip()
 
-        logger.debug(f"\n cite_attrs: (({cite_attrs}))")
+            if not content:
+                continue
 
-        short_tag = citation.to_string_self_closing()
+            if not cite_attrs or not citation.name:
+                numb += 1
+                name = f"autogen_{numb}"
+                citation.ref.attrs["name"] = name
+                cite_attrs = citation.get_attributes()
 
-        if cite_attrs in refs:
-            new_text = new_text.replace(cite_fulltext, short_tag)
-        else:
-            refs_to_check[short_tag] = cite_fulltext
-            refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
+            logger.debug(f"\n cite_attrs: (({cite_attrs}))")
 
-    for key, value in refs_to_check.items():
-        if value not in new_text:
-            # pattern = re.escape(key)
-            # new_text = re.sub(pattern, value, new_text, count=1)
-            new_text = new_text.replace(key, value, 1)
+            short_tag = citation.to_string_self_closing()
 
-    return new_text
+            if cite_attrs in refs:
+                new_text = new_text.replace(cite_fulltext, short_tag)
+            else:
+                refs_to_check[short_tag] = cite_fulltext
+                refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
+
+        for key, value in refs_to_check.items():
+            if value not in new_text:
+                # pattern = re.escape(key)
+                # new_text = re.sub(pattern, value, new_text, count=1)
+                new_text = new_text.replace(key, value, 1)
+
+        return new_text
 
 
 __all__ = [
-    "remove_duplicate_refs_with_attrs",
+    "DuplicateRefRemover",
 ]

@@ -2,24 +2,30 @@
 
 from __future__ import annotations
 
-from .add_lang_en_bot import add_lang_en_to_refs
+from .add_lang_en_bot import LanguageEnFixer
+from .fix_images import ImageFixer
 from .mini_fixes import MiniFixes
-from .move_dots import move_dots_after_refs
-from .redirect import is_redirect
+from .months import MonthTranslator
+from .move_dots import DotsMover
+from .redirect import RedirectDetector
 from .refs import (
+    DuplicateRefRemover,
     ReferenceExpander,
-    refs_expand,
-    refs_expand_work,
-    remove_duplicate_refs_with_attrs,
+    RefExpander,
+    RefsMover,
 )
+from .refs_utils import RefUtils
 
 __all__ = [
-    "refs_expand",
+    "LanguageEnFixer",
+    "ImageFixer",
     "MiniFixes",
-    "refs_expand_work",
+    "MonthTranslator",
+    "DotsMover",
+    "RedirectDetector",
+    "DuplicateRefRemover",
+    "RefExpander",
     "ReferenceExpander",
-    "remove_duplicate_refs_with_attrs",
-    "add_lang_en_to_refs",
-    "is_redirect",
-    "move_dots_after_refs",
+    "RefsMover",
+    "RefUtils",
 ]

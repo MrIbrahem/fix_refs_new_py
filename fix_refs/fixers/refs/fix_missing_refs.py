@@ -1,7 +1,3 @@
-"""
-Fix missing references by expanding from source text
-"""
-
 from __future__ import annotations
 
 import json
@@ -10,8 +6,8 @@ from pathlib import Path
 from typing import Any
 
 from ...config import ConfigManager
-from ...parsers.citations_parser import get_short_refs
-from .expend_refs import refs_expand
+from ...parsers.citations_parser import CitationsParser
+from .expend_refs import RefExpander
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +18,8 @@ class ReferenceExpander:
     def __init__(self, config_manager: ConfigManager | None = None) -> None:
         """Initialize the reference expander with an optional config manager."""
         self._config_manager = config_manager or ConfigManager()
+        self._citations_parser = CitationsParser()
+        self._ref_expander = RefExpander(self._citations_parser)
 
     def find_mdwiki_revid(self, sourcetitle: str) -> str:
         """Find MDWiki revision ID from JSON file.
@@ -94,7 +92,7 @@ class ReferenceExpander:
         Returns:
             Text with missing references expanded.
         """
-        short_refs = get_short_refs(text)
+        short_refs = self._citations_parser.get_short_refs(text)
 
         logger.debug(f"empty refs: {len(short_refs)}")
 
@@ -106,7 +104,7 @@ class ReferenceExpander:
         if not full_text:
             return text
 
-        expanded_text: str = refs_expand(short_refs, text, full_text)
+        expanded_text: str = self._ref_expander.refs_expand(short_refs, text, full_text)
         return expanded_text
 
 

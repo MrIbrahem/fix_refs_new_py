@@ -6,59 +6,63 @@ from __future__ import annotations
 
 import logging
 
-from ...parsers.citations_parser import Citation, get_full_refs, get_short_refs
+from ...parsers.citations_parser import Citation, CitationsParser
 
 logger = logging.getLogger(__name__)
 
 
-def refs_expand(short_refs: list[Citation], text: str, alltext: str) -> str:
-    """Expand short references with full text from source
+class RefExpander:
+    """Expander for replacing short reference tags with full citations."""
 
-    Args:
-        short_refs: List of short citation references
-        text: Text to fix
-        alltext: Source text with full references
+    def __init__(self, citations_parser: CitationsParser | None = None) -> None:
+        self.citations_parser = citations_parser or CitationsParser()
 
-    Returns:
-        Text with expanded references
-    """
-    refs = get_full_refs(alltext)
+    def refs_expand(self, short_refs: list[Citation], text: str, alltext: str) -> str:
+        """Expand short references with full text from source
 
-    for cite in short_refs:
-        name = cite.name
-        refe = cite.tag
+        Args:
+            short_refs: List of short citation references
+            text: Text to fix
+            alltext: Source text with full references
 
-        rr = refs.get(name, "")
+        Returns:
+            Text with expanded references
+        """
+        refs = self.citations_parser.get_full_refs(alltext)
 
-        if rr:
-            logger.debug(f"refs_expand: {name}")
-            text = text.replace(refe, rr)
+        for cite in short_refs:
+            name = cite.name
+            refe = cite.tag
 
-    return text
+            rr = refs.get(name, "")
 
+            if rr:
+                logger.debug(f"refs_expand: {name}")
+                text = text.replace(refe, rr)
 
-def refs_expand_work(first: str, alltext: str = "") -> str:
-    """Expand short citations with full reference content
+        return text
 
-    Similar to refs_expand but takes text directly instead of list of citations.
-    This matches the PHP API for compatibility.
+    def refs_expand_work(self, first: str, alltext: str = "") -> str:
+        """Expand short citations with full reference content
 
-    Args:
-        first: Text to process (may contain short citations)
-        alltext: Source text containing full references (if empty, uses first)
+        Similar to refs_expand but takes text directly instead of list of citations.
+        This matches the PHP API for compatibility.
 
-    Returns:
-        Text with short citations expanded to full references
-    """
-    if not alltext:
-        alltext = first
+        Args:
+            first: Text to process (may contain short citations)
+            alltext: Source text containing full references (if empty, uses first)
 
-    short_refs = get_short_refs(first)
+        Returns:
+            Text with short citations expanded to full references
+        """
+        if not alltext:
+            alltext = first
 
-    return refs_expand(short_refs, first, alltext)
+        short_refs = self.citations_parser.get_short_refs(first)
+
+        return self.refs_expand(short_refs, first, alltext)
 
 
 __all__ = [
-    "refs_expand",
-    "refs_expand_work",
+    "RefExpander",
 ]

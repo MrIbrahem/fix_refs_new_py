@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from .expend_refs import refs_expand, refs_expand_work
+from .expend_refs import RefExpander
 from .fix_missing_refs import ReferenceExpander
-from .remove_duplicate_refs import remove_duplicate_refs_with_attrs
+from .refs_mover import RefsMover
+from .remove_duplicate_refs import DuplicateRefRemover
 
 __all__ = [
-    "refs_expand",
-    "refs_expand_work",
+    "RefExpander",
     "ReferenceExpander",
-    "remove_duplicate_refs_with_attrs",
+    "RefsMover",
+    "DuplicateRefRemover",
 ]

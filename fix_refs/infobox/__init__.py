@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .expend_infobox import expand_infobox_in_text
+from .expend_infobox import InfoboxExpander
 
 __all__ = [
-    "expand_infobox_in_text",
+    "InfoboxExpander",
 ]
