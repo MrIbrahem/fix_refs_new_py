@@ -36,7 +36,7 @@ class LangMonth:
 
 
 @dataclass
-class PortugueseMonth(LangMonth):
+class PortugueseMonths(LangMonth):
     data: dict[str, str] = field(
         default_factory=lambda: {
             "January": "janeiro",
@@ -62,7 +62,7 @@ class PortugueseMonth(LangMonth):
 
 
 @dataclass
-class SpanishMonth(LangMonth):
+class SpanishMonths(LangMonth):
     data: dict[str, str] = field(
         default_factory=lambda: {
             "January": "enero",
@@ -91,8 +91,8 @@ class SpanishMonth(LangMonth):
 class MonthsTranslations:
     langs: dict[str, type[LangMonth]] = field(
         default_factory=lambda: {
-            "pt": PortugueseMonth,
-            "es": SpanishMonth,
+            "pt": PortugueseMonths,
+            "es": SpanishMonths,
         }
     )
 
@@ -105,7 +105,7 @@ class MonthsTranslations:
 
 __all__ = [
     "LangMonth",
-    "PortugueseMonth",
-    "SpanishMonth",
+    "PortugueseMonths",
+    "SpanishMonths",
     "MonthsTranslations",
 ]

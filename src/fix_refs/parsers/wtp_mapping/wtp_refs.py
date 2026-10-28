@@ -101,7 +101,6 @@ class WtpRefs:
         Unnamed refs are left untouched.
         Returns the new text (self.text is not modified).
         """
-        text = self.parsed.string
         seen: set[tuple[str, str]] = set()
         edits: list[tuple[tuple[int, int], str]] = []
 
@@ -117,6 +116,7 @@ class WtpRefs:
 
             edits.append((r.span, r.to_short()))
 
+        text = self.parsed.string
         # Apply from the end so earlier spans stay valid
         for (start, end), short in reversed(edits):
             text = text[:start] + short + text[end:]

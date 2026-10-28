@@ -58,7 +58,7 @@ class TestReferenceExpander:
     """ReferenceExpander.fix_missing_refs() full flow.
 
     Flow: REVISIONS_PATH -> ConfigManager -> ReferenceExpander -> get_revision_file_path(1501810)
-          -> 1501810/wikitext.txt -> get_full_text() -> refs_expand() -> expanded reference.
+          -> 1501810/wikitext.txt -> get_full_text() -> RefExpander.run() -> expanded reference.
     """
 
     @pytest.mark.usefixtures("revision_file")

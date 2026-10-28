@@ -17,6 +17,24 @@ logger = logging.getLogger(__name__)
 class MonthTranslator:
     """Translator and fixer for dates and English month names in templates and citations."""
 
+    def __init__(self) -> None:
+        self.months_translations = MonthsTranslations()
+
+    def _create_patterns(self, data_keys: str) -> list[str]:
+
+        month_part = rf"(?P<m>{data_keys})"
+
+        patterns = [
+            rf"^(?:(?P<d>\d{{1,2}})\s+)?{month_part},?\s+(?P<y>\d{{4}})$",
+            rf"^{month_part}\s+(?P<d>\d{{1,2}}),?\s+(?P<y>\d{{4}})$",
+        ]
+
+        return patterns
+
+    def _start_end(self, cite_temp: str) -> bool:
+        """Check if string starts with {{ and ends with }}"""
+        return cite_temp.startswith("{{") and cite_temp.endswith("}}")
+
     def new_date(self, val: str, lang: str = "pt") -> str:
         """Convert English month names to target language
 
@@ -27,19 +45,12 @@ class MonthTranslator:
         Returns:
             Date string with translated month name
         """
-        lang_item = MonthsTranslations().load_lang(lang)
+        lang_item = self.months_translations.load_lang(lang)
 
         if not lang_item:
             return val
 
-        data_keys = lang_item.join_data_keys
-
-        month_part = rf"(?P<m>{data_keys})"
-
-        patterns = [
-            rf"^(?:(?P<d>\d{{1,2}})\s+)?{month_part},?\s+(?P<y>\d{{4}})$",
-            rf"^{month_part}\s+(?P<d>\d{{1,2}}),?\s+(?P<y>\d{{4}})$",
-        ]
+        patterns = self._create_patterns(lang_item.join_data_keys)
 
         for pattern in patterns:
             match = re.match(pattern, val.strip(), re.IGNORECASE)
@@ -76,10 +87,6 @@ class MonthTranslator:
 
         return parsed.string
 
-    def start_end(self, cite_temp: str) -> bool:
-        """Check if string starts with {{ and ends with }}"""
-        return cite_temp.startswith("{{") and cite_temp.endswith("}}")
-
     def fix_months_in_refs(self, text: str, lang: str) -> str:
         """Translate English months to Spanish/Portuguese within citations
 
@@ -99,7 +106,7 @@ class MonthTranslator:
             contents = ref.contents or ""
 
             # Only process if it looks like a template
-            if not self.start_end(contents.strip()):
+            if not self._start_end(contents.strip()):
                 continue
 
             new_contents = self.fix_months_in_texts(contents, lang)

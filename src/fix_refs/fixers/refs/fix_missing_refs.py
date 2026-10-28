@@ -4,7 +4,6 @@ import logging
 from pathlib import Path
 
 from ...config import ConfigManager
-from ...parsers.wtp_mapping import WtpRefs
 from .expend_refs import RefExpander
 
 logger = logging.getLogger(__name__)
@@ -78,20 +77,12 @@ class ReferenceExpander:
         Returns:
             Text with missing references expanded.
         """
-        short_refs = WtpRefs.load(text).short_refs
-
-        logger.debug(f"empty refs: {len(short_refs)}")
-
-        if not short_refs:
-            return text
-
         full_text = self.get_full_text(sourcetitle, mdwiki_revid)
 
         if not full_text:
             return text
 
-        expanded_text: str = self._ref_expander.refs_expand(short_refs, text, full_text)
-        return expanded_text
+        return self._ref_expander.run(text, full_text)
 
 
 __all__ = [
