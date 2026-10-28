@@ -5,10 +5,6 @@ Tests for infobox expansion (expend_infobox.py)
 from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
-def expend_new(main_temp: str) -> str:
-    return InfoboxExpander().expend_new(main_temp)
-
-
 # Test data from infoboxTest.php
 TEXT_INPUT = r"""{{Infobox drug|verifiedrevid=461217017|image=Omaveloxolone structure.svg|width=250|alt=|caption=<!-- Names -->|pronounce=|tradename=Skyclarys|synonyms=RTA 408|IUPAC_name=N-((4aS,6aR,6bS,8aR,12aS,14aR,14bS)-1 1-cyano-2,2,6a,6b,9,9,12a-heptamethyl-10,14-dioxo-1,2,3,4,4a,5,6,6a,6b,7,8,8a,9,10,12a,14,14a,14b- octadecahydropicen-4a-yl)-2,2-difluoropropanamide
 
@@ -96,5 +92,5 @@ TEXT_OUTPUT = r"""{{Infobox drug
 def test_expend_new_simple_template():
     """Test expend_new with a simple template"""
     # Test with basic template
-    result = expend_new(TEXT_INPUT).strip()
+    result = InfoboxExpander().expend_new(TEXT_INPUT).strip()
     assert result == TEXT_OUTPUT.strip()

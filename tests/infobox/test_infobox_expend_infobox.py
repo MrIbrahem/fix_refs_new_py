@@ -6,10 +6,6 @@ Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.
 from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
-def expend_new(main_temp: str) -> str:
-    return InfoboxExpander().expend_new(main_temp)
-
-
 def expand_infobox_in_text(text: str, title: str, section_0: str) -> str:
     return InfoboxExpander().expand_infobox_in_text(text, title, section_0)
 
@@ -24,7 +20,7 @@ class TestInfobox:
     def test_expend_new_simple_template(self):
         """Test expend_new with a simple template"""
         # Test with basic template
-        result = expend_new("{{test}}")
+        result = InfoboxExpander().expend_new("{{test}}")
         assert result == "{{test\n}}"
 
     def test_make_section_0(self):
@@ -40,8 +36,7 @@ class TestInfobox:
 
     def test_expend_infobox_basic(self):
         """Test expend_infobox with basic infobox"""
-        text = """{{Infobox drug|name=Test}}
-Some content"""
+        text = """{{Infobox drug|name=Test}}\nSome content"""
         result = expand_infobox_in_text(text, "TestPage", "")
         assert isinstance(result, str)
         assert len(result) > 0

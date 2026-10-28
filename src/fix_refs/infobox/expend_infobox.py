@@ -75,6 +75,32 @@ class InfoboxExpander:
             result.append(ficrt)
         return result
 
+    def extract_main_template(self, section_0: str):
+        tempse_by_u = {}
+        tempse = {}
+        ingr = self.extract_templates_and_params(section_0)
+        u = 0
+
+        for temp in ingr:
+            u += 1
+            params, template = temp["params"], temp["item"]
+            if len(params) > 4 and section_0.find(f">{template}") == -1:
+                tempse_by_u[u] = temp
+                tempse[u] = len(template)
+
+        main_temp = {}
+
+        if len(tempse_by_u) == 1:
+            for _x, v in tempse_by_u.items():
+                main_temp = v
+        else:
+            PP = [[y1, u1] for u1, y1 in tempse.items()]
+            PP.sort(reverse=True)
+            for _y2, u2 in PP:
+                main_temp = tempse_by_u[u2]
+                break
+        return main_temp
+
     def make_section_0(self, title: str, newtext: str) -> str:
         """Extract lead section text (section 0)."""
         if newtext.find("==") != -1:
@@ -107,39 +133,24 @@ class InfoboxExpander:
         newtext = text
         if not section_0:
             section_0 = self.make_section_0(title, newtext)
+
         try:
             title2 = re.escape(title)
         except Exception:
             title2 = title
+
         newtext = re.sub(r"\}\s*(\'\'\'%s\'\'\')" % title2, r"}\n\n\g<1>", newtext)
         section_0 = re.sub(r"\}\s*(\'\'\'%s\'\'\')" % title2, r"}\n\n\g<1>", section_0)
-        tempse_by_u = {}
-        tempse = {}
-        ingr = self.extract_templates_and_params(section_0)
-        u = 0
-        for temp in ingr:
-            u += 1
-            params, template = temp["params"], temp["item"]
-            if len(params) > 4 and section_0.find(f">{template}") == -1:
-                tempse_by_u[u] = temp
-                tempse[u] = len(template)
-        main_temp = {}
-        if len(tempse_by_u) == 1:
-            for _x, v in tempse_by_u.items():
-                main_temp = v
-        else:
-            PP = [[y1, u1] for u1, y1 in tempse.items()]
-            PP.sort(reverse=True)
-            for _y2, u2 in PP:
-                main_temp = tempse_by_u[u2]
-                break
-        if main_temp != {}:
+
+        main_temp = self.extract_main_template(section_0)
+
+        if main_temp:
             main_temp_text = main_temp.get("item", "")
-            params = main_temp.get("params", [])
             new_temp = self.expend_new(main_temp_text)
             if new_temp != main_temp_text:
                 newtext = newtext.replace(main_temp_text, new_temp)
                 newtext = newtext.replace(f"{new_temp}'''", f"{new_temp}\n'''")
+
         return newtext
 
 
