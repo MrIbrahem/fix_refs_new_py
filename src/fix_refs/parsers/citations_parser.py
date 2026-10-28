@@ -96,9 +96,9 @@ class WtpRefs:
     parsed: wtp.WikiText = field(init=False, repr=False)
 
     # name -> '<ref name="x">...</ref>'
-    full_refs: dict[str, str] = field(init=False, default_factory=dict)
+    full_refs_str: dict[str, str] = field(init=False, default_factory=dict)
     # name -> spans of short refs (no content)
-    short_refs: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
+    short_refs_str: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
 
     def __post_init__(self):
         self.parsed = wtp.parse(self.text)
@@ -142,37 +142,21 @@ class WtpRefs:
             content = r.contents
             if content.strip():
                 full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
-                self.full_refs.setdefault(r.name, full_str)
+                self.full_refs_str.setdefault(r.name, full_str)
             else:
-                self.short_refs.setdefault(r.name, []).append(r.span)
+                self.short_refs_str.setdefault(r.name, []).append(r.span)
 
         logger.info(
             "Collected %d full refs and %d short ref names",
-            len(self.full_refs),
-            len(self.short_refs),
+            len(self.full_refs_str),
+            len(self.short_refs_str),
         )
 
     def get_all_citations(self, text: str) -> list[WtpRef]:
         return WtpRefs(text).all_refs
 
     def get_full_refs(self, text: str) -> dict[str, str]:
-        """Get mapping of citation names to their full reference tags
-
-        Args:
-            text: Text containing citations
-
-        Returns:
-            Dictionary mapping citation names to their full tags
-        """
-        full = {}
-        citations = self.get_all_citations(text)
-
-        for cite in citations:
-            if cite.contents and cite.name:
-                full[cite.name] = cite.tag_str
-
-        # return full
-        return WtpRefs(text).full_refs
+        return WtpRefs(text).full_refs_str
 
     def get_short_refs(self, text: str) -> list[WtpRef]:
         """Extract short/empty citations (self-closing tags)
