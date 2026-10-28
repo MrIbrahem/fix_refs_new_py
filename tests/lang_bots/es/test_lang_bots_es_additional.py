@@ -9,18 +9,6 @@ from src.fix_refs.fixers.months import MonthTranslator
 from src.fix_refs.lang_bots.es.es_bot import SpanishTemplateFixer
 
 
-def make_date_new_val_es(val: str) -> str:
-    """Convert date to Spanish format
-
-    Args:
-        val: Date string with English month
-
-    Returns:
-        Date string with Spanish month
-    """
-    return MonthTranslator().new_date(val, "es")
-
-
 def fix_temps_wrap(text: str) -> str:
     """Wrapper function that combines _fix_temps and fix_months_in_refs(result, "es")"""
     result = SpanishTemplateFixer()._fix_temps(text)
@@ -105,76 +93,3 @@ class TestEsTest:
         old = "{{cita web|título=Shoulder Trauma (Fractures and Dislocations)|url=https://orthoinfo.aaos.org/en/diseases--conditions/shoulder-trauma-fractures-and-dislocations/|sitioweb=OrthoInfo - AAOS|fechaacceso=7 de noviembre de 2018|fechaarchivo=19 de diciembre de 2019|urlarchivo=https://web.archive.org/web/20191219132225/https://orthoinfo.aaos.org/en/diseases--conditions/shoulder-trauma-fractures-and-dislocations/}}"
         new = "{{cita web|título=Shoulder Trauma (Fractures and Dislocations)|url=https://orthoinfo.aaos.org/en/diseases--conditions/shoulder-trauma-fractures-and-dislocations/|sitioweb=OrthoInfo - AAOS|fechaacceso=7 de noviembre de 2018|fechaarchivo=19 de diciembre de 2019|urlarchivo=https://web.archive.org/web/20191219132225/https://orthoinfo.aaos.org/en/diseases--conditions/shoulder-trauma-fractures-and-dislocations/}}"
         assert fix_temps_wrap(old) == new
-
-
-class TestEsMonthsNewValue:
-    """Test cases for make_date_new_val_es function"""
-
-    def test_date_with_full_date(self):
-        """Test full date transformation"""
-        assert make_date_new_val_es("July 25, 1975") == "25 de julio de 1975"
-
-    def test_date_with_month_and_year(self):
-        """Test month and year transformation"""
-        assert make_date_new_val_es("November 2022") == "noviembre de 2022"
-
-    def test_date_with_comma_year(self):
-        """Test comma year format"""
-        assert make_date_new_val_es("January, 2024") == "enero de 2024"
-
-    def test_date_with_day_month_year(self):
-        """Test day month year with comma"""
-        assert make_date_new_val_es("10 March, 2023") == "10 de marzo de 2023"
-
-    def test_date_with_day_month_year_lower(self):
-        """Test lowercase month"""
-        assert make_date_new_val_es("10 march, 2023") == "10 de marzo de 2023"
-
-    def test_date_with_day_month_year_no_comma(self):
-        """Test day month year without comma"""
-        assert make_date_new_val_es("5 May 1999") == "5 de mayo de 1999"
-
-    def test_date_with_month_day_year(self):
-        """Test month day year format"""
-        assert make_date_new_val_es("August 15, 2010") == "15 de agosto de 2010"
-
-    def test_date_with_month_day_year_no_comma(self):
-        """Test month day year without comma"""
-        assert make_date_new_val_es("April 1 2020") == "1 de abril de 2020"
-
-    def test_date_with_single_digit_day(self):
-        """Test single digit day"""
-        assert make_date_new_val_es("June 3, 2005") == "3 de junio de 2005"
-
-    def test_date_with_mixed_case(self):
-        """Test uppercase month"""
-        assert make_date_new_val_es("DECEMBER 20, 2015") == "20 de diciembre de 2015"
-
-    def test_date_with_no_match_returns_original(self):
-        """Test non-matching date format"""
-        assert make_date_new_val_es("Invalid Date") == "Invalid Date"
-        assert make_date_new_val_es("2023/10/15") == "2023/10/15"
-
-    def test_date_with_empty_input(self):
-        """Test empty input"""
-        assert make_date_new_val_es("") == ""
-
-    def test_date_with_whitespace_only(self):
-        """Test whitespace only"""
-        assert make_date_new_val_es("   ") == ""
-
-    def test_date_with_partial_month_name(self):
-        """Test abbreviated month name (no translation)"""
-        assert make_date_new_val_es("Jan 2023") == "Jan 2023"
-
-    def test_date_with_non_english_month(self):
-        """Test non-English month (no translation)"""
-        assert make_date_new_val_es("يناير 2023") == "يناير 2023"
-
-    def test_date_with_day_month_year_spaces(self):
-        """Test extra spaces in input"""
-        assert make_date_new_val_es("  7   July   2023  ") == "7 de julio de 2023"
-
-    def test_date_with_month_day_year_spaces(self):
-        """Test spaces in month day year format"""
-        assert make_date_new_val_es("September  12,  2023") == "12 de septiembre de 2023"

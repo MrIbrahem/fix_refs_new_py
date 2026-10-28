@@ -9,11 +9,6 @@ from pathlib import Path
 
 from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
-
-def expend_new(main_temp: str) -> str:
-    return InfoboxExpander().expend_new(main_temp)
-
-
 tests_dir = Path(__file__).parent / "texts_infobox2"
 
 
@@ -29,7 +24,7 @@ class TestInfobox2:
         with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
             text_output = f.read()
 
-        result = expend_new(text_input)
+        result = InfoboxExpander().expend_new(text_input)
 
         with open(tests_dir / "output.txt", "w", encoding="utf-8") as f:
             f.write(result)

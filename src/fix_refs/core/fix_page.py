@@ -45,13 +45,13 @@ class PageUpdater:
     # ---------------- Steps (each one updates ctx.text) ----------------
     def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
         if ctx.lang_setting.expend_infobox or ctx.lang_setting.lang == "es":
-            ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title, "")
+            ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title)
 
     def _apply_basic_fixes(self, ctx: PageContext) -> None:
         lang = ctx.lang_setting.lang
         ctx.text = self.mini_fixes.mini_fixes(ctx.text, lang)
         ctx.text = self.ref_expander.fix_missing_refs(ctx.text, ctx.source_title, ctx.mdwiki_revid)
-        ctx.text = self.duplicate_ref_remover.remove_duplicate_refs_with_attrs(ctx.text)
+        ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
 
     def _move_dots(self, ctx: PageContext) -> None:
         logger.info("move_dots\n")

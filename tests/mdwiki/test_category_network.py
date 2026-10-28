@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from src.fix_refs.config import ConfigManager
-from src.fix_refs.mdwiki.category import (
+from src.fix_refs.mdwiki.category_service import (
     SKIP_LANGS_CATEGORY,
     MDWikiCategoryService,
 )

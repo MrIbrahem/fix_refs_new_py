@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import logging
 
-from ...parsers.citations_parser import Citation, CitationsParser
+from ...parsers.wtp_mapping.wtp_refs import WtpRefs
 
 logger = logging.getLogger(__name__)
 
@@ -14,11 +14,9 @@ logger = logging.getLogger(__name__)
 class DuplicateRefRemover:
     """Remover for duplicate references by converting subsequent occurrences into self-closing tags."""
 
-    def __init__(self, citations_parser: CitationsParser | None = None) -> None:
-        self.citations_parser = citations_parser or CitationsParser()
-
-    def remove_duplicate_refs_with_attrs(self, text: str) -> str:
-        """Remove duplicate references by converting them to self-closing tags
+    def wtp_remove(self, text: str) -> str:
+        """
+        Remove duplicate references by converting them to self-closing tags
 
         First occurrence keeps full content, subsequent references become <ref name="..."/>
 
@@ -28,44 +26,29 @@ class DuplicateRefRemover:
         Returns:
             Text with duplicate references converted to self-closing tags
         """
-        new_text = text
-        refs_to_check: dict[str, str] = {}
-        refs: dict[str, str] = {}
-        citations: list[Citation] = self.citations_parser.get_all_citations(text)
+        ref_obj = WtpRefs.load(text)
 
-        numb = 0
+        seen: set[tuple[str, str]] = set()
+        edits: list[tuple[tuple[int, int], str]] = []
 
-        for citation in citations:
-            cite_fulltext = citation.tag
-            cite_attrs = citation.get_attributes()
-            content = citation.contents.strip()
-
-            if not content:
+        # Walk refs in document order so the first occurrence is the one kept
+        for r in sorted(ref_obj.all_refs, key=lambda x: x.span[0]):
+            if not r.name or r.is_self_closing():
                 continue
 
-            if not cite_attrs or not citation.name:
-                numb += 1
-                name = f"autogen_{numb}"
-                citation.ref.attrs["name"] = name
-                cite_attrs = citation.get_attributes()
+            if r.match_key not in seen:
+                seen.add(r.match_key)
+                continue
 
-            logger.debug(f"\n cite_attrs: (({cite_attrs}))")
+            edits.append((r.span, r.to_short()))
 
-            short_tag = citation.to_string_self_closing()
+        text = ref_obj.parsed.string
+        # Apply from the end so earlier spans stay valid
+        for (start, end), short in reversed(edits):
+            text = text[:start] + short + text[end:]
 
-            if cite_attrs in refs:
-                new_text = new_text.replace(cite_fulltext, short_tag)
-            else:
-                refs_to_check[short_tag] = cite_fulltext
-                refs[cite_attrs] = True  # pyright: ignore[reportArgumentType]
-
-        for key, value in refs_to_check.items():
-            if value not in new_text:
-                # pattern = re.escape(key)
-                # new_text = re.sub(pattern, value, new_text, count=1)
-                new_text = new_text.replace(key, value, 1)
-
-        return new_text
+        logger.info("Replaced %d duplicate refs with short refs", len(edits))
+        return text
 
 
 __all__ = [

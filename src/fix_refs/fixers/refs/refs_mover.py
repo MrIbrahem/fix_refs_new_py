@@ -1,6 +1,6 @@
 import logging
 
-from .wtp_mapping import WtpRefs
+from ...parsers.wtp_mapping import WtpRefsTemps
 
 logger = logging.getLogger(__name__)
 
@@ -8,10 +8,14 @@ logger = logging.getLogger(__name__)
 class RefsMover:
     """Moves full refs from templates into the body and shortens them in templates."""
 
-    def __init__(self, text: str, prefer_body_version: bool = False):
+    def __init__(
+        self,
+        text: str,
+        prefer_body_version: bool = False,
+    ) -> None:
         self.text = text
         self.prefer_body_version = prefer_body_version
-        self.refs = WtpRefs(text)
+        self.refs = WtpRefsTemps.load(text=text)
         self.placed: set[str] = set()
         self.edits: list[tuple[int, int, str]] = []
 
@@ -19,7 +23,7 @@ class RefsMover:
         """Body: first occurrence becomes full, the rest become short."""
         tpl_full = self.refs.tpl_full_refs
         for r in self.refs.body_refs:
-            name = self.refs.get_name(r)
+            name = r.name
             if name not in tpl_full:
                 continue
             if name not in self.placed:
@@ -31,7 +35,7 @@ class RefsMover:
                 self.edits.append((*r.span, tpl_full[name]))
             else:
                 logger.debug("Shortening duplicate body ref %r at %s", name, r.span)
-                self.edits.append((*r.span, self.refs.make_short(name)))
+                self.edits.append((*r.span, r.to_short()))
 
         unused = set(tpl_full) - self.placed
         for name in unused:
@@ -40,10 +44,10 @@ class RefsMover:
     def _plan_template_edits(self):
         """Templates: shorten only the refs that were placed in the body."""
         for r in self.refs.tpl_refs:
-            name = self.refs.get_name(r)
+            name = r.name
             if name in self.placed:
                 logger.debug("Shortening template ref %r at %s", name, r.span)
-                self.edits.append((*r.span, self.refs.make_short(name)))
+                self.edits.append((*r.span, r.to_short()))
 
     def _apply_edits(self) -> str:
         """Apply edits from end to start so spans stay valid."""
