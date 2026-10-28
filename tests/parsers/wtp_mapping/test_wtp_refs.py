@@ -29,6 +29,19 @@ class TestWtpRef:
         # assert wtp_tag.attrs["name"] == "PI2022/"
         assert wtp_tag.attrs["name"] == "PI2022"
 
+    def test_to_short(self) -> None:
+        # Already self-closing tags should be returned unchanged
+        for tag_str in ["<ref name=A />", '<ref name="A"/>', '<ref name="A" />']:
+            ref = WtpRef.load(wtp.Tag(tag_str))
+            assert ref.to_short() == tag_str
+
+        # Tags with empty or non-empty content should be converted to self-closing tag
+        ref_empty = WtpRef.load(wtp.Tag("<ref name=A></ref>"))
+        assert ref_empty.to_short() == "<ref name=A />"
+
+        ref_content = WtpRef.load(wtp.Tag("<ref name=A>x</ref>"))
+        assert ref_content.to_short() == "<ref name=A />"
+
 
 class TestGetAllRefs:
     """Tests for WtpRefs.load(text).all_refs function"""
