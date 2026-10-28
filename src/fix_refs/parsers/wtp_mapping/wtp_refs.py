@@ -10,8 +10,6 @@ from functools import cached_property
 
 import wikitextparser as wtp
 
-from .wtp_temps import WtpTemplates
-
 logger = logging.getLogger(__name__)
 
 
@@ -81,53 +79,20 @@ class WtpRef:
 class WtpRefs:
     """Parser for extracting reference tags and citations from WikiText."""
 
-    text: str
-    parsed: wtp.WikiText = field(init=False, repr=False)
-    tpls: WtpTemplates = field(init=False, repr=False)
+    parsed: wtp.WikiText
 
     # name -> '<ref name="x">...</ref>'
     full_refs_str: dict[str, str] = field(init=False, default_factory=dict)
     # name -> spans of short refs (no content)
     short_refs_str: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
 
-    def __post_init__(self):
-        self.tpls = WtpTemplates(self.text)
-        self.parsed = self.tpls.parsed
-        self._collect()
-
-    # ---------- Templates related ----------
-
-    @cached_property
-    def tpl_refs(self) -> list[WtpRef]:
-        return [r for r in self.all_refs if self.tpls.contains(r.span)]
-
-    @cached_property
-    def body_refs(self) -> list[WtpRef]:
-        return [r for r in self.all_refs if not self.tpls.contains(r.span)]
-
-    @cached_property
-    def tpl_full_refs(self) -> dict[str, str]:
-        """Full refs found inside templates only."""
-        return self._full_refs_of(self.tpl_refs)
-
-    @cached_property
-    def body_full_refs(self) -> dict[str, str]:
-        """Full refs found in the body only."""
-        return self._full_refs_of(self.body_refs)
-
-    @staticmethod
-    def _full_refs_of(refs: list[WtpRef]) -> dict[str, str]:
-        out: dict[str, str] = {}
-        for r in refs:
-            content = r.contents.strip()
-            if r.name and content:
-                full_str = r.tag.string
-                out.setdefault(r.name, full_str)
-        return out
-
-    @cached_property
-    def body_short_names(self) -> set[str]:
-        return {r.name for r in self.body_refs if r.name and r.is_self_closing()}
+    @classmethod
+    def load(cls, text: str = "", parsed: wtp.WikiText | None = None) -> WtpRefs:
+        obj = cls(
+            parsed=parsed or wtp.parse(text),
+        )
+        obj._collect()
+        return obj
 
     # ---------- helpers ----------
 
@@ -143,6 +108,14 @@ class WtpRefs:
             List of WtpRef objects
         """
         return [WtpRef.load(t) for t in self.parsed.get_tags("ref")]
+
+    @property
+    def full_refs(self) -> list[WtpRef]:
+        return [x for x in self.all_refs if not x.is_self_closing()]
+
+    @property
+    def short_refs(self) -> list[WtpRef]:
+        return [x for x in self.all_refs if x.is_self_closing()]
 
     # ---------- collecting refs ----------
     def _collect(self):

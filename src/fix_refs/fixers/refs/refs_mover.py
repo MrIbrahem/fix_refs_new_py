@@ -1,6 +1,6 @@
 import logging
 
-from ...parsers.wtp_mapping import WtpRefs
+from ...parsers.wtp_mapping import WtpRefsTemps
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ class RefsMover:
     def __init__(self, text: str, prefer_body_version: bool = False):
         self.text = text
         self.prefer_body_version = prefer_body_version
-        self.refs = WtpRefs(text)
+        self.refs = WtpRefsTemps.load(text=text)
         self.placed: set[str] = set()
         self.edits: list[tuple[int, int, str]] = []
 

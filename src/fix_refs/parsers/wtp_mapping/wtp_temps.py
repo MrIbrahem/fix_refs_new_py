@@ -1,5 +1,9 @@
+""" """
+
+from __future__ import annotations
+
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import cached_property
 
 import wikitextparser as wtp
@@ -14,10 +18,14 @@ def _inside(span, outer):
 @dataclass
 class WtpTemplates:
     text: str
-    parsed: wtp.WikiText = field(init=False, repr=False)
+    parsed: wtp.WikiText
 
-    def __post_init__(self):
-        self.parsed = wtp.parse(self.text)
+    @classmethod
+    def load(cls, text: str = "", parsed: wtp.WikiText | None = None) -> WtpTemplates:
+        return cls(
+            text=text,
+            parsed=parsed or wtp.parse(text),
+        )
 
     @cached_property
     def all_spans(self) -> list[tuple[int, int]]:

@@ -4,13 +4,14 @@ Converted from tests/fixers/refs/expend_refsTest.php
 """
 
 from fix_refs.fixers.refs.expend_refs import RefExpander
+from fix_refs.parsers.wtp_mapping import WtpRefs
 
 
 def refs_expand_work(first: str, alltext: str = "") -> str:
     alltext = alltext or first
 
     expander = RefExpander()
-    short_refs = expander.citations_parser.get_short_refs(first)
+    short_refs = WtpRefs.load(first).short_refs
 
     return expander.refs_expand(short_refs, first, alltext)
 

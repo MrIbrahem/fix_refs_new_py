@@ -26,7 +26,7 @@ class DuplicateRefRemover:
         Returns:
             Text with duplicate references converted to self-closing tags
         """
-        return WtpRefs(text).remove_duplicate()
+        return WtpRefs.load(text).remove_duplicate()
 
 
 __all__ = [

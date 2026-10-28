@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from ...config import ConfigManager
-from ...parsers.citations_parser import WtpRefs
+from ...parsers.wtp_mapping import WtpRefs
 from .expend_refs import RefExpander
 
 logger = logging.getLogger(__name__)
@@ -16,8 +16,7 @@ class ReferenceExpander:
     def __init__(self, config_manager: ConfigManager | None = None) -> None:
         """Initialize the reference expander with an optional config manager."""
         self.config_manager = config_manager or ConfigManager.load()
-        self._citations_parser = WtpRefs()
-        self._ref_expander = RefExpander(self._citations_parser)
+        self._ref_expander = RefExpander()
 
     def find_mdwiki_revid(self, sourcetitle: str) -> str:
         """Find MDWiki revision ID from JSON file.
@@ -79,7 +78,7 @@ class ReferenceExpander:
         Returns:
             Text with missing references expanded.
         """
-        short_refs = self._citations_parser.get_short_refs(text)
+        short_refs = WtpRefs.load(text).short_refs
 
         logger.debug(f"empty refs: {len(short_refs)}")
 

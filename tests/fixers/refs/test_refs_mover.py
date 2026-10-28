@@ -3,6 +3,7 @@ import logging
 
 from src.fix_refs.fixers.refs.refs_mover import RefsMover
 from src.fix_refs.parsers.wtp_mapping import (
+    WtpRefsTemps,
     WtpRefs,
     WtpTemplates,
 )
@@ -31,20 +32,33 @@ def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> st
 class TestWtpTemplates:
     def test_top_tpls_excludes_nested_and_templates_inside_refs(self):
         text = "{{Outer|x={{Inner}}}} text<ref>{{cite web|url=u}}</ref>"
-        tpls = WtpTemplates(text)
+        tpls = WtpTemplates.load(text)
         assert len(tpls.top_tpls) == 1
         start, end = tpls.top_tpls[0]
         assert text[start:end] == "{{Outer|x={{Inner}}}}"
 
     def test_contains(self):
         text = "{{T|a<ref name=A>x</ref>}} body<ref name=B>y</ref>"
-        tpls = WtpTemplates(text)
+        tpls = WtpTemplates.load(text)
         refs = tpls.parsed.get_tags("ref")
         assert tpls.contains(refs[0].span) is True
         assert tpls.contains(refs[1].span) is False
 
     def test_no_templates(self):
-        assert WtpTemplates("plain text").top_tpls == []
+        assert WtpTemplates.load("plain text").top_tpls == []
+
+
+# ---------------- WtpRefsTemps ----------------
+
+
+class TestWtpRefsTemps:
+    def test_template_vs_body_split(self):
+        refs = WtpRefsTemps.load(BASIC)
+        assert len(refs.tpl_refs) == 2
+        assert len(refs.body_refs) == 2
+        assert list(refs.tpl_full_refs) == ["A"]
+        assert refs.body_full_refs == {}
+        assert refs.body_short_names == {"A"}
 
 
 # ---------------- WtpRefs ----------------
@@ -52,27 +66,19 @@ class TestWtpTemplates:
 
 class TestWtpRefs:
     def test_full_and_short_collection(self):
-        refs = WtpRefs(BASIC)
+        refs = WtpRefs.load(BASIC)
         assert list(refs.full_refs_str) == ["A"]
         # assert refs.full_refs_str["A"] == '<ref name="A">{{cite web|url=http://a}}</ref>'
         assert refs.full_refs_str["A"] == "<ref name=A>{{cite web|url=http://a}}</ref>"
         assert len(refs.short_refs_str["A"]) == 3
 
-    def test_template_vs_body_split(self):
-        refs = WtpRefs(BASIC)
-        assert len(refs.tpl_refs) == 2
-        assert len(refs.body_refs) == 2
-        assert list(refs.tpl_full_refs) == ["A"]
-        assert refs.body_full_refs == {}
-        assert refs.body_short_names == {"A"}
-
     def test_unnamed_refs_are_skipped(self):
-        refs = WtpRefs("{{T|a<ref>no name</ref>}}")
-        assert refs.full_refs_str == {}
-        assert refs.short_refs_str == {}
+        refs = WtpRefs.load("{{T|a<ref>no name</ref>}}")
+        assert refs.full_refs == []
+        assert refs.short_refs == []
 
     def test_name_with_quotes_is_normalized(self):
-        refs = WtpRefs("text<ref name='A'>c</ref>")
+        refs = WtpRefs.load("text<ref name='A'>c</ref>")
         assert "A" in refs.full_refs_str
 
 
