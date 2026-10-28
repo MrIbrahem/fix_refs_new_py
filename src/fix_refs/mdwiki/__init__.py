@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from .category import MDWikiCategoryService
+from .category_service import MDWikiCategoryService
 
 __all__ = [
     "MDWikiCategoryService",

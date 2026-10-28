@@ -6,6 +6,7 @@ Converted from tests/mv_dots_afterTest.php and tests/mv_dots_beforeTest.php
 
 from src.fix_refs.fixers.move_dots import DotsMover
 
+
 class TestMoveDotsAfterRefs:
     """Tests for DotsMover.move_dots_after_refs()"""
 
