@@ -16,20 +16,20 @@ class TestInfobox:
         assert result == "{{test\n}}"
 
     def test_make_section_0(self):
-        """Test make_section_0 function"""
+        """Test extract_lead_section function"""
         text = "Some text before\n==Section==\nContent after"
-        result = InfoboxExpander().make_section_0(text)
+        result = InfoboxExpander.extract_lead_section(text)
         assert result == "Some text before\n"
 
         # Test without sections
         text2 = "Just some text"
-        result2 = InfoboxExpander().make_section_0(text2)
+        result2 = InfoboxExpander.extract_lead_section(text2)
         assert result2 == text2
 
     def test_expend_infobox_basic(self):
         """Test expend_infobox with basic infobox"""
         text = """{{Infobox drug|name=Test}}\nSome content"""
-        result = InfoboxExpander().expand_infobox_in_text(text, "TestPage", "")
+        result = InfoboxExpander().expand_infobox_in_text(text, "TestPage")
         assert isinstance(result, str)
         assert len(result) > 0
 

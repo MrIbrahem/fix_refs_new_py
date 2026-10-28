@@ -11,8 +11,33 @@ import wikitextparser as wtp
 
 logger = logging.getLogger(__name__)
 
+# Minimum number of unique params for a template to count as an infobox
+MIN_INFOBOX_PARAMS = 4
+
+# Width used to align parameter names
+PARAM_NAME_WIDTH = 17
+
+# Section-header comments that must be placed on their own lines
+_COMMENT_TITLES = (
+    r"Monoclonal antibody data",
+    r"External links",
+    r"Names*",
+    r"Clinical data",
+    r"Legal data",
+    r"Legal status",
+    r"Pharmacokinetic data",
+    r"Chemical and physical data",
+    r"Definition and medical uses",
+    r"Chemical data",
+    r"\w+ \w+ data",
+    r"\w+ \w+ \w+ data",
+    r"\w+ data",
+    r"\w+ status",
+    r"Identifiers",
+)
+
 COMMENT_PATTERN = re.compile(
-    r"\s*\n*\s*(<!-- (Monoclonal antibody data|External links|Names*|Clinical data|Legal data|Legal status|Pharmacokinetic data|Chemical and physical data|Definition and medical uses|Chemical data|\w+ \w+ data|\w+ \w+ \w+ data|\w+ data|\w+ status|Identifiers) -->)\s*\n*",
+    r"\s*\n*\s*(<!-- (?:" + "|".join(_COMMENT_TITLES) + r") -->)\s*\n*",
     re.IGNORECASE,
 )
 
@@ -20,138 +45,115 @@ COMMENT_PATTERN = re.compile(
 class InfoboxExpander:
     """Expander for WikiText infobox templates and parameters."""
 
-    def do_comments(self, text: str) -> str:
-        """Format comments in text."""
+    # ------------------------------------------------------------------
+    # Formatting helpers
+    # ------------------------------------------------------------------
+    @staticmethod
+    def do_comments(text: str) -> str:
+        """Put each known section comment on its own line, surrounded by spacing."""
+        return COMMENT_PATTERN.sub(lambda m: f"\n\n{m.group(1).strip()}\n", text)
 
-        def repl(match: re.Match[str]) -> str:
-            return f"\n\n{match.group(1).strip()}\n"
+    @staticmethod
+    def _separate_title(text: str, title: str) -> str:
+        """Ensure the bold title starts on a new paragraph after a closing brace."""
+        title_pattern = re.compile(r"\}\s*('''%s''')" % re.escape(title))
+        return title_pattern.sub(r"}\n\n\1", text)
 
-        return COMMENT_PATTERN.sub(repl, text)
+    # ------------------------------------------------------------------
+    # Template handling
+    # ------------------------------------------------------------------
+    def extract_main_template(self, section_0: str) -> dict:
+        """Return the longest template in section_0 that has more than 4 params.
 
+        The result is ``{"params": {...}, "item": "<template text>"}``,
+        or an empty dict when no template qualifies.
+        """
+        best: dict = {}
+        best_key: tuple[int, int] = (-1, -1)
+        order = 0
+
+        for template in wtp.parse(section_0).templates:
+            template_str = template.string
+            if not template_str.strip():
+                continue
+
+            order += 1
+
+            # Templates inside a tag (e.g. <ref>) are not the main infobox
+            if f">{template_str}" in section_0:
+                continue
+
+            # Later duplicates override earlier ones
+            params = {str(p.name).strip(): str(p.value) for p in template.arguments}
+            if len(params) <= MIN_INFOBOX_PARAMS:
+                continue
+
+            # Longest wins; on ties the later template wins
+            key = (len(template_str), order)
+            if key > best_key:
+                best_key = key
+                best = {"params": params, "item": template_str}
+
+        return best
+
+    # ------------------------------------------------------------------
+    # Section handling
+    # ------------------------------------------------------------------
+    @staticmethod
+    def extract_lead_section(newtext: str) -> str:
+        """Extract the lead section (section 0) using wikitextparser."""
+        sections = wtp.parse(newtext).get_sections(include_subsections=False)
+        return sections[0].string if sections else newtext
+
+    # ------------------------------------------------------------------
+    # Public entry points
+    # ------------------------------------------------------------------
     def expend_new(self, main_temp: str) -> str:
-        """Expand single template formatting."""
-        parsed = wtp.parse(main_temp)
+        """Expand a single template so each parameter is on its own line."""
+        wanted = main_temp.strip()
         new_temp = main_temp
-        for template in parsed.templates:
-            if not template:
+
+        for template in wtp.parse(main_temp).templates:
+            # Only the outer template equal to the whole input is expanded
+            if template.string.strip() != wanted:
                 continue
-            str_ = template.string
-            if str_.strip() != main_temp.strip():
-                continue
-            template_name = str(template.normal_name()).strip()
-            template.name = f"{template_name}\n"
+
+            template.name = f"{str(template.normal_name()).strip()}\n"
             for arg in template.arguments:
-                param = arg.name.rstrip()
-                value = arg.value.rstrip()
-                newparam = param.ljust(17)
-                arg.name = newparam
-                arg.value = f"{value}\n"
+                arg.name = arg.name.rstrip().ljust(PARAM_NAME_WIDTH)
+                arg.value = f"{arg.value.rstrip()}\n"
+
             new_temp = template.string
             break
-        new_temp = self.do_comments(new_temp)
-        return new_temp
 
-    def extract_templates_and_params(self, text: str) -> list[dict]:
-        """Extract templates and their parameter dictionary from text."""
-        result = []
-        parsed = wtp.parse(text)
-        templates = parsed.templates
-        for template in templates:
-            if not template:
-                continue
-            pa_item = template.string
-            if not pa_item or pa_item.strip() == "":
-                continue
-            params = {}
-            for param in template.arguments:
-                value = str(param.value)
-                key = str(param.name)
-                key = key.strip()
-                params[key] = value
-            ficrt = {
-                "params": params,
-                "item": pa_item,
-            }
-            result.append(ficrt)
-        return result
+        return self.do_comments(new_temp)
 
-    def extract_main_template(self, section_0: str):
-        tempse_by_u = {}
-        tempse = {}
-        ingr = self.extract_templates_and_params(section_0)
-        u = 0
-
-        for temp in ingr:
-            u += 1
-            params, template = temp["params"], temp["item"]
-            if len(params) > 4 and section_0.find(f">{template}") == -1:
-                tempse_by_u[u] = temp
-                tempse[u] = len(template)
-
-        main_temp = {}
-
-        if len(tempse_by_u) == 1:
-            for _x, v in tempse_by_u.items():
-                main_temp = v
-        else:
-            PP = [[y1, u1] for u1, y1 in tempse.items()]
-            PP.sort(reverse=True)
-            for _y2, u2 in PP:
-                main_temp = tempse_by_u[u2]
-                break
-        return main_temp
-
-    def make_section_0(self, title: str, newtext: str) -> str:
-        """Extract lead section text (section 0)."""
-        if newtext.find("==") != -1:
-            section_0 = newtext.split("==")[0]
-        else:
-            tagg = f"'''{title}'''"
-            if newtext.find(tagg) != -1:
-                section_0 = newtext.split(tagg)[0]
-            else:
-                section_0 = newtext
-        return section_0
-
-    def expand_infobox_in_text(self, text: str, title: str, section_0: str) -> str:
-        """Expand the infobox in the provided text.
-
-        This function processes the input text to expand an infobox based on the
-        specified title. It identifies sections within the text and modifies
-        them accordingly. If the section is empty, it attempts to extract
-        relevant information from the text. The function also handles template
-        extraction and ensures that the infobox is formatted correctly.
+    def expand_infobox_in_text(self, text: str, title: str) -> str:
+        """Expand the main infobox found in the lead section of ``text``.
 
         Args:
-            text (str): The input text containing the infobox to be expanded.
-            title (str): The title of the infobox to be processed.
-            section_0 (str): An optional section of text that may contain relevant information.
+            text: Full article wikitext.
+            title: Article title, used to find the bold lead phrase.
 
         Returns:
-            str: The modified text with the expanded infobox.
+            The text with the main infobox expanded, or the text with only the
+            title spacing fixed when no infobox is found.
         """
-        newtext = text
-        if not section_0:
-            section_0 = self.make_section_0(title, newtext)
 
-        try:
-            title2 = re.escape(title)
-        except Exception:
-            title2 = title
-
-        newtext = re.sub(r"\}\s*(\'\'\'%s\'\'\')" % title2, r"}\n\n\g<1>", newtext)
-        section_0 = re.sub(r"\}\s*(\'\'\'%s\'\'\')" % title2, r"}\n\n\g<1>", section_0)
+        newtext = self._separate_title(text, title)
+        section_0 = self.extract_lead_section(newtext)
 
         main_temp = self.extract_main_template(section_0)
+        if not main_temp:
+            return newtext
 
-        if main_temp:
-            main_temp_text = main_temp.get("item", "")
-            new_temp = self.expend_new(main_temp_text)
-            if new_temp != main_temp_text:
-                newtext = newtext.replace(main_temp_text, new_temp)
-                newtext = newtext.replace(f"{new_temp}'''", f"{new_temp}\n'''")
+        old_temp = main_temp["item"]
+        new_temp = self.expend_new(old_temp)
+        if new_temp == old_temp:
+            return newtext
 
-        return newtext
+        newtext = newtext.replace(old_temp, new_temp)
+        return newtext.replace(f"{new_temp}'''", f"{new_temp}\n'''")
 
 
 __all__ = [
