@@ -19,7 +19,7 @@ class RefsMover:
         """Body: first occurrence becomes full, the rest become short."""
         tpl_full = self.refs.tpl_full_refs
         for r in self.refs.body_refs:
-            name = self.refs.get_name(r)
+            name = r.name
             if name not in tpl_full:
                 continue
             if name not in self.placed:
@@ -40,7 +40,7 @@ class RefsMover:
     def _plan_template_edits(self):
         """Templates: shorten only the refs that were placed in the body."""
         for r in self.refs.tpl_refs:
-            name = self.refs.get_name(r)
+            name = r.name
             if name in self.placed:
                 logger.debug("Shortening template ref %r at %s", name, r.span)
                 self.edits.append((*r.span, self.refs.make_short(name)))

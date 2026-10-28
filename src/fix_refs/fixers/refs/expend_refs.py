@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import logging
 
-from ...parsers.citations_parser import Citation, CitationsParser
+from ...parsers.citations_parser import WtpRef, WtpRefs
 
 logger = logging.getLogger(__name__)
 
@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 class RefExpander:
     """Expander for replacing short reference tags with full citations."""
 
-    def __init__(self, citations_parser: CitationsParser | None = None) -> None:
-        self.citations_parser = citations_parser or CitationsParser()
+    def __init__(self, citations_parser: WtpRefs | None = None) -> None:
+        self.citations_parser = citations_parser or WtpRefs()
 
-    def refs_expand(self, short_refs: list[Citation], text: str, alltext: str) -> str:
+    def refs_expand(self, short_refs: list[WtpRef], text: str, alltext: str) -> str:
         """Expand short references with full text from source
 
         Args:
@@ -28,13 +28,13 @@ class RefExpander:
         Returns:
             Text with expanded references
         """
-        refs = self.citations_parser.get_full_refs(alltext)
+        full_refs = self.citations_parser.get_full_refs(alltext)
 
         for cite in short_refs:
             name = cite.name
             refe = cite.tag_str
 
-            rr = refs.get(name, "")
+            rr = full_refs.get(name, "")
 
             if rr:
                 logger.debug(f"refs_expand: {name}")

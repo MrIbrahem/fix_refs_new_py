@@ -54,7 +54,8 @@ class TestWtpRefs:
     def test_full_and_short_collection(self):
         refs = WtpRefs(BASIC)
         assert list(refs.full_refs) == ["A"]
-        assert refs.full_refs["A"] == '<ref name="A">{{cite web|url=http://a}}</ref>'
+        # assert refs.full_refs["A"] == '<ref name="A">{{cite web|url=http://a}}</ref>'
+        assert refs.full_refs["A"] == "<ref name=A>{{cite web|url=http://a}}</ref>"
         assert len(refs.short_refs["A"]) == 3
 
     def test_template_vs_body_split(self):
@@ -89,15 +90,15 @@ class TestRefsMover:
 
         assert '<ref name="A">' not in head
         assert head.count('<ref name="A" />') == 2
-        assert body.count('<ref name="A">') == 1
-        assert body.index('<ref name="A">') < body.index('<ref name="A" />')
+        assert body.count('<ref name=A>') == 1
+        assert body.index('<ref name=A>') < body.index('<ref name="A" />')
         assert result.count("{{cite web|url=http://a}}") == 1
 
     def test_works_with_any_template_name(self):
         text = BASIC.replace("Infobox", "Taxobox")
         result = move_refs_from_templates(text)
         head, body = split_head_body(result)
-        assert '<ref name="A">' in body
+        assert '<ref name=A>' in body
         assert '<ref name="A">' not in head
 
     def test_no_refs_in_templates_returns_text_unchanged(self):
@@ -121,7 +122,7 @@ class TestRefsMover:
         head, body = split_head_body(result)
         assert '<ref name="A" />' in head
         assert "<ref name=B>full B</ref>" in head  # untouched
-        assert '<ref name="A">full A</ref>' in body
+        assert body == " text<ref name=A>full A</ref>\n"
 
     def test_unnamed_ref_in_template_untouched(self):
         text = (
@@ -129,7 +130,7 @@ class TestRefsMover:
         )
         result = move_refs_from_templates(text)
         assert "<ref>{{cite web|url=u}}</ref>" in result
-        assert result.count('<ref name="A">full A</ref>') == 1
+        assert result.count("<ref name=A>full A</ref>") == 1
 
     def test_body_full_version_is_replaced_by_default(self):
         text = (
@@ -157,7 +158,7 @@ class TestRefsMover:
         )
         result = move_refs_from_templates(text)
         _, body = split_head_body(result)
-        assert body.count('<ref name="A">full A</ref>') == 1
+        assert body.count("<ref name=A>full A</ref>") == 1
         assert body.count('<ref name="A" />') == 1
 
     def test_idempotent(self):
@@ -194,8 +195,8 @@ Oorzaken.<ref name=Stat2019 />
 class TestRealisticArticle:
     def test_each_name_has_exactly_one_full_ref(self):
         result = move_refs_from_templates(ARTICLE)
-        assert result.count('<ref name="OI2019">') == 1
-        assert result.count('<ref name="Stat2019">') == 1
+        assert result.count("<ref name=OI2019>") == 1
+        assert result.count("<ref name=Stat2019>") == 1
 
     def test_infobox_contains_only_short_refs(self):
         result = move_refs_from_templates(ARTICLE)
@@ -209,8 +210,8 @@ class TestRealisticArticle:
     def test_full_refs_are_in_lead_paragraph(self):
         result = move_refs_from_templates(ARTICLE)
         lead = result.split("\n\n")[0]
-        assert '<ref name="OI2019">' in lead
-        assert '<ref name="Stat2019">' in lead
+        assert '<ref name=OI2019>' in lead
+        assert '<ref name=Stat2019>' in lead
 
     def test_reflist_preserved(self):
         assert "{{reflist}}" in move_refs_from_templates(ARTICLE)

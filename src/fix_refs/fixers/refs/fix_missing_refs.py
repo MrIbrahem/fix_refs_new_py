@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from ...config import ConfigManager
-from ...parsers.citations_parser import CitationsParser
+from ...parsers.citations_parser import WtpRefs
 from .expend_refs import RefExpander
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ class ReferenceExpander:
     def __init__(self, config_manager: ConfigManager | None = None) -> None:
         """Initialize the reference expander with an optional config manager."""
         self.config_manager = config_manager or ConfigManager.load()
-        self._citations_parser = CitationsParser()
+        self._citations_parser = WtpRefs()
         self._ref_expander = RefExpander(self._citations_parser)
 
     def find_mdwiki_revid(self, sourcetitle: str) -> str:

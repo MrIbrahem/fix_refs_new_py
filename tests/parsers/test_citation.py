@@ -4,19 +4,19 @@ Tests for citation parser
 
 import wikitextparser as wtp
 
-from src.fix_refs.parsers.citations_parser import Citation
+from src.fix_refs.parsers.citations_parser import WtpRef
 
 
 class TestCitation:
     def test_basic(self):
         text = "<ref name = PI2022></ref>"
-        result = Citation.from_text(text)
+        result = WtpRef.from_text(text)
         assert result.name == "PI2022"
         assert result.is_self_closing() is True
 
     def test_for_bug(self):
         """
-        BUG: Citation.from_text("<ref name = PI2022/>").name == "PI2022/" this should be fixed in Citation to become "PI2022"
+        BUG: WtpRef.from_text("<ref name = PI2022/>").name == "PI2022/" this should be fixed in WtpRef to become "PI2022"
         This bug already solved in wikitextparser>0.55
         """
         wtp_tag = wtp.Tag("<ref name = PI2022/>")
@@ -24,6 +24,6 @@ class TestCitation:
         assert wtp_tag.attrs["name"] == "PI2022"
 
         wtp_tag = wtp.Tag("<ref name=PI2022/>")
-        # this should be fixed in Citation to become "PI2022"
+        # this should be fixed in WtpRef to become "PI2022"
         # assert wtp_tag.attrs["name"] == "PI2022/"
         assert wtp_tag.attrs["name"] == "PI2022"
