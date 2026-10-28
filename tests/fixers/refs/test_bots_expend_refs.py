@@ -7,8 +7,7 @@ from fix_refs.fixers.refs.expend_refs import RefExpander
 
 
 def refs_expand_work(first: str, alltext: str = "") -> str:
-    if not alltext:
-        alltext = first
+    alltext = alltext or first
 
     expander = RefExpander()
     short_refs = expander.citations_parser.get_short_refs(first)

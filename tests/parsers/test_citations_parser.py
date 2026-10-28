@@ -175,17 +175,17 @@ class TestGetShortRefs:
 
 
 class TestGetFullRefs:
-    """Tests for WtpRefs().get_full_refs function"""
+    """Tests for WtpRefs().get_full_refs_str function"""
 
     def test_single_named_ref(self):
         text = '<ref name="smith2020">Smith, J. (2020)</ref>'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert result == {"smith2020": '<ref name="smith2020">Smith, J. (2020)</ref>'}
 
     def test_multiple_named_refs(self):
         text = '<ref name="a">First</ref> text <ref name="b">Second</ref>'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert set(result.keys()) == {"a", "b"}
         assert result["a"] == '<ref name="a">First</ref>'
@@ -193,43 +193,43 @@ class TestGetFullRefs:
 
     def test_unnamed_refs_excluded(self):
         text = '<ref>No name here</ref><ref name="named">Has name</ref>'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert list(result.keys()) == ["named"]
 
     def test_self_closing_refs_excluded(self):
         text = '<ref name="full">Full ref</ref><ref name="short" />'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert list(result.keys()) == ["full"]
 
     def test_short_ref_before_full_ref_with_same_name(self):
         # A short ref appearing first must not shadow the full definition
         text = '<ref name="ref2"/><ref name="ref1">Content 1</ref> <ref name="ref2">Content 2</ref>'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert len(result) == 2
         assert result["ref1"] == '<ref name="ref1">Content 1</ref>'
         assert result["ref2"] == '<ref name="ref2">Content 2</ref>'
 
     def test_only_short_refs_returns_empty_dict(self):
-        result = WtpRefs().get_full_refs('<ref name="ref2"/>')
+        result = WtpRefs().get_full_refs_str('<ref name="ref2"/>')
 
         assert result == {}
 
     def test_no_refs_returns_empty_dict(self):
-        result = WtpRefs().get_full_refs("Plain text, no refs at all")
+        result = WtpRefs().get_full_refs_str("Plain text, no refs at all")
 
         assert result == {}
 
     def test_empty_text_returns_empty_dict(self):
-        result = WtpRefs().get_full_refs("")
+        result = WtpRefs().get_full_refs_str("")
 
         assert result == {}
 
     def test_duplicate_names_first_occurrence_wins(self):
         text = '<ref name="dup">First</ref> text <ref name="dup">Second</ref>'
-        result = WtpRefs().get_full_refs(text)
+        result = WtpRefs().get_full_refs_str(text)
 
         assert result == {"dup": '<ref name="dup">First</ref>'}
 
@@ -248,7 +248,7 @@ class TestGetShortAndFullRefs:
     def test_refs(self) -> None:
         source = self.load_fixture("source-1.wiki")
 
-        full_refs = WtpRefs().get_full_refs(source)
+        full_refs = WtpRefs().get_full_refs_str(source)
         short_refs = WtpRefs().get_short_refs(source)
 
         assert len(full_refs) == 11

@@ -155,7 +155,7 @@ class WtpRefs:
     def get_all_citations(self, text: str) -> list[WtpRef]:
         return WtpRefs(text).all_refs
 
-    def get_full_refs(self, text: str) -> dict[str, str]:
+    def get_full_refs_str(self, text: str) -> dict[str, str]:
         return WtpRefs(text).full_refs_str
 
     def get_short_refs(self, text: str) -> list[WtpRef]:

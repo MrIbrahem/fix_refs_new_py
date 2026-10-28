@@ -28,7 +28,7 @@ class RefExpander:
         Returns:
             Text with expanded references
         """
-        full_refs = self.citations_parser.get_full_refs(alltext)
+        full_refs = self.citations_parser.get_full_refs_str(alltext)
 
         for cite in short_refs:
             name = cite.name
