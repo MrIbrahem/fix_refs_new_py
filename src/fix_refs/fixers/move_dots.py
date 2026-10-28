@@ -35,13 +35,23 @@ class DotsMover:
         Returns:
             Text with punctuation moved after references
         """
+        # Get the appropriate dots/periods for the specified language
         dots_str = cls.get_dots(lang)
+        # Regular expression pattern to match reference tags
+        # It matches one or more whitespace characters followed by <ref tag
+        # and captures everything until the closing ref tag or self-closing tag
         regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
 
+        # Escape the dots string to handle any special regex characters
         escaped = re.escape(dots_str)
+        # Create the pattern to match dots followed by reference tags
+        # This pattern will capture dots and then reference tags
         pattern = rf"([{escaped}]+)\s*{regline}"
+        # Set the replacement to put the reference tags first, then the dots
         replacement = r"\2\1"
 
+        # Perform the substitution using the pattern and replacement
+        # Using re.MULTILINE flag to handle multi-line text
         text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
 
         return text
