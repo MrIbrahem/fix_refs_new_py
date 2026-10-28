@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 class DotsMover:
     """Fixer for moving punctuation marks after reference tags."""
 
-    def move_dots_after_refs(self, text: str, lang: str) -> str:
+    @staticmethod
+    def move_dots_after_refs(text: str, lang: str) -> str:
         """Move punctuation marks after reference tags
 
         Args:
@@ -27,7 +28,6 @@ class DotsMover:
 
         if lang == "hy":
             dots = r".,。։।:"
-        # ([\.,。։।:]+)\s*((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)
         regline = r"((?:\s*<ref[\s\S]+?(?:<\/ref|\/)>)+)"
 
         escaped = re.escape(dots)
