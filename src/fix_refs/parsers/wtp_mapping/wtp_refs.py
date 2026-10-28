@@ -5,7 +5,7 @@ Citation parser for WikiText reference tags
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import cached_property
 
 import wikitextparser as wtp
@@ -36,10 +36,6 @@ class WtpRef:
         """Get citation name"""
         return self.tag.attrs.get("name", "").strip()
 
-    def set_contents(self, new_content: str) -> None:
-        """Set citation content"""
-        self.tag.contents = new_content
-
     def is_self_closing(self) -> bool:
         return not self.tag.contents or not self.tag.contents.strip()
 
@@ -53,22 +49,9 @@ class WtpRef:
 
     def to_short(self) -> str:
         """Build a self-closing tag that keeps all original attributes."""
-        clone = wtp.Tag(self.tag.string)
+        clone = wtp.Tag(self.tag_str)
         clone.contents = ""
         return clone.string.replace("></ref>", " />")
-
-    @classmethod
-    def from_text(cls, ref_text: str) -> WtpRef:
-        """Create a WtpRef from a reference tag string"""
-
-        if not ref_text.strip().startswith("<ref"):
-            raise ValueError("Not a reference tag")
-
-        if ref_text.count("<ref") != 1:
-            raise ValueError("Multiple reference tags")
-
-        tag = wtp.Tag(ref_text)
-        return WtpRef.load(tag)
 
     @classmethod
     def load(cls, ref: wtp.Tag) -> WtpRef:
@@ -81,32 +64,21 @@ class WtpRefs:
 
     parsed: wtp.WikiText
 
-    # name -> '<ref name="x">...</ref>'
-    full_refs_str: dict[str, str] = field(init=False, default_factory=dict)
-    # name -> spans of short refs (no content)
-    short_refs_str: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
-
     @classmethod
-    def load(cls, text: str = "", parsed: wtp.WikiText | None = None) -> WtpRefs:
-        obj = cls(
+    def load(
+        cls,
+        text: str = "",
+        parsed: wtp.WikiText | None = None,
+    ) -> WtpRefs:
+        return cls(
             parsed=parsed or wtp.parse(text),
         )
-        obj._collect()
-        return obj
 
     # ---------- helpers ----------
 
     @cached_property
     def all_refs(self) -> list[WtpRef]:
-        """
-        Extract all citation reference tags from text
-
-        Args:
-            text: Text containing citation tags
-
-        Returns:
-            List of WtpRef objects
-        """
+        """Extract all citation reference tags from text"""
         return [WtpRef.load(t) for t in self.parsed.get_tags("ref")]
 
     @property
@@ -114,28 +86,12 @@ class WtpRefs:
         return [x for x in self.all_refs if not x.is_self_closing()]
 
     @property
+    def full_named_refs(self) -> list[WtpRef]:
+        return [x for x in self.full_refs if x.name]
+
+    @property
     def short_refs(self) -> list[WtpRef]:
         return [x for x in self.all_refs if x.is_self_closing()]
-
-    # ---------- collecting refs ----------
-    def _collect(self):
-        for r in self.all_refs:
-            if not r.name:
-                logger.debug("Skipping unnamed ref at %s", r.span)
-                continue
-
-            content = r.contents
-            if content.strip():
-                full_str = r.tag.string
-                self.full_refs_str.setdefault(r.name, full_str)
-            else:
-                self.short_refs_str.setdefault(r.name, []).append(r.span)
-
-        logger.info(
-            "Collected %d full refs and %d short ref names",
-            len(self.full_refs_str),
-            len(self.short_refs_str),
-        )
 
     def remove_duplicate(self) -> str:
         """Replace repeated full refs with self-closing refs.

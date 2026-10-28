@@ -8,7 +8,11 @@ logger = logging.getLogger(__name__)
 class RefsMover:
     """Moves full refs from templates into the body and shortens them in templates."""
 
-    def __init__(self, text: str, prefer_body_version: bool = False):
+    def __init__(
+        self,
+        text: str,
+        prefer_body_version: bool = False,
+    ) -> None:
         self.text = text
         self.prefer_body_version = prefer_body_version
         self.refs = WtpRefsTemps.load(text=text)

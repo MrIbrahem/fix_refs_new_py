@@ -25,14 +25,14 @@ class RefExpander:
         Returns:
             Text with expanded references
         """
-        full_refs = WtpRefs.load(alltext).full_refs
-        full_refs_str = {x.name: x.tag_str for x in full_refs}
+        full_named_refs = WtpRefs.load(alltext).full_named_refs
+        str_full_refs = {x.name: x.tag_str for x in full_named_refs}
 
         for cite in short_refs:
             name = cite.name
             refe = cite.tag_str
 
-            rr = full_refs_str.get(name, "")
+            rr = str_full_refs.get(name, "")
 
             if rr:
                 logger.debug(f"refs_expand: {name}")

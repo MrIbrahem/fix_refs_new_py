@@ -2,9 +2,10 @@
 
 Converted from tests/fixers/refs/remove_duplicate_refsTest.php
 """
-import pytest
+
 from pathlib import Path
 
+import pytest
 from src.fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 
 
@@ -76,6 +77,7 @@ def test_remove_med_refs():
     expected = '<ref name="PI2023">{{Cite web|title=DailyMed - SKYCLARYS- omaveloxolone capsule|url=https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|website=dailymed.nlm.nih.gov|access-date=24 May 2023|archive-date=1 July 2023|archive-url=https://web.archive.org/web/20230701174203/https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f1a1100e-8318-1596-e053-2995a90a533e|url-status=live}}</ref> ଅତିକମରେ ୧୬ ବର୍ଷ ବୟସରେ ଏହା ବ୍ୟବହୃତ ହୁଏ ।<ref name="PI2023" /> ଏହା ପାଟିରେ ଦିଆଯାଏ ।<ref name="PI2023" />'
     result = remove(input_text)
     assert result == expected
+
 
 @pytest.mark.skip()
 def test_remove_identical_refs_with_group_attribute():

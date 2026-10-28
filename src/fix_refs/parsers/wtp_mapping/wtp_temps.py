@@ -21,7 +21,11 @@ class WtpTemplates:
     parsed: wtp.WikiText
 
     @classmethod
-    def load(cls, text: str = "", parsed: wtp.WikiText | None = None) -> WtpTemplates:
+    def load(
+        cls,
+        text: str = "",
+        parsed: wtp.WikiText | None = None,
+    ) -> WtpTemplates:
         return cls(
             text=text,
             parsed=parsed or wtp.parse(text),

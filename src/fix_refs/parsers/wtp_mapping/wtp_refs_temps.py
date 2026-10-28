@@ -4,12 +4,12 @@ Citation parser for WikiText reference tags
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from functools import cached_property
 
-from .wtp_temps import WtpTemplates
 from .wtp_refs import WtpRef, WtpRefs
+from .wtp_temps import WtpTemplates
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class WtpRefsTemps:
         for r in refs:
             content = r.contents.strip()
             if r.name and content:
-                full_str = r.tag.string
+                full_str = r.tag_str
                 out.setdefault(r.name, full_str)
         return out
 

@@ -5,18 +5,17 @@ Unit tests for wtp_mapping module.
 from pathlib import Path
 
 import wikitextparser as wtp
-
-from src.fix_refs.parsers.wtp_mapping import WtpRefs, WtpRef
+from src.fix_refs.parsers.wtp_mapping import WtpRef, WtpRefs
 
 
 class TestWtpRef:
     def test_basic(self):
         text = "<ref name = PI2022></ref>"
-        result = WtpRef.from_text(text)
+        result = WtpRef.load(wtp.Tag(text))
         assert result.name == "PI2022"
         assert result.is_self_closing() is True
 
-    def test_for_bug(self):
+    def test_for_bug(self) -> None:
         """
         BUG: WtpRef.from_text("<ref name = PI2022/>").name == "PI2022/" this should be fixed in WtpRef to become "PI2022"
         This bug already solved in wikitextparser>0.55
@@ -198,69 +197,71 @@ class TestGetShortRefs:
         assert result[0].tag_str == '<ref name="tight"/>'
 
 
-def get_full_refs_str(text: str) -> dict[str, str]:
-    # return WtpRefs.load(text).full_refs_str
-    return {x.name: x.tag_str for x in WtpRefs.load(text).full_refs}
-
-
 class TestGetFullRefs:
-    """Tests for get_full_refs_str function"""
+    """Tests for WtpRefs.full_refs"""
 
     def test_single_named_ref(self):
         text = '<ref name="smith2020">Smith, J. (2020)</ref>'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_refs
 
-        assert result == {"smith2020": '<ref name="smith2020">Smith, J. (2020)</ref>'}
+        assert len(result) == 1
+        assert result[0].name == "smith2020"
+        assert result[0].tag_str == '<ref name="smith2020">Smith, J. (2020)</ref>'
 
     def test_multiple_named_refs(self):
         text = '<ref name="a">First</ref> text <ref name="b">Second</ref>'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_refs
 
-        assert set(result.keys()) == {"a", "b"}
-        assert result["a"] == '<ref name="a">First</ref>'
-        assert result["b"] == '<ref name="b">Second</ref>'
+        assert [x.name for x in result] == ["a", "b"]
+        assert result[0].tag_str == '<ref name="a">First</ref>'
+        assert result[1].tag_str == '<ref name="b">Second</ref>'
 
     def test_unnamed_refs_excluded(self):
         text = '<ref>No name here</ref><ref name="named">Has name</ref>'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_named_refs
 
-        assert list(result.keys()) == ["named"], f"Unexpected keys: {list(result.keys())}"
+        assert len(result) == 1
+        assert result[0].name == "named"
 
     def test_self_closing_refs_excluded(self):
         text = '<ref name="full">Full ref</ref><ref name="short" />'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_refs
 
-        assert list(result.keys()) == ["full"], f"Unexpected keys: {list(result.keys())}"
+        assert [x.name for x in result] == ["full"]
+        assert result[0].tag_str == '<ref name="full">Full ref</ref>'
 
     def test_short_ref_before_full_ref_with_same_name(self):
         # A short ref appearing first must not shadow the full definition
         text = '<ref name="ref2"/><ref name="ref1">Content 1</ref> <ref name="ref2">Content 2</ref>'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_refs
 
-        assert len(result) == 2
-        assert result["ref1"] == '<ref name="ref1">Content 1</ref>'
-        assert result["ref2"] == '<ref name="ref2">Content 2</ref>'
+        assert [x.name for x in result] == ["ref1", "ref2"]
+        assert result[0].tag_str == '<ref name="ref1">Content 1</ref>'
+        assert result[1].tag_str == '<ref name="ref2">Content 2</ref>'
 
-    def test_only_short_refs_returns_empty_dict(self):
-        result = get_full_refs_str('<ref name="ref2"/>')
+    def test_only_short_refs_returns_empty_list(self):
+        result = WtpRefs.load('<ref name="ref2"/>').full_refs
 
-        assert result == {}
+        assert result == []
 
-    def test_no_refs_returns_empty_dict(self):
-        result = get_full_refs_str("Plain text, no refs at all")
+    def test_no_refs_returns_empty_list(self):
+        result = WtpRefs.load("Plain text, no refs at all").full_refs
 
-        assert result == {}
+        assert result == []
 
-    def test_empty_text_returns_empty_dict(self):
-        result = get_full_refs_str("")
+    def test_empty_text_returns_empty_list(self):
+        result = WtpRefs.load("").full_refs
 
-        assert result == {}
+        assert result == []
 
-    def test_duplicate_names_last_occurrence_wins(self):
+    def test_duplicate_names_are_all_kept_in_order(self):
+        # full_refs is a list, so no "last wins" de-duplication happens here
         text = '<ref name="dup">First</ref> text <ref name="dup">Second</ref>'
-        result = get_full_refs_str(text)
+        result = WtpRefs.load(text).full_refs
 
-        assert result == {"dup": '<ref name="dup">Second</ref>'}
+        assert [x.name for x in result] == ["dup", "dup"]
+        assert result[0].tag_str == '<ref name="dup">First</ref>'
+        assert result[1].tag_str == '<ref name="dup">Second</ref>'
 
 
 class TestGetShortAndFullRefs:
@@ -277,9 +278,11 @@ class TestGetShortAndFullRefs:
     def test_refs(self) -> None:
         source = self.load_fixture("source-1.wiki")
 
-        full_refs = {x.name: x.tag_str for x in WtpRefs.load(source).full_refs}
+        full_refs = WtpRefs.load(source).full_refs
+        full_named_refs = WtpRefs.load(source).full_named_refs
+        full_refs_keys = {x.name for x in full_refs}
 
-        assert set(full_refs.keys()) == {
+        assert full_refs_keys == {
             "",
             "AHFS2022",
             "BNF81",
@@ -310,7 +313,41 @@ class TestGetShortAndFullRefs:
             "not_exists_ref_should_be_deleted",
         }
 
-        assert len(full_refs) == 11, f"Unexpected number of full refs: {len(full_refs)}"
-        assert len(short_refs) == 22, f"Unexpected number of short refs: {len(short_refs)}"
+        assert len(full_refs) == 13
+        assert len(full_named_refs) == 11
+        assert len(short_refs) == 22
 
-        assert len(set(full_refs.keys())) == 11, f"Unexpected number of unique full refs: {len(full_refs)}"
+
+# ---------------- WtpRefs ----------------
+
+
+BASIC = (
+    "{{Infobox\n"
+    "| a = x<ref name=A>{{cite web|url=http://a}}</ref>\n"
+    "| b = y<ref name=A />\n"
+    "}}\n"
+    "BODY first.<ref name=A /> Second.<ref name=A />\n"
+)
+
+
+class TestWtpRefs:
+    def test_full_and_short_collection(self):
+        refs = WtpRefs.load(BASIC)
+        full_reference_list = [x for x in refs.full_refs if x.name == "A"]
+        assert full_reference_list[0].name == "A"
+        assert full_reference_list[0].tag_str == "<ref name=A>{{cite web|url=http://a}}</ref>"
+
+        short_reference_list = [x for x in refs.short_refs if x.name == "A"]
+        assert len(short_reference_list) == 3
+
+    def test_unnamed_refs_are_skipped(self):
+        refs = WtpRefs.load("{{T|a<ref>no name</ref>}}")
+        assert refs.full_named_refs == []
+        assert refs.short_refs == []
+        assert len(refs.full_refs) == 1
+
+    def test_name_with_quotes_is_normalized(self):
+        refs = WtpRefs.load("text<ref name='A'>c</ref>")
+        full_reference_list = [x for x in refs.full_refs if x.name == "A"]
+        assert len(full_reference_list) == 1
+        assert full_reference_list[0].contents == "c"
