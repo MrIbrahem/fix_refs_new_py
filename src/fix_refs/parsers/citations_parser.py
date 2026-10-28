@@ -159,22 +159,7 @@ class WtpRefs:
         return WtpRefs(text).full_refs_str
 
     def get_short_refs(self, text: str) -> list[WtpRef]:
-        """Extract short/empty citations (self-closing tags)
-
-        Args:
-            text: Text containing short citations
-
-        Returns:
-            List of WtpRef objects for short references
-        """
-        citations = []
-        parsed = wtp.parse(text)
-        for tag in parsed.get_tags():
-            if tag.name == "ref" and not tag.contents:
-                # citations.append(WtpRef.from_text(tag.string))
-                citations.append(WtpRef.load(tag))
-
-        return citations
+        return [x for x in WtpRefs(text).all_refs if x.is_self_closing()]
 
     def remove_duplicate(self) -> str:
         """Replace repeated full refs with self-closing refs.

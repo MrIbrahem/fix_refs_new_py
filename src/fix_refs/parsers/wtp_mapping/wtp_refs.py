@@ -86,9 +86,9 @@ class WtpRefs:
     tpls: WtpTemplates = field(init=False, repr=False)
 
     # name -> '<ref name="x">...</ref>'
-    full_refs: dict[str, str] = field(init=False, default_factory=dict)
+    full_refs_str: dict[str, str] = field(init=False, default_factory=dict)
     # name -> spans of short refs (no content)
-    short_refs: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
+    short_refs_str: dict[str, list[tuple[int, int]]] = field(init=False, default_factory=dict)
 
     def __post_init__(self):
         self.tpls = WtpTemplates(self.text)
@@ -142,16 +142,18 @@ class WtpRefs:
             if not r.name:
                 logger.debug("Skipping unnamed ref at %s", r.span)
                 continue
-            content = r.contents.strip()
-            if content:
+
+            content = r.contents
+            if content.strip():
                 full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
-                self.full_refs.setdefault(r.name, full_str)
+                self.full_refs_str.setdefault(r.name, full_str)
             else:
-                self.short_refs.setdefault(r.name, []).append(r.span)
+                self.short_refs_str.setdefault(r.name, []).append(r.span)
+
         logger.info(
             "Collected %d full refs and %d short ref names",
-            len(self.full_refs),
-            len(self.short_refs),
+            len(self.full_refs_str),
+            len(self.short_refs_str),
         )
 
     @cached_property

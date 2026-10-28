@@ -53,10 +53,10 @@ class TestWtpTemplates:
 class TestWtpRefs:
     def test_full_and_short_collection(self):
         refs = WtpRefs(BASIC)
-        assert list(refs.full_refs) == ["A"]
-        # assert refs.full_refs["A"] == '<ref name="A">{{cite web|url=http://a}}</ref>'
-        assert refs.full_refs["A"] == "<ref name=A>{{cite web|url=http://a}}</ref>"
-        assert len(refs.short_refs["A"]) == 3
+        assert list(refs.full_refs_str) == ["A"]
+        # assert refs.full_refs_str["A"] == '<ref name="A">{{cite web|url=http://a}}</ref>'
+        assert refs.full_refs_str["A"] == "<ref name=A>{{cite web|url=http://a}}</ref>"
+        assert len(refs.short_refs_str["A"]) == 3
 
     def test_template_vs_body_split(self):
         refs = WtpRefs(BASIC)
@@ -68,12 +68,12 @@ class TestWtpRefs:
 
     def test_unnamed_refs_are_skipped(self):
         refs = WtpRefs("{{T|a<ref>no name</ref>}}")
-        assert refs.full_refs == {}
-        assert refs.short_refs == {}
+        assert refs.full_refs_str == {}
+        assert refs.short_refs_str == {}
 
     def test_name_with_quotes_is_normalized(self):
         refs = WtpRefs("text<ref name='A'>c</ref>")
-        assert "A" in refs.full_refs
+        assert "A" in refs.full_refs_str
 
     def test_helpers(self):
         assert WtpRefs.make_full("c", name="A") == '<ref name="A">c</ref>'

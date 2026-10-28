@@ -1,7 +1,5 @@
 """
 Unit tests for citations_parser module.
-
-Functions to test: .get_all_citations, .get_full_refs, .get_short_refs
 """
 
 from pathlib import Path
