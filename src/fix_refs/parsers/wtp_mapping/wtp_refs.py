@@ -121,6 +121,25 @@ class WtpRefs:
         """Full refs found inside templates only."""
         return self._full_refs_of(self.tpl_refs)
 
+    @cached_property
+    def body_full_refs(self) -> dict[str, str]:
+        """Full refs found in the body only."""
+        return self._full_refs_of(self.body_refs)
+
+    @staticmethod
+    def _full_refs_of(refs: list[WtpRef]) -> dict[str, str]:
+        out: dict[str, str] = {}
+        for r in refs:
+            content = r.contents.strip()
+            if r.name and content:
+                full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
+                out.setdefault(r.name, full_str)
+        return out
+
+    @cached_property
+    def body_short_names(self) -> set[str]:
+        return {r.name for r in self.body_refs if r.name and r.is_self_closing()}
+
     # ---------- helpers ----------
 
     @cached_property
@@ -155,25 +174,6 @@ class WtpRefs:
             len(self.full_refs_str),
             len(self.short_refs_str),
         )
-
-    @cached_property
-    def body_full_refs(self) -> dict[str, str]:
-        """Full refs found in the body only."""
-        return self._full_refs_of(self.body_refs)
-
-    @staticmethod
-    def _full_refs_of(refs: list[WtpRef]) -> dict[str, str]:
-        out: dict[str, str] = {}
-        for r in refs:
-            content = r.contents.strip()
-            if r.name and content:
-                full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
-                out.setdefault(r.name, full_str)
-        return out
-
-    @cached_property
-    def body_short_names(self) -> set[str]:
-        return {r.name for r in self.body_refs if r.name and r.is_self_closing()}
 
     def remove_duplicate(self) -> str:
         """Replace repeated full refs with self-closing refs.
