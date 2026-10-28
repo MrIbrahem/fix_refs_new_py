@@ -5,7 +5,8 @@ Category parser for WikiText category tags
 from __future__ import annotations
 
 import logging
-import re
+
+import wikitextparser as wtp
 
 logger = logging.getLogger(__name__)
 
@@ -24,40 +25,23 @@ class CategoryParser:
         """
         categories: dict[str, str] = {}
 
-        # Find all [[...]] patterns
-        for match in re.finditer(r"\[\[.+?\]\]", text):
-            full_match = match.group(0)
+        wikilinks: list[wtp.WikiLink] = wtp.parse(text).wikilinks
 
-            # Extract the word between [[ and :
-            prefix_match = re.match(r"\[\[([^\:]+?)\s*:", full_match)
-            if prefix_match:
-                prefix_word = prefix_match.group(1).strip().lower()
-                # Check if it's "category" (case-insensitive)
-                if prefix_word == "category":
-                    # Extract content after the colon
-                    colon_pos = full_match.find(":")
-                    if colon_pos > 0:
-                        category_content = full_match[colon_pos + 1 : -2]
+        for link in wikilinks:
+            # link.target is the part before the "|", e.g. "Category:Foo"
+            prefix, sep, name = link.target.partition(":")
 
-                        parts = category_content.split("|")
-                        category_name = parts[0].strip() if parts else category_content.strip()
+            # Skip links without a namespace prefix, and leading-colon links
+            # such as [[:Category:Foo]], which are plain links, not categorizations
+            if not sep or prefix.strip().lower() != "category":
+                continue
 
-                        if category_name:
-                            categories[category_name] = full_match
+            category_name = name.strip()
+            if category_name:
+                # link.string is the full tag, e.g. "[[Category:Foo|sortkey]]"
+                categories[category_name] = link.string
 
         return categories
-
-    def get_category_list(self, text: str) -> list[str]:
-        """Extract category names as a list
-
-        Args:
-            text: Text containing category tags
-
-        Returns:
-            List of category names
-        """
-        categories = self.get_categories(text)
-        return list(categories.keys())
 
     def has_category(self, text: str, category_name: str) -> bool:
         """Check if text contains a specific category
@@ -69,8 +53,7 @@ class CategoryParser:
         Returns:
             True if category is present
         """
-        categories = self.get_categories(text)
-        return category_name in categories
+        return category_name in self.get_categories(text)
 
 
 __all__ = [
