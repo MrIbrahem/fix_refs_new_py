@@ -30,12 +30,12 @@ class TestRefsMover:
         head, body = split_head_body(result)
 
         assert '<ref name="A">' not in head
-        assert head.count("<ref name=A />") == 1
-        assert head == "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A / />\n}}\n"
+        assert head.count("<ref name=A />") == 2
+        assert head == "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A />\n}}\n"
 
-        assert body == " first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A / />\n"
+        assert body == " first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A />\n"
         assert body.count("<ref name=A>") == 1
-        assert body.index("<ref name=A>") < body.index("<ref name=A / />")
+        assert body.index("<ref name=A>") < body.index("<ref name=A />")
         assert result.count("{{cite web|url=http://a}}") == 1
 
     def test_works_with_any_template_name(self):
@@ -116,7 +116,7 @@ class TestRefsMover:
     def test_edits_are_applied_without_corrupting_other_text(self):
         result = move_refs_from_templates(BASIC)
         assert result.startswith("{{Infobox\n| a = x")
-        expected = "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A / />\n}}\nBODY first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A / />\n"
+        expected = "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A />\n}}\nBODY first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A />\n"
         assert result == expected
 
 
@@ -150,7 +150,7 @@ class TestRealisticArticle:
         assert "{{cite web" not in infobox
         assert "{{cite journal" not in infobox
         assert "<ref name=OI2019 />" in infobox
-        expected = "{{Infobox aandoening\n| naam = Enkelbreuk\n| symptomen = pijn<ref name=OI2019 />\n| complicaties = x<ref name=OI2019 / /><ref name=Stat2019 />\n| diagnose = y<ref name=Stat2019 / />\n"
+        expected = "{{Infobox aandoening\n| naam = Enkelbreuk\n| symptomen = pijn<ref name=OI2019 />\n| complicaties = x<ref name=OI2019 /><ref name=Stat2019 />\n| diagnose = y<ref name=Stat2019 />\n"
         assert infobox == expected
 
     def test_full_refs_are_in_lead_paragraph(self):
