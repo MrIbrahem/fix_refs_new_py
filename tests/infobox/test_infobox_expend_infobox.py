@@ -6,14 +6,6 @@ Converted from tests/infoboxes/infoboxTest.php and tests/infoboxes/infobox2Test.
 from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 
-def expand_infobox_in_text(text: str, title: str, section_0: str) -> str:
-    return InfoboxExpander().expand_infobox_in_text(text, title, section_0)
-
-
-def make_section_0(title: str, newtext: str) -> str:
-    return InfoboxExpander().make_section_0(title, newtext)
-
-
 class TestInfobox:
     """Test cases for infobox expansion"""
 
@@ -26,18 +18,18 @@ class TestInfobox:
     def test_make_section_0(self):
         """Test make_section_0 function"""
         text = "Some text before\n==Section==\nContent after"
-        result = make_section_0("Title", text)
+        result = InfoboxExpander().make_section_0(text)
         assert result == "Some text before\n"
 
         # Test without sections
         text2 = "Just some text"
-        result2 = make_section_0("Title", text2)
+        result2 = InfoboxExpander().make_section_0(text2)
         assert result2 == text2
 
     def test_expend_infobox_basic(self):
         """Test expend_infobox with basic infobox"""
         text = """{{Infobox drug|name=Test}}\nSome content"""
-        result = expand_infobox_in_text(text, "TestPage", "")
+        result = InfoboxExpander().expand_infobox_in_text(text, "TestPage", "")
         assert isinstance(result, str)
         assert len(result) > 0
 

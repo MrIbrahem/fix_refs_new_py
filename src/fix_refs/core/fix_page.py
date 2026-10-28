@@ -45,7 +45,7 @@ class PageUpdater:
     # ---------------- Steps (each one updates ctx.text) ----------------
     def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
         if ctx.lang_setting.expend_infobox or ctx.lang_setting.lang == "es":
-            ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title, "")
+            ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title)
 
     def _apply_basic_fixes(self, ctx: PageContext) -> None:
         lang = ctx.lang_setting.lang
