@@ -32,6 +32,10 @@ class WtpRef:
         return self.tag.contents or ""
 
     @property
+    def match_key(self) -> tuple[str, str]:
+        return (self.name, self.group)
+
+    @property
     def name(self) -> str:
         """Get citation name"""
         return self.tag.attrs.get("name", "").strip()
@@ -109,9 +113,8 @@ class WtpRefs:
             if not r.name or r.is_self_closing():
                 continue
 
-            key = (r.name, r.group)
-            if key not in seen:
-                seen.add(key)
+            if r.match_key not in seen:
+                seen.add(r.match_key)
                 continue
 
             edits.append((r.span, r.to_short()))

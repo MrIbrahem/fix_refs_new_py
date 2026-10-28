@@ -37,10 +37,11 @@ class RefExpander:
 
         source_loader = WtpRefs.load(source_text)
 
-        str_full_refs = {x.name: x for x in source_loader.full_named_refs}
+        # use match_key to match name and group, (self.name, self.group)
+        str_full_refs = {x.match_key: x for x in source_loader.full_named_refs}
 
         for cite in short_refs:
-            expanded_ref = str_full_refs.get(cite.name)
+            expanded_ref = str_full_refs.get(cite.match_key)
             if expanded_ref:
                 logger.debug(f"refs_expand: {cite.name}")
                 text = text.replace(cite.tag_str, expanded_ref.tag_str)
