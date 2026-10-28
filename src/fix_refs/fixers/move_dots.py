@@ -25,7 +25,7 @@ class DotsMover:
         return "".join(dots)
 
     @classmethod
-    def move_dots_after_refs(cls, text: str, lang: str) -> str:
+    def move_dots_after_refs_old(cls, text: str, lang: str) -> str:
         """Move punctuation marks after reference tags
 
         Args:
@@ -47,7 +47,7 @@ class DotsMover:
         return text
 
     @classmethod
-    def move_dots_after_refs_new(cls, text: str, lang: str) -> str:
+    def move_dots_after_refs(cls, text: str, lang: str) -> str:
         """Move punctuation marks after reference tags
 
         Args:
@@ -60,9 +60,11 @@ class DotsMover:
         dots_str = cls.get_dots(lang)
 
         parsed = wtp.parse(text)
+        spans = sorted(tag.span for tag in parsed.get_tags("ref"))
+
         # Go from last to first so earlier spans stay valid after each edit
-        for tag in sorted(parsed.get_tags("ref"), key=lambda t: t.span[0], reverse=True):
-            start, end = tag.span
+        for i in range(len(spans) - 1, -1, -1):
+            start, end = spans[i]
 
             # Punctuation (and spaces) right before the ref
             before = text[:start].rstrip()
@@ -72,7 +74,13 @@ class DotsMover:
             if not moved:
                 continue
 
-            # Put the punctuation after the ref, drop the spaces in between
+            # Extend to the end of the consecutive refs (only whitespace between them)
+            for next_start, next_end in spans[i + 1 :]:
+                if text[end:next_start].strip():
+                    break
+                end = next_end
+
+            # Put the punctuation after the whole chain, drop the spaces before the first ref
             text = stripped + text[start:end] + moved + text[end:]
 
         return text

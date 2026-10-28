@@ -14,31 +14,26 @@ class TestMoveDotsAfterRefs:
         input_text = "This is a sentence。<ref>Reference 1</ref>"
         expected = "This is a sentence<ref>Reference 1</ref>。"
         assert DotsMover.move_dots_after_refs(input_text, "en") == expected
-        assert DotsMover.move_dots_after_refs_new(input_text, "en") == expected
 
     def test_move_dots_after_multiple_dots(self):
         input_text = "First sentence. Second sentence.<ref>Reference 1</ref>"
         expected = "First sentence. Second sentence<ref>Reference 1</ref>."
         assert DotsMover.move_dots_after_refs(input_text, "en") == expected
-        assert DotsMover.move_dots_after_refs_new(input_text, "en") == expected
 
     def test_move_dots_after_multiple_refs(self):
         input_text = "Text।<ref>Ref1</ref><ref>Ref2</ref>"
         expected = "Text<ref>Ref1</ref><ref>Ref2</ref>।"
         assert DotsMover.move_dots_after_refs(input_text, "en") == expected
-        assert DotsMover.move_dots_after_refs_new(input_text, "en") == expected
 
     def test_move_dots_after_no_dot(self):
         input_text = "Text<ref>Reference</ref>"
         expected = "Text<ref>Reference</ref>"
         assert DotsMover.move_dots_after_refs(input_text, "en") == expected
-        assert DotsMover.move_dots_after_refs_new(input_text, "en") == expected
 
     def test_move_dots_after_different_punctuation(self):
         input_text = "Text, <ref>Reference</ref>"
         expected = "Text<ref>Reference</ref>,"
         assert DotsMover.move_dots_after_refs(input_text, "en") == expected
-        assert DotsMover.move_dots_after_refs_new(input_text, "en") == expected
 
     def test_move_dots_after_with_whitespace(self):
         input_text = "Text.  <ref>Reference</ref>"
