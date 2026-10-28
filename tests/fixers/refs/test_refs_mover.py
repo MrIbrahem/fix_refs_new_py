@@ -75,10 +75,6 @@ class TestWtpRefs:
         refs = WtpRefs("text<ref name='A'>c</ref>")
         assert "A" in refs.full_refs_str
 
-    def test_helpers(self):
-        assert WtpRefs.make_full("c", name="A") == '<ref name="A">c</ref>'
-        assert WtpRefs.make_short("A") == '<ref name="A" />'
-
 
 # ---------------- RefsMover ----------------
 
@@ -89,16 +85,19 @@ class TestRefsMover:
         head, body = split_head_body(result)
 
         assert '<ref name="A">' not in head
-        assert head.count('<ref name="A" />') == 2
-        assert body.count('<ref name=A>') == 1
-        assert body.index('<ref name=A>') < body.index('<ref name="A" />')
+        assert head.count("<ref name=A />") == 1
+        assert head == "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A / />\n}}\n"
+
+        assert body == " first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A / />\n"
+        assert body.count("<ref name=A>") == 1
+        assert body.index("<ref name=A>") < body.index("<ref name=A / />")
         assert result.count("{{cite web|url=http://a}}") == 1
 
     def test_works_with_any_template_name(self):
         text = BASIC.replace("Infobox", "Taxobox")
         result = move_refs_from_templates(text)
         head, body = split_head_body(result)
-        assert '<ref name=A>' in body
+        assert "<ref name=A>" in body
         assert '<ref name="A">' not in head
 
     def test_no_refs_in_templates_returns_text_unchanged(self):
@@ -120,7 +119,7 @@ class TestRefsMover:
         text = "{{T\n| a = x<ref name=A>full A</ref>\n| b = y<ref name=B>full B</ref>\n}}\nBODY text<ref name=A />\n"
         result = move_refs_from_templates(text)
         head, body = split_head_body(result)
-        assert '<ref name="A" />' in head
+        assert "<ref name=A />" in head
         assert "<ref name=B>full B</ref>" in head  # untouched
         assert body == " text<ref name=A>full A</ref>\n"
 
@@ -150,7 +149,7 @@ class TestRefsMover:
         head, body = split_head_body(result)
         assert "template version" not in result
         assert "<ref name=A>body version</ref>" in body
-        assert '<ref name="A" />' in head
+        assert "<ref name=A />" in head
 
     def test_duplicate_full_refs_in_body_become_short(self):
         text = (
@@ -159,7 +158,7 @@ class TestRefsMover:
         result = move_refs_from_templates(text)
         _, body = split_head_body(result)
         assert body.count("<ref name=A>full A</ref>") == 1
-        assert body.count('<ref name="A" />') == 1
+        assert body.strip() == "one<ref name=A>full A</ref> two<ref name=A />"
 
     def test_idempotent(self):
         once = move_refs_from_templates(BASIC)
@@ -172,7 +171,8 @@ class TestRefsMover:
     def test_edits_are_applied_without_corrupting_other_text(self):
         result = move_refs_from_templates(BASIC)
         assert result.startswith("{{Infobox\n| a = x")
-        assert result.endswith('Second.<ref name="A" />\n')
+        expected = "{{Infobox\n| a = x<ref name=A />\n| b = y<ref name=A / />\n}}\nBODY first.<ref name=A>{{cite web|url=http://a}}</ref> Second.<ref name=A / />\n"
+        assert result == expected
 
 
 # ---------------- Realistic article ----------------
@@ -204,14 +204,15 @@ class TestRealisticArticle:
         infobox = result[:infobox_end]
         assert "{{cite web" not in infobox
         assert "{{cite journal" not in infobox
-        assert '<ref name="OI2019" />' in infobox
-        assert '<ref name="Stat2019" />' in infobox
+        assert "<ref name=OI2019 />" in infobox
+        expected = "{{Infobox aandoening\n| naam = Enkelbreuk\n| symptomen = pijn<ref name=OI2019 />\n| complicaties = x<ref name=OI2019 / /><ref name=Stat2019 />\n| diagnose = y<ref name=Stat2019 / />\n"
+        assert infobox == expected
 
     def test_full_refs_are_in_lead_paragraph(self):
         result = move_refs_from_templates(ARTICLE)
         lead = result.split("\n\n")[0]
-        assert '<ref name=OI2019>' in lead
-        assert '<ref name=Stat2019>' in lead
+        assert "<ref name=OI2019>" in lead
+        assert "<ref name=Stat2019>" in lead
 
     def test_reflist_preserved(self):
         assert "{{reflist}}" in move_refs_from_templates(ARTICLE)

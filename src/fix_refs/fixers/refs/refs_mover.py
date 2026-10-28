@@ -31,7 +31,7 @@ class RefsMover:
                 self.edits.append((*r.span, tpl_full[name]))
             else:
                 logger.debug("Shortening duplicate body ref %r at %s", name, r.span)
-                self.edits.append((*r.span, self.refs.make_short(name)))
+                self.edits.append((*r.span, r.to_short()))
 
         unused = set(tpl_full) - self.placed
         for name in unused:
@@ -43,7 +43,7 @@ class RefsMover:
             name = r.name
             if name in self.placed:
                 logger.debug("Shortening template ref %r at %s", name, r.span)
-                self.edits.append((*r.span, self.refs.make_short(name)))
+                self.edits.append((*r.span, r.to_short()))
 
     def _apply_edits(self) -> str:
         """Apply edits from end to start so spans stay valid."""

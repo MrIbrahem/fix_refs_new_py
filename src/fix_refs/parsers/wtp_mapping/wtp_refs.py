@@ -95,17 +95,6 @@ class WtpRefs:
         self.parsed = self.tpls.parsed
         self._collect()
 
-    @staticmethod
-    def make_full(content: str, **attrs: str) -> str:
-        tag = wtp.Tag(f"<ref>{content}</ref>")
-        for k, v in attrs.items():
-            tag.set_attr(k, v)
-        return tag.string
-
-    @staticmethod
-    def make_short(name: str) -> str:
-        return f'<ref name="{name}" />'
-
     # ---------- Templates related ----------
 
     @cached_property
@@ -132,7 +121,7 @@ class WtpRefs:
         for r in refs:
             content = r.contents.strip()
             if r.name and content:
-                full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
+                full_str = r.tag.string
                 out.setdefault(r.name, full_str)
         return out
 
@@ -164,7 +153,7 @@ class WtpRefs:
 
             content = r.contents
             if content.strip():
-                full_str = r.tag.string  # WtpRefs.make_full(content, name=r.name)
+                full_str = r.tag.string
                 self.full_refs_str.setdefault(r.name, full_str)
             else:
                 self.short_refs_str.setdefault(r.name, []).append(r.span)
