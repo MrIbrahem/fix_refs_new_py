@@ -97,36 +97,6 @@ class WtpRefs:
     def short_refs(self) -> list[WtpRef]:
         return [x for x in self.all_refs if x.is_self_closing()]
 
-    def remove_duplicate(self) -> str:
-        """Replace repeated full refs with self-closing refs.
-
-        The first occurrence of each (name, group) keeps its content;
-        every later one with content becomes <ref name="..." />.
-        Unnamed refs are left untouched.
-        Returns the new text (self.text is not modified).
-        """
-        seen: set[tuple[str, str]] = set()
-        edits: list[tuple[tuple[int, int], str]] = []
-
-        # Walk refs in document order so the first occurrence is the one kept
-        for r in sorted(self.all_refs, key=lambda x: x.span[0]):
-            if not r.name or r.is_self_closing():
-                continue
-
-            if r.match_key not in seen:
-                seen.add(r.match_key)
-                continue
-
-            edits.append((r.span, r.to_short()))
-
-        text = self.parsed.string
-        # Apply from the end so earlier spans stay valid
-        for (start, end), short in reversed(edits):
-            text = text[:start] + short + text[end:]
-
-        logger.info("Replaced %d duplicate refs with short refs", len(edits))
-        return text
-
 
 __all__ = [
     "WtpRef",
