@@ -3,8 +3,8 @@
 Converted from tests/fixers/refs/expend_refsTest.php
 """
 
-from fix_refs.fixers.refs.expend_refs import RefExpander
-from fix_refs.parsers.wtp_mapping import WtpRefs
+from src.fix_refs.fixers.refs.expend_refs import RefExpander
+from src.fix_refs.parsers.wtp_mapping import WtpRefs
 
 
 def refs_expand_work(first: str, alltext: str = "") -> str:

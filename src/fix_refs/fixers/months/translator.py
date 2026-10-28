@@ -9,6 +9,8 @@ import re
 
 import wikitextparser as wtp
 
+from .mapping import MonthsTranslations
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,43 +27,15 @@ class MonthTranslator:
         Returns:
             Date string with translated month name
         """
-        months_translations: dict[str, dict[str, str]] = {
-            "pt": {
-                "January": "janeiro",
-                "February": "fevereiro",
-                "March": "março",
-                "April": "abril",
-                "May": "maio",
-                "June": "junho",
-                "July": "julho",
-                "August": "agosto",
-                "September": "setembro",
-                "October": "outubro",
-                "November": "novembro",
-                "December": "dezembro",
-            },
-            "es": {
-                "January": "enero",
-                "February": "febrero",
-                "March": "marzo",
-                "April": "abril",
-                "May": "mayo",
-                "June": "junio",
-                "July": "julio",
-                "August": "agosto",
-                "September": "septiembre",
-                "October": "octubre",
-                "November": "noviembre",
-                "December": "diciembre",
-            },
-        }
+        lang_item = MonthsTranslations().load_lang(lang)
 
-        if lang not in months_translations:
-            return val.strip()
+        if not lang_item:
+            return val
 
-        months_lower = {k.lower(): v for k, v in months_translations[lang].items()}
+        data_keys = lang_item.join_data_keys
 
-        month_part = r"(?P<m>January|February|March|April|May|June|July|August|September|October|November|December)"
+        month_part = rf"(?P<m>{data_keys})"
+
         patterns = [
             rf"^(?:(?P<d>\d{{1,2}})\s+)?{month_part},?\s+(?P<y>\d{{4}})$",
             rf"^{month_part}\s+(?P<d>\d{{1,2}}),?\s+(?P<y>\d{{4}})$",
@@ -70,18 +44,13 @@ class MonthTranslator:
         for pattern in patterns:
             match = re.match(pattern, val.strip(), re.IGNORECASE)
             if match:
-                day = match.group("d")
-                month = match.group("m").lower()
-                year = match.group("y")
-                translated_month = months_lower.get(month, "")
-
-                if translated_month:
-                    if lang == "es":
-                        return (
-                            f"{day} de {translated_month} de {year}".strip() if day else f"{translated_month} de {year}"
-                        )
-                    else:
-                        return f"{day} de {translated_month} {year}".strip() if day else f"{translated_month} {year}"
+                result = lang_item.translate(
+                    day=match.group("d"),
+                    year=match.group("y"),
+                    month=match.group("m"),
+                )
+                if result:
+                    return result
 
         return val.strip()
 
@@ -128,10 +97,15 @@ class MonthTranslator:
 
         for ref in ref_tags:
             contents = ref.contents or ""
+
             # Only process if it looks like a template
-            if not self.start_end(contents):
+            if not self.start_end(contents.strip()):
                 continue
-            ref.contents = self.fix_months_in_texts(contents, lang)
+
+            new_contents = self.fix_months_in_texts(contents, lang)
+            if new_contents:
+                ref.contents = new_contents
+
         return parsed.string
 
 

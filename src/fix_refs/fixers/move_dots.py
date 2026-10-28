@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import re
+
 import wikitextparser as wtp
 
 logger = logging.getLogger(__name__)
