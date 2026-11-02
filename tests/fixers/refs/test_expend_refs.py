@@ -1,10 +1,121 @@
-"""Tests for expend_refs (expend_refsTest.php)
 
-Converted from tests/fixers/refs/expend_refsTest.php
-"""
+"""Tests for RefExpander"""
+
+from __future__ import annotations
+
+import pytest
 
 from src.fix_refs.fixers.refs.expend_refs import RefExpander
 
+
+@pytest.fixture
+def expander() -> RefExpander:
+    return RefExpander()
+
+
+def test_existing_full_ref_not_overwritten(expander):
+    """Regression: a ref that already has a body must not be replaced by the source body."""
+    text = (
+        "{{صندوق معلومات حالة طبية\n"
+        "|مرادفات=Juxta-epiphyseal fracture of the distal phalanx<ref name=Rad2024/>\n"
+        '|مسبب=Forced forward bending of the fingertip, [[crush injury]]<ref name="Rad2024"/>\n'
+        "|عوامل الخطر=\n"
+        "|التشخيص=Based on symptoms, [[X-rays]]<ref name='Rad2024' />\n"
+        "}}\n"
+        "Page lead.<ref name=Rad2024>full ref shouldn't be replaced</ref>\n"
+    )
+    source = "<ref name=Rad2024>original ref from mdwiki.org</ref>"
+
+    result = expander.run(text, source_text=source)
+
+    assert "full ref shouldn't be replaced" in result
+    assert "original ref from mdwiki.org" not in result
+    # nothing to expand, so the expander must not touch the text at all
+    assert result == text
+
+
+def test_short_ref_expanded_from_source(expander):
+    text = "Some text.<ref name=A/>"
+    source = "<ref name=A>source body</ref>"
+
+    result = expander.run(text, source_text=source)
+
+    assert result == "Some text.<ref name=A>source body</ref>"
+
+
+def test_multiple_short_refs_with_different_quoting_all_expanded(expander):
+    text = "One<ref name=A/> two<ref name=\"B\"/> three<ref name='A' />"
+    source = "<ref name=A>body A</ref><ref name=B>body B</ref>"
+
+    result = expander.run(text, source_text=source)
+
+    assert result.count("body A") == 2
+    assert result.count("body B") == 1
+    assert "/>" not in result
+
+
+def test_short_ref_not_in_source_is_unchanged(expander):
+    text = "Some text.<ref name=Missing/>"
+    source = "<ref name=Other>other body</ref>"
+
+    assert expander.run(text, source_text=source) == text
+
+
+def test_only_unexpanded_names_are_expanded(expander):
+    """Name A already has a body in text; name B does not."""
+    text = "x<ref name=A>keep me</ref> y<ref name=A/> z<ref name=B/>"
+    source = "<ref name=A>source A</ref><ref name=B>source B</ref>"
+
+    result = expander.run(text, source_text=source)
+
+    assert "keep me" in result
+    assert "source A" not in result
+    assert "<ref name=B>source B</ref>" in result
+
+
+def test_group_is_part_of_match_key(expander):
+    """Same name with a different group is a different ref."""
+    text = '<ref name=A>plain body</ref> and <ref name=A group=notes/>'
+    source = '<ref name=A group=notes>notes body</ref>'
+
+    result = expander.run(text, source_text=source)
+
+    assert "plain body" in result
+    assert "notes body" in result
+
+
+def test_no_short_refs_returns_text_unchanged(expander):
+    text = "Plain text.<ref name=A>body</ref>"
+
+    assert expander.run(text, source_text="<ref name=A>other</ref>") == text
+
+
+def test_text_without_refs_returns_text_unchanged(expander):
+    assert expander.run("No refs here.", source_text="<ref name=A>x</ref>") == "No refs here."
+
+
+def test_empty_source_expands_from_same_text(expander):
+    """With no source_text, full refs in the text itself expand its short refs."""
+    text = "First<ref name=A>body A</ref> second<ref name=A/>"
+
+    result = expander.run(text)
+
+    assert result.count("<ref name=A>body A</ref>") == 2
+    assert "/>" not in result
+
+
+def test_empty_source_without_full_ref_is_unchanged(expander):
+    text = "Only short<ref name=A/>"
+
+    assert expander.run(text) == text
+
+
+def test_unnamed_short_ref_is_not_expanded(expander):
+    text = "Text<ref/>"
+    source = "<ref name=A>body</ref>"
+
+    assert expander.run(text, source_text=source) == text
+    
 
 class TestExpendRefsWithNameOnly:
     """Test cases for expanding references"""
