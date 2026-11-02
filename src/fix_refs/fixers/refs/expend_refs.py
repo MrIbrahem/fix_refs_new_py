@@ -10,19 +10,15 @@ from ...parsers.wtp_mapping import WtpRefs
 
 logger = logging.getLogger(__name__)
 
-
 class RefExpander:
     """Expander for replacing short reference tags with full citations."""
 
     def run(self, text: str, source_text: str = "") -> str:
         """Expand short references with full text from source.
-
         Refs that already have a body in `text` are never overwritten.
-
         Args:
             text: Text to fix
             source_text: Source text with full references
-
         Returns:
             Text with expanded references
         """
@@ -34,12 +30,13 @@ class RefExpander:
         if not short_refs:
             return text
 
-        # Refs (name, group) that already have a body in the target text.
-        # These must win over anything coming from the source.
-        existing_full_keys = {x.match_key for x in text_loader.full_named_refs}
-
-        # if not source_text expend refs in same text
-        source_text = source_text or text
+        # Only protect existing bodies when a separate source is given.
+        # With no source, the text itself is the source (same-text expansion).
+        if source_text:
+            existing_full_keys = {x.match_key for x in text_loader.full_named_refs}
+        else:
+            existing_full_keys = set()
+            source_text = text
 
         source_loader = WtpRefs.load(source_text)
 
@@ -57,8 +54,6 @@ class RefExpander:
                 text = text.replace(cite.tag_str, expanded_ref.tag_str)
 
         return text
-
-
 __all__ = [
     "RefExpander",
 ]
