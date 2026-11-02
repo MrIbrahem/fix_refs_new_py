@@ -63,6 +63,7 @@ class RefsMover:
 
         self._plan_body_edits()
         self._plan_template_edits()
+
         logger.info("Applying %d edits", len(self.edits))
         return self._apply_edits()
 

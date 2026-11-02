@@ -1,6 +1,8 @@
 # test_refs_mover.py
 import logging
+from pathlib import Path
 
+from src.fix_refs.core.fix_page import PageUpdater
 from src.fix_refs.fixers.refs.refs_mover import RefsMover
 
 BASIC = (
@@ -19,6 +21,37 @@ def split_head_body(text: str):
 
 def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> str:
     return RefsMover(text, prefer_body_version).run()
+
+
+class TestWithFile:
+    def load_fixture(self, name: str) -> str:
+        path = Path(__file__).parent / "data" / name
+        assert path.exists(), f"Fixture file missing: {path}"
+
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert content is not None, f"Unable to read fixture file: {path}"
+        return content
+
+    def test_refs(self) -> None:
+        source = self.load_fixture("source1.wiki")
+        result = RefsMover(source).run()
+        assert source == result
+
+    def test_pageupdater(self) -> None:
+        source = self.load_fixture("source.wiki")
+
+        fixer = PageUpdater(move_refs_out_infobox=False)
+        result = fixer.run(
+            text=source,
+            title="title",
+            source_title="",
+            mdwiki_revid=0,
+            lang_setting={"lang": "ha", "add_en_lang": False, "move_dots": False},
+        )
+
+        assert source == result
 
 
 # ---------------- RefsMover ----------------
