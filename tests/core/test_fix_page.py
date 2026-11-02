@@ -34,3 +34,35 @@ class TestFixPage:
         expected = '[[Category:Translated from MDWiki]] ռետինոիդներ<ref name="NORD2006" /><ref name="Gli2017" />։'
         result = self.fix_page_wrap(input_text, "hy")
         assert result == expected
+
+    def test_page_updater_preserves_custom_body_when_source_original_text_provided(self):
+        """References with existing body in target text are not overwritten by source_original_text."""
+        updater = PageUpdater()
+
+        wiki_text = """{{صندوق معلومات حالة طبية
+|مرادفات=Juxta-epiphyseal fracture of the distal phalanx<ref name=Rad2024/>
+|مسبب=Forced forward bending of the fingertip, [[crush injury]]<ref name="Rad2024"/>
+|عوامل الخطر=
+|التشخيص=Based on symptoms, [[X-rays]]<ref name='Rad2024' />
+}}
+Page lead.<ref name=Rad2024>full ref shouldn't be replaced</ref>"""
+
+        full_text = """<ref name=Rad2024>original ref from mdwiki.org</ref>"""
+
+        lang_setting = LangSetting(lang="ar", expend_infobox=True)
+
+        updated_text = updater.run(
+            text=wiki_text,
+            title="كسر عظمي",
+            lang_setting=lang_setting,
+            source_title="Juxta-epiphyseal fracture",
+            mdwiki_revid=123456,
+            source_original_text=full_text,
+        )
+
+        assert "full ref shouldn't be replaced" in updated_text
+        assert "original ref from mdwiki.org" not in updated_text
+        # Ensure template short refs retained their attributes without normalization
+        assert "<ref name=Rad2024/>" in updated_text
+        assert '<ref name="Rad2024"/>' in updated_text
+        assert "<ref name='Rad2024' />" in updated_text

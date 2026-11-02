@@ -202,3 +202,22 @@ class TestExpendRefsWithNameAndGroup:
         first = 'Text <ref name="ref1" group="g2"/>'
         source_text = '<ref name="ref1" group="g1">Full content</ref>'
         assert RefExpander().run(first, source_text) == first
+
+
+class TestExpendRefsPreservesExistingFullRefs:
+    """Tests ensuring that existing custom full reference bodies in the text are not overwritten."""
+
+    def test_does_not_expand_short_ref_when_full_ref_already_exists_in_target_text(self):
+        """When text already contains a full definition, short refs should not be replaced by source_text."""
+        text = 'Lead.<ref name="Rad2024">custom full body</ref> More text.<ref name="Rad2024"/>'
+        source_text = '<ref name="Rad2024">external source body</ref>'
+        result = RefExpander().run(text, source_text)
+        assert result == text
+
+    def test_expands_only_missing_refs_when_some_already_exist(self):
+        """Only the refs without full definitions in target text should be expanded."""
+        text = 'Ref1:<ref name="ref1">existing body</ref> Short1:<ref name="ref1"/> Short2:<ref name="ref2"/>'
+        source_text = '<ref name="ref1">external 1</ref><ref name="ref2">external 2</ref>'
+        expected = 'Ref1:<ref name="ref1">existing body</ref> Short1:<ref name="ref1"/> Short2:<ref name="ref2">external 2</ref>'
+        result = RefExpander().run(text, source_text)
+        assert result == expected
