@@ -24,7 +24,14 @@ logger = logging.getLogger(__name__)
 
 
 class PageUpdater:
-    """Stateless page fixer. Create once, call run() for each page."""
+    """
+    Orchestrates and applies a series of text processing fixes to wiki page content.
+
+    This class acts as the main pipeline coordinator for transforming and cleaning
+    wiki text. It integrates multiple specialized collaborator modules (such as
+    reference expanders, language fixers, and infobox expanders) to process text
+    sequentially based on specific language settings and page contexts.
+    """
 
     def __init__(self) -> None:
 
@@ -63,11 +70,11 @@ class PageUpdater:
 
     def _apply_language_fixes(self, ctx: PageContext) -> None:
         fixed = self.language_pipeline.apply_language_fixes(
-            ctx.text,
-            ctx.title,
-            ctx.lang_setting.lang,
-            ctx.source_title,
-            ctx.mdwiki_revid,
+            text=ctx.text,
+            title=ctx.title,
+            lang=ctx.lang_setting.lang,
+            source_title=ctx.source_title,
+            mdwiki_revid=ctx.mdwiki_revid,
         )
         if fixed:
             ctx.text = fixed
