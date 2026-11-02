@@ -1,8 +1,8 @@
 """
-Tests for core fix_page functionality
+Tests for core page_updater functionality
 """
 
-from src.fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.page_updater import LangSetting, PageUpdater
 
 
 def _fix_one(

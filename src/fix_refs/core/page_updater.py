@@ -8,13 +8,13 @@ import logging
 from typing import Any
 
 from ..fixers import (
-    RefsMover,
     DotsMover,
     DuplicateRefRemover,
     LanguageEnFixer,
     MiniFixes,
     RedirectDetector,
     RefExpander,
+    RefsMover,
 )
 from ..infobox import InfoboxExpander
 from ..lang_bots import LanguageFixerPipeline
@@ -49,9 +49,10 @@ class PageUpdater:
 
     def _apply_refs_fixes(self, ctx: PageContext) -> None:
         if ctx.source_original_text:
-            ctx.text = self.ref_expander.run(
+            ctx.text = self.ref_expander.fix_and_overwrite(
                 ctx.text,
                 source_text=ctx.source_original_text,
+                overwrite=ctx.lang_setting.overwrite_refs,
             )
 
         ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)

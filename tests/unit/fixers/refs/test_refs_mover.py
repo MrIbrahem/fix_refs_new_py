@@ -2,7 +2,7 @@
 import logging
 from pathlib import Path
 
-from src.fix_refs.core.fix_page import PageUpdater
+from src.fix_refs.core.page_updater import PageUpdater
 from src.fix_refs.fixers.refs.refs_mover import RefsMover
 
 BASIC = (

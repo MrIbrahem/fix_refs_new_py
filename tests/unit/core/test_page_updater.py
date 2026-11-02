@@ -1,9 +1,9 @@
-"""Tests for fix_page (FixpageTest.php)
+"""Tests for page_updater (FixpageTest.php)
 
 Converted from tests/FixpageTest.php
 """
 
-from src.fix_refs.core.fix_page import PageUpdater
+from src.fix_refs.core.page_updater import PageUpdater
 from src.fix_refs.core.mapping import LangSetting
 
 

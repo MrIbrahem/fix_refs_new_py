@@ -1,11 +1,11 @@
-"""Tests for fix_page (FixpageTest.php)
+"""Tests for page_updater (FixpageTest.php)
 
 Converted from tests/FixpageTest.php
 """
 
 from pathlib import Path
 
-from src.fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.page_updater import LangSetting, PageUpdater
 
 
 def test_file_ja():

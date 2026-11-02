@@ -1,5 +1,4 @@
-
-from src.fix_refs.core.fix_page import PageUpdater  # adjust path
+from src.fix_refs.core.page_updater import PageUpdater  # adjust path
 from src.fix_refs.core.mapping import LangSetting  # adjust path
 
 
@@ -18,7 +17,7 @@ Page lead.<ref name=Rad2024>full ref shouldn't be replaced</ref>
     result = PageUpdater().run(
         text=wiki_text,
         title="كسر عظمي",
-        lang_setting=LangSetting(lang="ar", expend_infobox=True),
+        lang_setting=LangSetting(lang="ar", expend_infobox=True, overwrite_refs=False),
         source_title="Juxta-epiphyseal fracture",
         mdwiki_revid=123456,
         source_original_text=full_text,
