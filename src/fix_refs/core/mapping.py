@@ -17,7 +17,6 @@ class LangSetting:
     move_dots: bool = True
     expend_infobox: bool = True
     add_en_lang: bool = False
-    add_category: bool = False
     overwrite_refs: bool = False
 
     def to_json(self) -> dict[str, Any]:
@@ -29,7 +28,9 @@ class LangSetting:
         if isinstance(setting, LangSetting):
             return setting
 
-        return cls(**setting)
+        # load only valid keys
+        valid_setting = {k: v for k, v in setting.items() if k in cls.__annotations__}
+        return cls(**valid_setting)
 
 
 @dataclass

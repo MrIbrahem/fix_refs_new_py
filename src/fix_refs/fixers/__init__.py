@@ -10,7 +10,6 @@ from .move_dots import DotsMover
 from .redirect import RedirectDetector
 from .refs import (
     DuplicateRefRemover,
-    ReferenceExpander,
     RefExpander,
     RefsMover,
 )
@@ -24,6 +23,5 @@ __all__ = [
     "RedirectDetector",
     "DuplicateRefRemover",
     "RefExpander",
-    "ReferenceExpander",
     "RefsMover",
 ]

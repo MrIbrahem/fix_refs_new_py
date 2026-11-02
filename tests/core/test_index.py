@@ -9,14 +9,20 @@ from src.fix_refs.core.fix_page import LangSetting, PageUpdater
 class TestIndex:
     """Test cases for index processing"""
 
-    def fix_page_wrap(self, text: str, lang: str, move_dots: bool, infobox: bool, add_en_lang: bool) -> str:
+    def fix_page_wrap(
+        self,
+        text: str,
+        lang: str,
+        move_dots: bool,
+        infobox: bool,
+        add_en_lang: bool,
+    ) -> str:
         """Wrapper function matching PHP test signature"""
         lang_setting = LangSetting(
             lang=lang,
             move_dots=move_dots,
             expend_infobox=infobox,
             add_en_lang=add_en_lang,
-            add_category=False,
         )
 
         fixer = PageUpdater()

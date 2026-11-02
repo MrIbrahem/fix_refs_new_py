@@ -18,7 +18,6 @@ from ..fixers import (
 )
 from ..infobox import InfoboxExpander
 from ..lang_bots import LanguageFixerPipeline
-from ..mdwiki import MDWikiCategoryService
 from .mapping import LangSetting, PageContext
 
 logger = logging.getLogger(__name__)
@@ -29,7 +28,6 @@ class PageUpdater:
 
     def __init__(
         self,
-        category_service: MDWikiCategoryService | None = None,
         move_refs_out_infobox: bool | None = None,
     ) -> None:
 
@@ -42,7 +40,6 @@ class PageUpdater:
         self.language_pipeline = LanguageFixerPipeline()
         self.infobox_expander = InfoboxExpander()
         self.redirect_detector = RedirectDetector()
-        self.category_service = category_service or MDWikiCategoryService()
         self.move_refs_out_infobox = move_refs_out_infobox if move_refs_out_infobox is not None else True
 
     # ---------------- Steps (each one updates ctx.text) ----------------
@@ -79,19 +76,6 @@ class PageUpdater:
             ctx.text = fixed
             # Re-expand infobox if language fixes made changes
             self._expand_infobox_if_needed(ctx)
-
-    def _add_mdwiki_category(self, ctx: PageContext) -> None:
-        if not ctx.lang_setting.add_category:
-            return
-
-        category = self.category_service.get_mdwiki_category(ctx.lang_setting.lang)
-        if not category:
-            return
-
-        ctx.text = self.category_service.add_mdwiki_category(
-            ctx.text,
-            category,
-        )
 
     # ---------------- Public API ----------------
     def run(
@@ -137,7 +121,6 @@ class PageUpdater:
         self._apply_refs_fixes(ctx)
 
         self._apply_language_fixes(ctx)
-        self._add_mdwiki_category(ctx)
 
         ctx.text = self.mini_fixer.mini_fixes_after_fixing(
             ctx.text,
