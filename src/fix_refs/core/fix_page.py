@@ -51,13 +51,15 @@ class PageUpdater:
             ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title)
 
     def _apply_refs_fixes(self, ctx: PageContext) -> None:
-        ctx.text = self.ref_expander.run(
-            ctx.text,
-            source_text=ctx.source_original_text,
-        )
-        ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
+        if ctx.source_original_text:
+            ctx.text = self.ref_expander.run(
+                ctx.text,
+                source_text=ctx.source_original_text,
+            )
 
-        # if self.move_refs_out_infobox: ctx.text = RefsMover(ctx.text, True).run()
+        ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
+        if self.move_refs_out_infobox:
+            ctx.text = RefsMover(ctx.text, True).run()
 
         if ctx.lang_setting.move_dots:
             ctx.text = self.dots_mover.move_dots_after_refs(ctx.text, ctx.lang_setting.lang)
