@@ -131,7 +131,7 @@ class TestMiniFixes:
 
     def test_minimal_text(self):
         """Test with minimal text"""
-        result = MiniFixes().mini_fixes("Test", "en")
+        result = MiniFixes().fix("Test", "en")
         assert "Test" in result
 
 

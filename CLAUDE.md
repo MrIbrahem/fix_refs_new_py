@@ -40,12 +40,16 @@ ruff format fix_refs/
 The codebase has four main modules under `fix_refs/`:
 
 ### core/
+
 Entry point and orchestration layer:
+
 - `fix_page.py` - Main `fix_one_page()` function that orchestrates all fixes in a pipeline
 - `settings.py` - Loads language-specific settings from JSON file or API server
 
 ### bots/
+
 Individual transformation functions that operate on wikitext:
+
 - `mini_fixes.py` - General fixes: section title translation, whitespace cleanup, interwiki link simplification
 - `fix_missing_refs.py` - Expands short refs (`<ref name="x"/>`) from MDWiki source text
 - `remove_duplicate_refs.py` - Deduplicates references with identical names
@@ -54,7 +58,9 @@ Individual transformation functions that operate on wikitext:
 - `fix_images.py` - Fixes image syntax and retrieves metadata from Commons API
 
 ### lang_bots/
+
 Language-specific processing modules. Each module handles fixes specific to a Wikipedia language edition:
+
 - `bg_bot.py` - Bulgarian
 - `es/` - Spanish (has submodules for data, helpers, refs, section processing)
 - `hy_bot.py` - Armenian
@@ -63,11 +69,14 @@ Language-specific processing modules. Each module handles fixes specific to a Wi
 - `sw_bot.py` - Swahili
 
 ### parsers/
+
 Low-level parsers using `wikitextparser` library:
+
 - `citations_parser.py` - Parses `<ref>` tags into `Citation` dataclass objects
 - `category.py` - Parses category links
 
 ### utils/
+
 - `http.py` - HTTP client with `get_url()` and `get_url_json()` helpers
 - `debug.py` - Debug output utilities
 
@@ -94,6 +103,7 @@ The `DoChangesToText1()` function is the alternative entry point that loads lang
 ## Processing Pipeline
 
 `fix_one_page()` applies transformations in this order:
+
 1. Skip if redirect page
 2. Expand infobox templates
 3. Apply mini_fixes (whitespace, section titles)
@@ -104,12 +114,6 @@ The `DoChangesToText1()` function is the alternative entry point that loads lang
 8. Apply language-specific fixes
 9. Add category (if enabled)
 10. Apply post-fix mini_fixes
-
-## Configuration
-
-- `config.py` - Sets up paths for `resources_path` and `revisions_path` from environment variables
-- `resources/language_settings.json` - Per-language settings (move_dots, expend, add_en_lang)
-- Settings can also be loaded from `mdwiki.toolforge.org` API when `SERVER_NAME` env var is set
 
 ## Code Style
 

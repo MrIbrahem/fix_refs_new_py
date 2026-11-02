@@ -32,6 +32,7 @@ class PageFixer:
         lang_setting: LangSetting | dict[str, Any],
         source_title: str = "",
         mdwiki_revid: int | str = 0,
+        source_original_text: str = "",
     ) -> None:
         self.text_org = text
         self.text = text
@@ -40,6 +41,8 @@ class PageFixer:
         self.source_title = source_title
         self.mdwiki_revid = int(mdwiki_revid)
 
+        self.source_original_text = source_original_text
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -47,6 +50,7 @@ class PageFixer:
         """Run all fixes and return the fixed page content."""
         return PageUpdater().run(
             text=self.text,
+            source_original_text=self.source_original_text,
             title=self.title,
             lang_setting=self.lang_setting,
             source_title=self.source_title,

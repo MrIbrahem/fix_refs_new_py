@@ -21,7 +21,14 @@ class LanguageFixerPipeline:
         self.sw_bot = SwahiliBot()
         self.hy_bot = ArmenianBot()
 
-    def apply_language_fixes(self, text: str, title: str, lang: str, source_title: str, mdwiki_revid: int) -> str:
+    def apply_language_fixes(
+        self,
+        text: str,
+        title: str,
+        lang: str,
+        source_title: str,
+        mdwiki_revid: int,
+    ) -> str:
         """Apply language-specific transformations to text.
 
         Args:

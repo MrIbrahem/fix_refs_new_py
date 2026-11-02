@@ -17,7 +17,7 @@ class LangSetting:
     move_dots: bool = True
     expend_infobox: bool = True
     add_en_lang: bool = False
-    add_category: bool = False
+    overwrite_refs: bool = False
 
     def to_json(self) -> dict[str, Any]:
         return asdict(self)
@@ -28,7 +28,9 @@ class LangSetting:
         if isinstance(setting, LangSetting):
             return setting
 
-        return cls(**setting)
+        # load only valid keys
+        valid_setting = {k: v for k, v in setting.items() if k in cls.__annotations__}
+        return cls(**valid_setting)
 
 
 @dataclass
@@ -41,6 +43,8 @@ class PageContext:
     source_title: str = ""
     mdwiki_revid: int = 0
     text_org: str = field(init=False)
+
+    source_original_text: str = ""
 
     def __post_init__(self) -> None:
         # Keep the untouched original so we can fall back to it

@@ -85,9 +85,7 @@ fix_refs/
 │   ├── citations_parser.py
 │   └── category.py
 ├── infobox/        # Infobox template expansion
-├── mdwiki/         # MDWiki category integration
-├── utils/          # HTTP client and debug utilities
-└── resources/      # Local data files and cached revisions
+└── utils/          # HTTP client and debug utilities
 ```
 
 ### Processing Pipeline
@@ -137,7 +135,6 @@ ruff format fix_refs/
 
 - **requests** >= 2.31.0 - HTTP client
 - **wikitextparser** >= 0.55.0 - MediaWiki wikitext parsing
-- **python-dotenv** - Environment variable loading
 
 ### Dev Dependencies
 
@@ -145,14 +142,6 @@ ruff format fix_refs/
 - mypy - Type checking
 - pylint - Linting
 - ruff, black, isort - Formatting
-
-## Configuration
-
-| Environment Variable | Default                     | Purpose                                |
-| -------------------- | --------------------------- | -------------------------------------- |
-| `RESOURCES_PATH`     | `./resources`               | Path to local data files               |
-| `REVISIONS_PATH`     | `$RESOURCES_PATH/revisions` | Path to cached revisions               |
-| `SERVER_NAME`        | (empty)                     | If set, loads settings from remote API |
 
 ## License
 

@@ -22,10 +22,9 @@ def test_file_ja():
         move_dots=True,
         expend_infobox=True,
         add_en_lang=False,
-        add_category=False,
     )
 
-    fixer = PageUpdater()
+    fixer = PageUpdater(move_refs_out_infobox=False)
     result = fixer.run(
         text=text_input,
         title="title",
@@ -57,10 +56,9 @@ def test_file_pl():
         move_dots=False,
         expend_infobox=True,
         add_en_lang=False,
-        add_category=False,
     )
 
-    fixer = PageUpdater()
+    fixer = PageUpdater(move_refs_out_infobox=False)
     result = fixer.run(
         text=text_input,
         title="title",
