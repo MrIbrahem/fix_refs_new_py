@@ -50,6 +50,7 @@ class PageFixer:
         """Run all fixes and return the fixed page content."""
         return PageUpdater().run(
             text=self.text,
+            source_original_text=self.source_original_text,
             title=self.title,
             lang_setting=self.lang_setting,
             source_title=self.source_title,

@@ -61,6 +61,58 @@ class ConfigManager:
         except (OSError, json.JSONDecodeError):
             return {}
 
+    def find_mdwiki_revid(self, sourcetitle: str) -> str:
+        """Find MDWiki revision ID from JSON file.
+
+        Args:
+            sourcetitle: Source page title.
+
+        Returns:
+            MDWiki revision ID or empty string.
+        """
+        data = self.load_revisions_path_json("json_data.json")
+        logger.info(f"count of data: {len(data)}")
+
+        result = data.get(sourcetitle, "")
+        return str(result) if isinstance(result, str) else ""
+
+    def get_full_text(self, sourcetitle: str, mdwiki_revid: int) -> str:
+        """Get full text from MDWiki revision.
+
+        Args:
+            sourcetitle: Source page title.
+            mdwiki_revid: MDWiki revision ID.
+
+        Returns:
+            Full text or empty string.
+        """
+        sourcetitle = sourcetitle.replace(" ", "_")
+
+        if mdwiki_revid == 0:
+            revid_str = self.find_mdwiki_revid(sourcetitle)
+            mdwiki_revid = int(revid_str) if revid_str.isdigit() else 0
+
+        if mdwiki_revid == 0:
+            logger.info(f"empty mdwiki_revid, sourcetitle:({sourcetitle})")
+            return ""
+
+        file_path = self.get_revision_file_path(mdwiki_revid)
+
+        if not Path(file_path).exists():
+            logger.info(f"file not found: {file_path}")
+            return ""
+
+        logger.info(f"url{file_path}")
+
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            return ""
+
+        logger.info("source_original_text length: %d", len(text))
+        return text
+
     @classmethod
     def load(cls) -> ConfigManager:
         """Create a ConfigManager instance from environment variables."""

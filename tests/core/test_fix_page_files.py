@@ -5,6 +5,7 @@ Converted from tests/FixpageTest.php
 
 from pathlib import Path
 
+from fix_refs.config import ConfigManager
 from src.fix_refs.core.fix_page import LangSetting, PageUpdater
 
 
@@ -25,7 +26,7 @@ def test_file_ja():
         add_category=False,
     )
 
-    fixer = PageUpdater()
+    fixer = PageUpdater(move_refs_out_infobox=False)
     result = fixer.run(
         text=text_input,
         title="title",
@@ -60,7 +61,7 @@ def test_file_pl():
         add_category=False,
     )
 
-    fixer = PageUpdater()
+    fixer = PageUpdater(move_refs_out_infobox=False)
     result = fixer.run(
         text=text_input,
         title="title",

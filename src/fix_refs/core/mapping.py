@@ -43,6 +43,8 @@ class PageContext:
     mdwiki_revid: int = 0
     text_org: str = field(init=False)
 
+    source_original_text: str = ""
+
     def __post_init__(self) -> None:
         # Keep the untouched original so we can fall back to it
         self.text_org = self.text

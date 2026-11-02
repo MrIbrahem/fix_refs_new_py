@@ -55,6 +55,7 @@ class WtpRef:
         """Build a self-closing tag that keeps all original attributes."""
         if self.is_self_closing() and self.tag_str.rstrip().endswith("/>"):
             return self.tag_str
+
         clone = wtp.Tag(self.tag_str)
         clone.contents = ""
         return clone.string.replace("></ref>", " />")

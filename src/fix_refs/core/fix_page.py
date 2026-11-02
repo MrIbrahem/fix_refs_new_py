@@ -14,7 +14,7 @@ from ..fixers import (
     LanguageEnFixer,
     MiniFixes,
     RedirectDetector,
-    ReferenceExpander,
+    RefExpander,
 )
 from ..infobox import InfoboxExpander
 from ..lang_bots import LanguageFixerPipeline
@@ -30,11 +30,12 @@ class PageUpdater:
     def __init__(
         self,
         category_service: MDWikiCategoryService | None = None,
+        move_refs_out_infobox: bool | None = None,
     ) -> None:
 
         # Injected collaborators
         self.mini_fixer = MiniFixes()
-        self.ref_expander = ReferenceExpander()
+        self.ref_expander = RefExpander()
         self.duplicate_ref_remover = DuplicateRefRemover()
         self.dots_mover = DotsMover()
         self.lang_en_fixer = LanguageEnFixer()
@@ -42,6 +43,7 @@ class PageUpdater:
         self.infobox_expander = InfoboxExpander()
         self.redirect_detector = RedirectDetector()
         self.category_service = category_service or MDWikiCategoryService()
+        self.move_refs_out_infobox = move_refs_out_infobox if move_refs_out_infobox is not None else True
 
     # ---------------- Steps (each one updates ctx.text) ----------------
     def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
@@ -49,9 +51,13 @@ class PageUpdater:
             ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title)
 
     def _apply_refs_fixes(self, ctx: PageContext) -> None:
-        ctx.text = self.ref_expander.fix_missing_refs(ctx.text, ctx.source_title, ctx.mdwiki_revid)
+        ctx.text = self.ref_expander.run(
+            ctx.text,
+            source_text=ctx.source_original_text,
+        )
         ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
-        ctx.text = RefsMover(ctx.text, True).run()
+
+        # if self.move_refs_out_infobox: ctx.text = RefsMover(ctx.text, True).run()
 
         if ctx.lang_setting.move_dots:
             ctx.text = self.dots_mover.move_dots_after_refs(ctx.text, ctx.lang_setting.lang)
@@ -93,6 +99,7 @@ class PageUpdater:
         lang_setting: LangSetting | dict[str, Any],
         source_title: str = "",
         mdwiki_revid: int | str = 0,
+        source_original_text: str = "",
     ) -> str:
         """
         Run all fixes and return the fixed page content.
@@ -103,6 +110,7 @@ class PageUpdater:
             lang_setting: Per-language options (LangSetting). Defaults to LangSetting().
             source_title: Source page title
             mdwiki_revid: MDWiki revision ID
+            source_original_text: Original source page content from mdwiki.org
         """
         ctx = PageContext(
             text=text,
@@ -110,6 +118,7 @@ class PageUpdater:
             lang_setting=LangSetting.from_any(lang_setting),
             source_title=source_title,
             mdwiki_revid=int(mdwiki_revid),
+            source_original_text=source_original_text,
         )
         logger.info("start fix one page with mdwiki_revid:%s", ctx.mdwiki_revid)
 
