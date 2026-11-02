@@ -56,7 +56,7 @@ class RefExpander:
 
         return text
 
-    def overwrite_refs(self, text: str, source_text: str) -> str:
+    def overwrite_all_refs(self, text: str, source_text: str) -> str:
         """
         Overwrite full refs in `text` with the refs from `source_text`.
 
@@ -123,7 +123,7 @@ class RefExpander:
         """
         # Step 1: overwrite existing full refs
         if overwrite and source_text:
-            text = self.overwrite_refs(text, source_text)
+            text = self.overwrite_all_refs(text, source_text)
 
         # Step 2: expand short refs
         text = self.run(text, source_text)

@@ -26,10 +26,7 @@ logger = logging.getLogger(__name__)
 class PageUpdater:
     """Stateless page fixer. Create once, call run() for each page."""
 
-    def __init__(
-        self,
-        move_refs_out_infobox: bool | None = None,
-    ) -> None:
+    def __init__(self) -> None:
 
         # Injected collaborators
         self.mini_fixer = MiniFixes()
@@ -40,7 +37,6 @@ class PageUpdater:
         self.language_pipeline = LanguageFixerPipeline()
         self.infobox_expander = InfoboxExpander()
         self.redirect_detector = RedirectDetector()
-        self.move_refs_out_infobox = move_refs_out_infobox if move_refs_out_infobox is not None else True
 
     # ---------------- Steps (each one updates ctx.text) ----------------
     def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
@@ -56,7 +52,7 @@ class PageUpdater:
             )
 
         ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
-        if self.move_refs_out_infobox:
+        if ctx.lang_setting.move_refs_out_infobox:
             ctx.text = RefsMover(ctx.text, True).run()
 
         if ctx.lang_setting.move_dots:

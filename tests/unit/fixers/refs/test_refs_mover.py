@@ -42,13 +42,19 @@ class TestWithFile:
     def test_pageupdater(self) -> None:
         source = self.load_fixture("source.wiki")
 
-        fixer = PageUpdater(move_refs_out_infobox=False)
+        fixer = PageUpdater()
+        lang_setting = {
+            "lang": "ha",
+            "add_en_lang": False,
+            "move_dots": False,
+            "move_refs_out_infobox": False,
+        }
         result = fixer.run(
             text=source,
             title="title",
             source_title="",
             mdwiki_revid=0,
-            lang_setting={"lang": "ha", "add_en_lang": False, "move_dots": False},
+            lang_setting=lang_setting,
         )
 
         assert source == result
