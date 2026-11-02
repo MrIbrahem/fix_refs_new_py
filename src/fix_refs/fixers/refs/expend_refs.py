@@ -130,6 +130,7 @@ class RefExpander:
 
         return text
 
+
 __all__ = [
     "RefExpander",
 ]

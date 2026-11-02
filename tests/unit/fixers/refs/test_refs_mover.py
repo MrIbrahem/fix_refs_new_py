@@ -1,6 +1,5 @@
 # test_refs_mover.py
 import logging
-from pathlib import Path
 
 from src.fix_refs.core.page_updater import PageUpdater
 from src.fix_refs.fixers.refs.refs_mover import RefsMover
@@ -24,23 +23,13 @@ def move_refs_from_templates(text: str, prefer_body_version: bool = False) -> st
 
 
 class TestWithFile:
-    def load_fixture(self, name: str) -> str:
-        path = Path(__file__).parent / "data" / name
-        assert path.exists(), f"Fixture file missing: {path}"
-
-        with open(path, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        assert content is not None, f"Unable to read fixture file: {path}"
-        return content
-
-    def test_refs(self) -> None:
-        source = self.load_fixture("source1.wiki")
+    def test_refs(self, load_fixture) -> None:
+        source = load_fixture("unit/fixers/refs/data/source1.wiki")
         result = RefsMover(source).run()
         assert source == result
 
-    def test_pageupdater(self) -> None:
-        source = self.load_fixture("source.wiki")
+    def test_pageupdater(self, load_fixture) -> None:
+        source = load_fixture("unit/fixers/refs/data/source.wiki")
 
         fixer = PageUpdater()
         lang_setting = {

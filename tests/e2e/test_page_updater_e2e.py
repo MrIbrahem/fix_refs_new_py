@@ -1,5 +1,5 @@
-from src.fix_refs.core.page_updater import PageUpdater
 from src.fix_refs.core.mapping import LangSetting
+from src.fix_refs.core.page_updater import PageUpdater
 
 WIKI_TEXT_SOURCE = """
 {{صندوق معلومات حالة طبية

@@ -7,8 +7,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from .page_updater import PageUpdater
 from .mapping import LangSetting
+from .page_updater import PageUpdater
 
 logger = logging.getLogger(__name__)
 

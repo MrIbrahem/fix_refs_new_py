@@ -5,7 +5,6 @@ Converted from tests/fixers/refs/remove_duplicate_refsTest.php
 
 from pathlib import Path
 
-import pytest
 from src.fix_refs.fixers.refs.remove_duplicate_refs import DuplicateRefRemover
 
 
