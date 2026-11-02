@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from .category import CategoryParser
 from .wtp_mapping import WtpRef, WtpRefs, WtpRefsTemps, WtpTemplates
 
 __all__ = [
@@ -10,5 +9,4 @@ __all__ = [
     "WtpRef",
     "WtpTemplates",
     "WtpRefs",
-    "CategoryParser",
 ]

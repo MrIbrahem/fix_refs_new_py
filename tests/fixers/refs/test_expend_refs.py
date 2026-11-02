@@ -1,4 +1,3 @@
-
 """Tests for RefExpander"""
 
 from __future__ import annotations
@@ -75,8 +74,8 @@ def test_only_unexpanded_names_are_expanded(expander):
 
 def test_group_is_part_of_match_key(expander):
     """Same name with a different group is a different ref."""
-    text = '<ref name=A>plain body</ref> and <ref name=A group=notes/>'
-    source = '<ref name=A group=notes>notes body</ref>'
+    text = "<ref name=A>plain body</ref> and <ref name=A group=notes/>"
+    source = "<ref name=A group=notes>notes body</ref>"
 
     result = expander.run(text, source_text=source)
 
@@ -115,7 +114,7 @@ def test_unnamed_short_ref_is_not_expanded(expander):
     source = "<ref name=A>body</ref>"
 
     assert expander.run(text, source_text=source) == text
-    
+
 
 class TestExpendRefsWithNameOnly:
     """Test cases for expanding references"""

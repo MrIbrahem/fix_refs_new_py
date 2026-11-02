@@ -100,6 +100,11 @@ class WtpRefs:
     def short_refs(self) -> list[WtpRef]:
         return [x for x in self.all_refs if x.is_self_closing()]
 
+    @staticmethod
+    def list_wtpref_to_dict(data: list[WtpRef]) -> dict[tuple[str, str], WtpRef]:
+        # use match_key to match name and group, (self.name, self.group)
+        return {x.match_key: x for x in data}
+
 
 __all__ = [
     "WtpRef",

@@ -10,6 +10,7 @@ from ...parsers.wtp_mapping import WtpRefs
 
 logger = logging.getLogger(__name__)
 
+
 class RefExpander:
     """Expander for replacing short reference tags with full citations."""
 
@@ -54,6 +55,8 @@ class RefExpander:
                 text = text.replace(cite.tag_str, expanded_ref.tag_str)
 
         return text
+
+
 __all__ = [
     "RefExpander",
 ]
