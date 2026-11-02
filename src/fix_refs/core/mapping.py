@@ -18,6 +18,7 @@ class LangSetting:
     expend_infobox: bool = True
     add_en_lang: bool = False
     add_category: bool = False
+    overwrite_refs: bool = False
 
     def to_json(self) -> dict[str, Any]:
         return asdict(self)

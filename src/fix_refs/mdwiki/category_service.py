@@ -92,10 +92,31 @@ class MDWikiCategoryService:
         if lang in self.skip_langs:
             return text
 
-        if re.search(r":\s*Translated[ _]from[ _]MDWiki\s*\]\]", text, re.IGNORECASE):
+        if re.search(r":\s*Translated[ _]from[ _]MDWiki\s*(\||\]\])", text, re.IGNORECASE):
             return text
 
         cat = self.get_mdwiki_category(lang)
+
+        if cat and cat not in text:
+            text += f"\n[[{cat}]]\n"
+
+        return text
+
+    def add_mdwiki_category(self, text: str, cat: str) -> str:
+        """Add MDWiki category to text if not already present.
+
+        Args:
+            text: WikiText content.
+            lang: Language code.
+
+        Returns:
+            Text with MDWiki category added if not present.
+        """
+        if not cat.strip():
+            return text
+
+        if re.search(r":\s*Translated[ _]from[ _]MDWiki\s*\]\]", text, re.IGNORECASE):
+            return text
 
         if cat and cat not in text:
             text += f"\n[[{cat}]]\n"

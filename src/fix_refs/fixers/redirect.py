@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class RedirectDetector:
     """Detector for MediaWiki redirect pages."""
 
-    def is_redirect(self, title: str, text: str) -> bool:
+    def is_redirect(self, text: str) -> bool:
         """Check if page is a redirect
 
         Args:

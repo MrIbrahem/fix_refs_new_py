@@ -26,8 +26,16 @@ class MiniFixes:
                 "Reference": "Izvori",
                 "References": "Izvori",
             },
-            "sw": {"Reference": "Marejeo", "References": "Marejeo", "Marejeleo": "Marejeo"},
-            "ru": {"Reference": "Примечания", "References": "Примечания", "Ссылки": "Примечания"},
+            "sw": {
+                "Reference": "Marejeo",
+                "References": "Marejeo",
+                "Marejeleo": "Marejeo",
+            },
+            "ru": {
+                "Reference": "Примечания",
+                "References": "Примечания",
+                "Ссылки": "Примечания",
+            },
         }
 
         if lang not in to_replace:
@@ -102,7 +110,7 @@ class MiniFixes:
         text = self.fix_prefix(text, lang)
         return text
 
-    def mini_fixes(self, text: str, lang: str) -> str:
+    def fix(self, text: str, lang: str) -> str:
         """Apply mini fixes to text
 
         Args:

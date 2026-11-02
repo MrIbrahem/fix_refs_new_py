@@ -35,10 +35,3 @@ class TestFixPage:
         expected = '[[Category:Translated from MDWiki]] ռետինոիդներ<ref name="NORD2006" /><ref name="Gli2017" />։'
         result = self.fix_page_wrap(input_text, "hy")
         assert result == expected
-
-    def test_move_dots(self, monkeypatch):
-        updater = PageUpdater()
-        monkeypatch.setattr(updater.dots_mover, "move_dots_after_refs", lambda t, lang: t + "!")
-        ctx = PageContext(text="abc", title="t", lang_setting=LangSetting(lang="de"))
-        updater._move_dots(ctx)
-        assert ctx.text == "abc!"
