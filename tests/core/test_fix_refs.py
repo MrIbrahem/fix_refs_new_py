@@ -16,7 +16,6 @@ def _fix_one(
     move_dots: bool = True,
     expend_infobox: bool = True,
     add_en_lang: bool = False,
-    add_category: bool = False,
 ) -> str:
     """
     Backward-compatible wrapper around PageUpdater.
@@ -30,7 +29,6 @@ def _fix_one(
             move_dots=move_dots,
             expend_infobox=expend_infobox,
             add_en_lang=add_en_lang,
-            add_category=add_category,
         )
 
     fixer = PageUpdater()

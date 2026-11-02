@@ -4,7 +4,7 @@ Converted from tests/FixpageTest.php
 """
 
 from src.fix_refs.core.fix_page import PageUpdater
-from src.fix_refs.core.mapping import LangSetting, PageContext
+from src.fix_refs.core.mapping import LangSetting
 
 
 class TestFixPage:
@@ -17,7 +17,6 @@ class TestFixPage:
             move_dots=True,
             expend_infobox=True,
             add_en_lang=False,
-            add_category=False,
         )
 
         fixer = PageUpdater()

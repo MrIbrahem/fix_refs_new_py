@@ -48,7 +48,6 @@ class TestQuoteVariants:
         full_text = f"something {full_ref}"
         text = f"This ref should be expanded {short_ref}"
 
-        # Case 1: use full_text arg. ne neeed to write to revisions_path
         result = RefExpander().run(
             text=text,
             source_text=full_text,
@@ -66,7 +65,6 @@ class TestQuoteVariants:
         full_text = "something without refs"
         text = f"text {short_ref}"
 
-        # Case 1: use full_text arg. ne neeed to write to revisions_path
         result = RefExpander().run(
             text=text,
             source_text=full_text,

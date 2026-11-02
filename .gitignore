@@ -9,6 +9,4 @@ _work_files/*
 !_work_files/tree.md
 **/__pycache__/**
 state/**
-**/resources/**/json_data_all.json
-**/resources/**/json_data.json
 docs/docs.7z
