@@ -32,6 +32,7 @@ class PageFixer:
         lang_setting: LangSetting | dict[str, Any],
         source_title: str = "",
         mdwiki_revid: int | str = 0,
+        source_original_text: str = "",
     ) -> None:
         self.text_org = text
         self.text = text
@@ -39,6 +40,8 @@ class PageFixer:
         self.lang_setting = LangSetting.from_any(lang_setting)
         self.source_title = source_title
         self.mdwiki_revid = int(mdwiki_revid)
+
+        self.source_original_text = source_original_text
 
     # ------------------------------------------------------------------
     # Public API

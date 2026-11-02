@@ -62,9 +62,12 @@ class ReferenceExpander:
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
-                return f.read()
+                text = f.read()
         except OSError:
             return ""
+
+        logger.info("source_original_text length: %d", len(text))
+        return text
 
     def fix_missing_refs(self, text: str, sourcetitle: str, mdwiki_revid: int = 0) -> str:
         """Fix missing references by expanding from MDWiki source.
