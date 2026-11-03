@@ -1,11 +1,11 @@
-"""Tests for fix_page (FixpageTest.php)
+"""Tests for page_updater (FixpageTest.php)
 
 Converted from tests/FixpageTest.php
 """
 
 from pathlib import Path
 
-from src.fix_refs.core.fix_page import LangSetting, PageUpdater
+from src.fix_refs.core.page_updater import LangSetting, PageUpdater
 
 
 def test_file_ja():
@@ -22,9 +22,10 @@ def test_file_ja():
         move_dots=True,
         expend_infobox=True,
         add_en_lang=False,
+        move_refs_out_infobox=False,
     )
 
-    fixer = PageUpdater(move_refs_out_infobox=False)
+    fixer = PageUpdater()
     result = fixer.run(
         text=text_input,
         title="title",
@@ -56,9 +57,10 @@ def test_file_pl():
         move_dots=False,
         expend_infobox=True,
         add_en_lang=False,
+        move_refs_out_infobox=False,
     )
 
-    fixer = PageUpdater(move_refs_out_infobox=False)
+    fixer = PageUpdater()
     result = fixer.run(
         text=text_input,
         title="title",

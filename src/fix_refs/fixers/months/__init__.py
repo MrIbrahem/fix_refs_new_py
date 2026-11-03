@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from .translator import MonthTranslator
 from .mapping import (
     LangMonth,
+    MonthsTranslations,
     PortugueseMonths,
     SpanishMonths,
-    MonthsTranslations,
 )
+from .translator import MonthTranslator
 
 __all__ = [
     "MonthTranslator",

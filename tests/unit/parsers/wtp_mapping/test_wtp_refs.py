@@ -2,8 +2,6 @@
 Unit tests for wtp_mapping module.
 """
 
-from pathlib import Path
-
 import wikitextparser as wtp
 from src.fix_refs.parsers.wtp_mapping import WtpRef, WtpRefs
 
@@ -278,18 +276,8 @@ class TestGetFullRefs:
 
 
 class TestGetShortAndFullRefs:
-    def load_fixture(self, name: str) -> str:
-        path = Path(__file__).parent / "data" / name
-        assert path.exists(), f"Fixture file missing: {path}"
-
-        with open(path, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        assert content is not None, f"Unable to read fixture file: {path}"
-        return content
-
-    def test_refs(self) -> None:
-        source = self.load_fixture("source-1.wiki")
+    def test_refs(self, load_fixture) -> None:
+        source = load_fixture("unit/parsers/wtp_mapping/data/source-1.wiki")
 
         full_refs = WtpRefs.load(source).full_refs
         full_named_refs = WtpRefs.load(source).full_named_refs

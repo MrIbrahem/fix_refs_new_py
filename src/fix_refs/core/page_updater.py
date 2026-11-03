@@ -8,13 +8,13 @@ import logging
 from typing import Any
 
 from ..fixers import (
-    RefsMover,
     DotsMover,
     DuplicateRefRemover,
     LanguageEnFixer,
     MiniFixes,
     RedirectDetector,
     RefExpander,
+    RefsMover,
 )
 from ..infobox import InfoboxExpander
 from ..lang_bots import LanguageFixerPipeline
@@ -24,12 +24,16 @@ logger = logging.getLogger(__name__)
 
 
 class PageUpdater:
-    """Stateless page fixer. Create once, call run() for each page."""
+    """
+    Orchestrates and applies a series of text processing fixes to wiki page content.
 
-    def __init__(
-        self,
-        move_refs_out_infobox: bool | None = None,
-    ) -> None:
+    This class acts as the main pipeline coordinator for transforming and cleaning
+    wiki text. It integrates multiple specialized collaborator modules (such as
+    reference expanders, language fixers, and infobox expanders) to process text
+    sequentially based on specific language settings and page contexts.
+    """
+
+    def __init__(self) -> None:
 
         # Injected collaborators
         self.mini_fixer = MiniFixes()
@@ -40,22 +44,31 @@ class PageUpdater:
         self.language_pipeline = LanguageFixerPipeline()
         self.infobox_expander = InfoboxExpander()
         self.redirect_detector = RedirectDetector()
-        self.move_refs_out_infobox = move_refs_out_infobox if move_refs_out_infobox is not None else True
 
     # ---------------- Steps (each one updates ctx.text) ----------------
     def _expand_infobox_if_needed(self, ctx: PageContext) -> None:
-        if ctx.lang_setting.expend_infobox or ctx.lang_setting.lang == "es":
+        """
+        Expands the infobox within the page text if required by the language settings.
+        """
+        expanded_langs = [
+            "es",
+        ]
+        if ctx.lang_setting.expend_infobox or ctx.lang_setting.lang in expanded_langs:
             ctx.text = self.infobox_expander.expand_infobox_in_text(ctx.text, ctx.title)
 
     def _apply_refs_fixes(self, ctx: PageContext) -> None:
         if ctx.source_original_text:
-            ctx.text = self.ref_expander.run(
+            ctx.text = self.ref_expander.fix_and_overwrite(
                 ctx.text,
                 source_text=ctx.source_original_text,
+                overwrite=ctx.lang_setting.overwrite_refs,
             )
 
         ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
-        if self.move_refs_out_infobox:
+        should_move_refs = (
+            True if ctx.lang_setting.move_refs_out_infobox or ctx.lang_setting.move_refs_out_infobox is None else False
+        )
+        if should_move_refs:
             ctx.text = RefsMover(ctx.text, True).run()
 
         if ctx.lang_setting.move_dots:
@@ -66,11 +79,11 @@ class PageUpdater:
 
     def _apply_language_fixes(self, ctx: PageContext) -> None:
         fixed = self.language_pipeline.apply_language_fixes(
-            ctx.text,
-            ctx.title,
-            ctx.lang_setting.lang,
-            ctx.source_title,
-            ctx.mdwiki_revid,
+            text=ctx.text,
+            title=ctx.title,
+            lang=ctx.lang_setting.lang,
+            source_title=ctx.source_title,
+            mdwiki_revid=ctx.mdwiki_revid,
         )
         if fixed:
             ctx.text = fixed
