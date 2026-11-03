@@ -106,7 +106,7 @@ def _fix_one(
     )
 
 
-class PageUpdaterForRefs:
+class TestPageUpdaterForRefs:
     """Test the main function"""
 
     def test_hy_language_simple(self):
