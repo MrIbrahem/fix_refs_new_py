@@ -65,7 +65,10 @@ class PageUpdater:
             )
 
         ctx.text = self.duplicate_ref_remover.wtp_remove(ctx.text)
-        if ctx.lang_setting.move_refs_out_infobox:
+        should_move_refs = (
+            True if ctx.lang_setting.move_refs_out_infobox or ctx.lang_setting.move_refs_out_infobox is None else False
+        )
+        if should_move_refs:
             ctx.text = RefsMover(ctx.text, True).run()
 
         if ctx.lang_setting.move_dots:
