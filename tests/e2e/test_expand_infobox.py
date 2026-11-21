@@ -1,6 +1,6 @@
-from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 from src.fix_refs.core.mapping import LangSetting
 from src.fix_refs.core.page_updater import PageUpdater
+from src.fix_refs.infobox.expend_infobox import InfoboxExpander
 
 WIKI_TEXT_SOURCE = """{{Databox}}
 
