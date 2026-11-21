@@ -83,7 +83,8 @@ class MonthTranslator:
                 old_val = arg.value
                 new_val = self.new_date(old_val, lang)
                 if new_val and new_val.strip() != old_val.strip():
-                    temp.set_arg(arg.name, new_val)
+                    # temp.set_arg(arg.name, new_val)
+                    arg.value = new_val
 
         return parsed.string
 

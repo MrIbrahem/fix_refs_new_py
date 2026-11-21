@@ -89,7 +89,7 @@ TEXT_OUTPUT = r"""{{Infobox drug
 
 
 def test_expend_new_simple_template():
-    """Test expend_new with a simple template"""
+    """Test _expend_new with a simple template"""
     # Test with basic template
-    result = InfoboxExpander().expend_new(TEXT_INPUT).strip()
+    result = InfoboxExpander()._expend_new(TEXT_INPUT).strip()
     assert result == TEXT_OUTPUT.strip()

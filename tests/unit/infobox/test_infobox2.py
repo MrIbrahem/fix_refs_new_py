@@ -16,7 +16,7 @@ class TestInfobox2:
     """Test cases for infobox2 template processing"""
 
     def test_expend_new_file_text(self):
-        """Test expend_new with file input"""
+        """Test _expend_new with file input"""
 
         with open(tests_dir / "input.txt", "r", encoding="utf-8") as f:
             text_input = f.read()
@@ -24,7 +24,7 @@ class TestInfobox2:
         with open(tests_dir / "expected.txt", "r", encoding="utf-8") as f:
             text_output = f.read()
 
-        result = InfoboxExpander().expend_new(text_input)
+        result = InfoboxExpander()._expend_new(text_input)
 
         with open(tests_dir / "output.txt", "w", encoding="utf-8") as f:
             f.write(result)

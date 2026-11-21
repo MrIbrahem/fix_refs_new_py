@@ -10,9 +10,9 @@ class TestInfobox:
     """Test cases for infobox expansion"""
 
     def test_expend_new_simple_template(self):
-        """Test expend_new with a simple template"""
+        """Test _expend_new with a simple template"""
         # Test with basic template
-        result = InfoboxExpander().expend_new("{{test}}")
+        result = InfoboxExpander()._expend_new("{{test}}")
         assert result == "{{test\n}}"
 
     def test_make_section_0(self):

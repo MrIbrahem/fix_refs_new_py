@@ -59,20 +59,38 @@ class InfoboxExpander:
         title_pattern = re.compile(r"\}\s*('''%s''')" % re.escape(title))
         return title_pattern.sub(r"}\n\n\1", text)
 
+    def extract_text_before_triple_single_quote(self, section_0: str) -> str:
+        """
+        Extracts and returns text from section_0 that appears before the first line that starts with
+        triple single quotes ('''). If no such line is found, returns the entire input string.
+        """
+        lines = section_0.splitlines(keepends=True)
+        offset = 0
+
+        for line in lines:
+            if line.startswith("'''"):
+                return section_0[:offset]
+            offset += len(line)
+
+        return section_0
+
     # ------------------------------------------------------------------
     # Template handling
     # ------------------------------------------------------------------
     def extract_main_template(self, section_0: str) -> dict:
-        """Return the longest template in section_0 that has more than 4 params.
+        """
+        Return the longest template in section_0 that has more than 4 params.
 
         The result is ``{"params": {...}, "item": "<template text>"}``,
         or an empty dict when no template qualifies.
         """
+        section = self.extract_text_before_triple_single_quote(section_0)
+
         best: dict = {}
         best_key: tuple[int, int] = (-1, -1)
         order = 0
 
-        for template in wtp.parse(section_0).templates:
+        for template in wtp.parse(section).templates:
             template_str = template.string
             if not template_str.strip():
                 continue
@@ -108,7 +126,7 @@ class InfoboxExpander:
     # ------------------------------------------------------------------
     # Public entry points
     # ------------------------------------------------------------------
-    def expend_new(self, main_temp: str) -> str:
+    def _expend_new(self, main_temp: str) -> str:
         """Expand a single template so each parameter is on its own line."""
         wanted = main_temp.strip()
         new_temp = main_temp
@@ -120,7 +138,8 @@ class InfoboxExpander:
 
             template.name = f"{str(template.normal_name()).strip()}\n"
             for arg in template.arguments:
-                arg.name = arg.name.rstrip().ljust(PARAM_NAME_WIDTH)
+                if not arg.positional:
+                    arg.name = arg.name.rstrip().ljust(PARAM_NAME_WIDTH)
                 arg.value = f"{arg.value.rstrip()}\n"
 
             new_temp = template.string
@@ -148,7 +167,7 @@ class InfoboxExpander:
             return newtext
 
         old_temp = main_temp["item"]
-        new_temp = self.expend_new(old_temp)
+        new_temp = self._expend_new(old_temp)
         if new_temp == old_temp:
             return newtext
 
