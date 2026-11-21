@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import wikitextparser as wtp
 from src.fix_refs.parsers.wtp_mapping.wtp_refs_temps import WtpRefsTemps
 
 BASIC = (
@@ -9,6 +12,20 @@ BASIC = (
 )
 
 # ---------------- WtpRefsTemps ----------------
+
+
+class TestWtpTemps:
+    def test_set_arg(self):
+        temp = wtp.Template("{{Svg lang|ar|de|fr}}")
+
+        temp.set_arg("dl", "en")
+        assert temp.string == "{{Svg lang|ar|de|fr|dl=en}}"
+
+    def test_set_arg_before(self):
+        temp = wtp.Template("{{Svg lang|ar|de|fr}}")
+
+        temp.set_arg("dl", "en", before="1")
+        assert temp.string == "{{Svg lang|dl=en|ar|de|fr}}"
 
 
 class TestWtpRefsTemps:
